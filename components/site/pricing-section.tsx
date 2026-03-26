@@ -1,13 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { SectionWrapper } from "./section-wrapper";
 import { CTA_LINKS } from "@/lib/constants";
 import { Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const tiers = [
   {
     name: "Free",
-    price: "$0",
+    monthlyPrice: 0,
     period: "",
     description: "For trying the workflow",
     features: [
@@ -20,7 +22,7 @@ const tiers = [
   },
   {
     name: "Pro",
-    price: "$12",
+    monthlyPrice: 12,
     period: "/mo",
     description: "For professionals who want full work visibility",
     features: [
@@ -36,7 +38,7 @@ const tiers = [
   },
   {
     name: "Team",
-    price: "$9",
+    monthlyPrice: 9,
     period: "/user/mo",
     description: "For teams that want better updates without more meetings",
     features: [
@@ -50,13 +52,59 @@ const tiers = [
   },
 ];
 
+function getPrice(monthlyPrice: number, yearly: boolean) {
+  if (monthlyPrice === 0) return "$0";
+  if (yearly) {
+    const discounted = Math.round(monthlyPrice * 0.8);
+    return `$${discounted}`;
+  }
+  return `$${monthlyPrice}`;
+}
+
+function getPeriod(period: string, yearly: boolean) {
+  if (!period) return "";
+  if (yearly) {
+    return period.replace("/mo", "/mo, billed yearly");
+  }
+  return period;
+}
+
 export function PricingSection() {
+  const [yearly, setYearly] = useState(false);
+
   return (
     <SectionWrapper background="muted" id="pricing">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:text-4xl">
           Simple pricing for clearer workdays
         </h2>
+
+        {/* Toggle */}
+        <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white px-1.5 py-1.5 shadow-sm">
+          <button
+            onClick={() => setYearly(false)}
+            className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${
+              !yearly
+                ? "bg-slate-900 text-white shadow-sm"
+                : "text-slate-500 hover:text-slate-700"
+            }`}
+          >
+            Monthly
+          </button>
+          <button
+            onClick={() => setYearly(true)}
+            className={`flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-all ${
+              yearly
+                ? "bg-slate-900 text-white shadow-sm"
+                : "text-slate-500 hover:text-slate-700"
+            }`}
+          >
+            Yearly
+            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+              Save 20%
+            </span>
+          </button>
+        </div>
       </div>
 
       <div className="mx-auto mt-14 grid max-w-5xl gap-6 sm:grid-cols-3">
@@ -79,13 +127,29 @@ export function PricingSection() {
 
             <h3 className="text-lg font-semibold text-slate-900">{tier.name}</h3>
             <div className="mt-3 flex items-baseline gap-1">
-              <span className="text-4xl font-bold tracking-tight text-slate-900">
-                {tier.price}
-              </span>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={`${tier.name}-${yearly}`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-4xl font-bold tracking-tight text-slate-900"
+                >
+                  {getPrice(tier.monthlyPrice, yearly)}
+                </motion.span>
+              </AnimatePresence>
               {tier.period && (
-                <span className="text-sm text-slate-500">{tier.period}</span>
+                <span className="text-sm text-slate-500">
+                  {getPeriod(tier.period, yearly)}
+                </span>
               )}
             </div>
+            {yearly && tier.monthlyPrice > 0 && (
+              <p className="mt-1 text-xs text-slate-400 line-through">
+                ${tier.monthlyPrice}/mo
+              </p>
+            )}
             <p className="mt-2 text-sm text-slate-500">{tier.description}</p>
 
             <ul className="mt-6 space-y-3">
