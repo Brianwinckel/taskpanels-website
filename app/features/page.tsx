@@ -15,6 +15,9 @@ import {
 export const metadata: Metadata = {
   title: "Features",
   description: `${SITE_NAME} helps you track your day and generate clean work summaries with completed work, blockers, approvals, and next steps.`,
+  alternates: {
+    canonical: "/features",
+  },
 };
 
 const features = [

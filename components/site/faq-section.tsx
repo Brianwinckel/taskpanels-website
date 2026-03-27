@@ -12,33 +12,50 @@ const faqs = [
   {
     question: "Is this employee surveillance?",
     answer:
-      "No. TaskPanels is built for the worker, not the watcher.",
+      "No. TaskPanels is built for the worker, not the watcher. It does not monitor screens, keystrokes, or take screenshots. You control what you track and share.",
   },
   {
     question: "Do I need to track every minute?",
     answer:
-      "No. The goal is useful visibility, not obsessive logging.",
+      "No. The goal is useful visibility, not obsessive logging. Track what matters — projects, blockers, approvals — and let TaskPanels generate the summary.",
   },
   {
     question: "Is this just another time tracker?",
     answer:
-      "No. TaskPanels helps you show progress, blockers, approvals, and value — not just hours.",
+      "No. Time trackers log hours. TaskPanels helps you show progress, blockers, approvals, and value — not just hours. It turns your workday into a clear, manager-ready update.",
   },
   {
     question: "Can I use this for client work?",
     answer:
-      "Yes. It's especially useful for showing work in progress, revisions, and unrealized effort.",
+      "Yes. TaskPanels is especially useful for showing work in progress, revisions, and unrealized effort to clients. Export summaries or email them directly.",
   },
   {
     question: "What if I already use Asana / Jira / Notion?",
     answer:
-      "Great. Those tools track projects. TaskPanels tracks your actual day.",
+      "Great — those tools track projects. TaskPanels tracks your actual day. It complements project management tools by capturing the work that happens between tasks.",
   },
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
 
 export function FaqSection() {
   return (
     <SectionWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:text-4xl">
           Questions, answered

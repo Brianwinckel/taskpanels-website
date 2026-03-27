@@ -1,0 +1,43 @@
+# TaskPanels
+
+> TaskPanels helps professionals track their day and automatically turn it into a clean, manager-ready work summary with completed work, blockers, approvals, and next steps.
+
+## About
+
+TaskPanels is a work tracking and summary generation tool for professionals. It is not employee surveillance — it is built for the worker, not the watcher. Users track their day with color-coded panels, tag work by project and context, and generate polished daily summaries they can copy, email, or export.
+
+## Key Pages
+
+- Homepage: https://taskpanels.app
+- Features: https://taskpanels.app/features
+- Pricing: https://taskpanels.app/pricing
+- Privacy Policy: https://taskpanels.app/privacy
+- Terms of Service: https://taskpanels.app/terms
+- Application: https://app.taskpanels.app
+
+## Core Features
+
+- Color-coded task panels for visual daily tracking
+- Rich context tagging by project, value, status, revisions, blockers, and approvals
+- Automatic AI-powered summary generation
+- Time by project breakdowns
+- Blocker and follow-up tracking
+- Unrealized effort tracking for shelved, scrapped, and pivoted work
+- Export and email tools for reports and 1:1s
+- Weekly rollups across all projects
+
+## Pricing
+
+- Free: $0 — Basic daily tracking, limited history, sample summaries
+- Pro: $12/month — Unlimited panels, full summaries, blockers, unrealized effort, weekly reporting, export tools
+- Team: $9/user/month — Manager dashboard, team visibility, shared rollups, admin controls
+
+## Target Audience
+
+Professionals who need to document daily work, communicate progress clearly, and prove impact — including designers, engineers, managers, consultants, and freelancers.
+
+## What Makes TaskPanels Different
+
+- Unlike time trackers, TaskPanels adds context (blockers, approvals, value) not just hours
+- Unlike project tools (Asana, Jira, Notion), TaskPanels tracks your actual day, not project tasks
+- Unlike monitoring software, TaskPanels is controlled by the worker with no surveillance
