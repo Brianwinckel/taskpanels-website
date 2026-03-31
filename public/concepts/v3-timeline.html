@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskPanels App — V3: Timeline</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { font-family: 'Inter', -apple-system, sans-serif; }
+  body { background: #f8fafc; }
+  .timer-pulse { animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  .timeline-block {
+    transition: all 0.2s ease;
+  }
+  .timeline-block:hover {
+    transform: scale(1.01);
+  }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ===== CONCEPT V3: TIMELINE =====
+     Philosophy: Your day is a visual timeline. Each work block is a
+     proportionally-sized stripe on a horizontal timeline at top.
+     The active task is prominent below. Panel switcher is a compact
+     horizontal row. Everything flows top-to-bottom like reading a story.
+     ===== -->
+
+<div class="flex h-screen overflow-hidden">
+
+  <!-- Slim Sidebar -->
+  <nav class="w-16 bg-white border-r border-slate-100 flex flex-col items-center py-4 gap-1 shrink-0">
+    <div class="mb-6">
+      <svg width="32" height="32" viewBox="0 0 32 32">
+        <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+        <circle cx="22" cy="10" r="5" fill="#f97316"/>
+        <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+        <circle cx="22" cy="22" r="5" fill="#10b981"/>
+      </svg>
+    </div>
+    <button class="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-50 text-blue-600"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+    <button class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-50"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></button>
+    <button class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-50"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></button>
+    <div class="flex-1"></div>
+    <button class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-50"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.573-1.066z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    <div class="mt-2 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold">BW</div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <div class="bg-white border-b border-slate-100 px-8 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-xl font-bold text-slate-900">Monday, March 30</h1>
+        <p class="text-sm text-slate-400">6h 47m tracked across 4 panels</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="h-9 px-3 text-sm text-slate-500 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+          Add Panel
+        </button>
+        <button class="h-9 px-4 bg-slate-900 text-white text-sm font-semibold rounded-lg">End My Day</button>
+      </div>
+    </div>
+
+    <!-- Visual Timeline Bar -->
+    <div class="bg-white border-b border-slate-100 px-8 py-5">
+      <div class="flex items-center gap-1 mb-2">
+        <span class="text-[10px] text-slate-400 w-10 shrink-0">9 AM</span>
+        <div class="flex-1 flex gap-0.5 h-8 rounded-lg overflow-hidden">
+          <!-- Website Refresh: 1h22m -->
+          <div class="bg-blue-500 rounded-sm relative group cursor-pointer" style="flex: 82">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-[9px] font-semibold text-white opacity-90">Website Refresh</span>
+            </div>
+          </div>
+          <!-- Gap 8min -->
+          <div class="bg-slate-100 rounded-sm" style="flex: 8"></div>
+          <!-- Internal Ops: 1h10m -->
+          <div class="bg-orange-400 rounded-sm relative cursor-pointer" style="flex: 70">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-[9px] font-semibold text-white opacity-90">Internal Ops</span>
+            </div>
+          </div>
+          <!-- Gap 4min -->
+          <div class="bg-slate-100 rounded-sm" style="flex: 4"></div>
+          <!-- Launch Assets: 1h55m -->
+          <div class="bg-emerald-500 rounded-sm relative cursor-pointer" style="flex: 115">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-[9px] font-semibold text-white opacity-90">Launch Assets</span>
+            </div>
+          </div>
+          <!-- Break: 15min -->
+          <div class="bg-amber-300 rounded-sm relative cursor-pointer" style="flex: 15">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-[8px] font-medium text-amber-800">Brk</span>
+            </div>
+          </div>
+          <!-- Website Refresh (current): 2h41m and counting -->
+          <div class="bg-blue-500 rounded-sm relative cursor-pointer" style="flex: 161">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-[9px] font-semibold text-white opacity-90 flex items-center gap-1">
+                <span class="timer-pulse inline-block w-1.5 h-1.5 rounded-full bg-white"></span>
+                Website Refresh
+              </span>
+            </div>
+          </div>
+        </div>
+        <span class="text-[10px] text-slate-400 w-10 shrink-0 text-right">Now</span>
+      </div>
+      <!-- Time markers -->
+      <div class="flex items-center gap-1">
+        <div class="w-10 shrink-0"></div>
+        <div class="flex-1 flex justify-between text-[9px] text-slate-300">
+          <span>10</span><span>11</span><span>12</span><span>1 PM</span><span>2</span><span>3</span><span>4</span>
+        </div>
+        <div class="w-10 shrink-0"></div>
+      </div>
+    </div>
+
+    <div class="flex-1 overflow-auto">
+      <div class="max-w-3xl mx-auto px-8 py-6 space-y-6">
+
+        <!-- Active Task — Hero Card -->
+        <div class="bg-white rounded-2xl border-2 border-blue-200 p-6 shadow-sm shadow-blue-50">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="timer-pulse block w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-blue-500">Now Tracking</span>
+              </div>
+              <h2 class="text-xl font-bold text-slate-900">Website Refresh</h2>
+            </div>
+            <div class="text-right">
+              <p class="text-3xl font-mono font-extrabold text-blue-600 tabular-nums tracking-tight">2:41:33</p>
+              <p class="text-xs text-slate-400 mt-0.5">Session started 2:15 PM</p>
+            </div>
+          </div>
+
+          <div class="flex gap-2 mb-5">
+            <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-medium border border-blue-100">Web Redesign</span>
+            <span class="text-xs bg-purple-50 text-purple-600 px-2 py-0.5 rounded-md font-medium border border-purple-100">High Value</span>
+          </div>
+
+          <!-- Inline task list -->
+          <div class="flex items-center gap-4 mb-5">
+            <div class="flex items-center gap-1.5">
+              <span class="w-4 h-4 rounded bg-emerald-500 flex items-center justify-center"><svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/></svg></span>
+              <span class="text-xs text-slate-400 line-through">Update hero</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-4 h-4 rounded bg-emerald-500 flex items-center justify-center"><svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/></svg></span>
+              <span class="text-xs text-slate-400 line-through">Fix mobile nav</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-4 h-4 rounded border-2 border-slate-200"></span>
+              <span class="text-xs text-slate-600">Pricing page</span>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button class="h-10 px-5 bg-slate-900 text-white text-sm font-semibold rounded-xl flex items-center gap-2">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="1"/></svg>
+              Stop
+            </button>
+            <button class="h-10 px-4 border border-slate-200 text-slate-600 text-sm font-medium rounded-xl hover:bg-slate-50">Add Note</button>
+          </div>
+        </div>
+
+        <!-- Panel Switcher — Horizontal Cards -->
+        <div>
+          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Switch Panel</h2>
+          <div class="flex gap-3 overflow-x-auto pb-1">
+            <div class="min-w-[180px] bg-white rounded-xl border border-slate-200 p-4 cursor-pointer hover:border-emerald-300 hover:shadow-sm transition-all shrink-0">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-2 h-6 rounded-full bg-emerald-500"></div>
+                <span class="text-sm font-semibold text-slate-800">Launch Assets</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-slate-400">2 tasks</span>
+                <span class="text-sm font-mono font-semibold text-slate-500 tabular-nums">1:55:00</span>
+              </div>
+            </div>
+
+            <div class="min-w-[180px] bg-white rounded-xl border border-slate-200 p-4 cursor-pointer hover:border-orange-300 hover:shadow-sm transition-all shrink-0">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-2 h-6 rounded-full bg-orange-400"></div>
+                <span class="text-sm font-semibold text-slate-800">Internal Ops</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-slate-400">1 of 2 done</span>
+                <span class="text-sm font-mono font-semibold text-slate-500 tabular-nums">1:10:30</span>
+              </div>
+            </div>
+
+            <div class="min-w-[180px] bg-white rounded-xl border border-slate-200 p-4 cursor-pointer hover:border-purple-300 hover:shadow-sm transition-all shrink-0">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-2 h-6 rounded-full bg-purple-500"></div>
+                <span class="text-sm font-semibold text-slate-800">Client Review</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-slate-400">1 task</span>
+                <span class="text-sm font-mono font-semibold text-slate-500 tabular-nums">0:00:00</span>
+              </div>
+            </div>
+
+            <div class="min-w-[120px] bg-white rounded-xl border border-dashed border-slate-200 p-4 cursor-pointer hover:bg-slate-50 transition-all shrink-0 flex items-center justify-center">
+              <span class="text-sm text-slate-400 font-medium">+ Add Panel</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Session History -->
+        <div>
+          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Earlier Today</h2>
+          <div class="space-y-3">
+            <div class="flex gap-4 items-start">
+              <div class="text-right w-20 shrink-0 pt-1">
+                <p class="text-xs font-medium text-slate-500">9:00 AM</p>
+                <p class="text-[10px] text-slate-400">1h 22m</p>
+              </div>
+              <div class="w-0.5 bg-blue-200 rounded-full self-stretch shrink-0"></div>
+              <div class="flex-1 bg-white rounded-xl border border-slate-200 p-4">
+                <div class="flex items-center gap-2 mb-1">
+                  <div class="w-2 h-5 rounded-full bg-blue-500"></div>
+                  <span class="text-sm font-semibold text-slate-800">Website Refresh</span>
+                  <span class="text-[10px] bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded border border-emerald-200 ml-auto">Completed</span>
+                </div>
+                <p class="text-xs text-slate-500 ml-5">Updated hero section, fixed mobile nav</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4 items-start">
+              <div class="text-right w-20 shrink-0 pt-1">
+                <p class="text-xs font-medium text-slate-500">10:30 AM</p>
+                <p class="text-[10px] text-slate-400">1h 10m</p>
+              </div>
+              <div class="w-0.5 bg-orange-200 rounded-full self-stretch shrink-0"></div>
+              <div class="flex-1 bg-white rounded-xl border border-slate-200 p-4">
+                <div class="flex items-center gap-2 mb-1">
+                  <div class="w-2 h-5 rounded-full bg-orange-400"></div>
+                  <span class="text-sm font-semibold text-slate-800">Internal Ops</span>
+                  <span class="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded border border-blue-200 ml-auto">In Progress</span>
+                </div>
+                <p class="text-xs text-slate-500 ml-5">Team standup, started process doc</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4 items-start">
+              <div class="text-right w-20 shrink-0 pt-1">
+                <p class="text-xs font-medium text-slate-500">11:45 AM</p>
+                <p class="text-[10px] text-slate-400">1h 55m</p>
+              </div>
+              <div class="w-0.5 bg-emerald-200 rounded-full self-stretch shrink-0"></div>
+              <div class="flex-1 bg-white rounded-xl border border-slate-200 p-4">
+                <div class="flex items-center gap-2 mb-1">
+                  <div class="w-2 h-5 rounded-full bg-emerald-500"></div>
+                  <span class="text-sm font-semibold text-slate-800">Launch Assets</span>
+                  <span class="text-[10px] bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded border border-emerald-200 ml-auto">Completed</span>
+                </div>
+                <p class="text-xs text-slate-500 ml-5">Social templates, email banner design</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4 items-start">
+              <div class="text-right w-20 shrink-0 pt-1">
+                <p class="text-xs font-medium text-slate-500">1:40 PM</p>
+                <p class="text-[10px] text-slate-400">15m</p>
+              </div>
+              <div class="w-0.5 bg-amber-200 rounded-full self-stretch shrink-0"></div>
+              <div class="flex-1 bg-white rounded-xl border border-dashed border-slate-200 p-3">
+                <span class="text-sm text-slate-500">Break — 15 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fixed bottom-0 left-0 right-0 bg-slate-900 text-white px-6 py-3 text-sm z-50">
+  <strong>V3: Timeline</strong> — Your day is a visual story. Horizontal timeline bar shows proportional time blocks at a glance. Active task is a hero card below. Horizontal panel switcher for quick context switches. Vertical session history with color-coded timeline rail.
+</div>
+
+</body>
+</html>

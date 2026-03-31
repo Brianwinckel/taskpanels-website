@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskPanels — Home Screen Concepts</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { font-family: 'Inter', -apple-system, sans-serif; }
+  body { background: #0f172a; }
+  .concept-card {
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .concept-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+</style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-8">
+
+  <div class="text-center mb-12">
+    <div class="flex items-center justify-center gap-3 mb-4">
+      <svg width="40" height="40" viewBox="0 0 32 32">
+        <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+        <circle cx="22" cy="10" r="5" fill="#f97316"/>
+        <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+        <circle cx="22" cy="22" r="5" fill="#10b981"/>
+      </svg>
+      <span class="text-2xl font-bold text-white">TaskPanels</span>
+    </div>
+    <h1 class="text-4xl font-extrabold text-white mb-3">App Home Screen Concepts</h1>
+    <p class="text-lg text-slate-400 max-w-xl mx-auto">5 layout explorations for the TaskPanels app dashboard. Each takes a different approach to organizing panels, timers, and session history.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl w-full">
+
+    <a href="v1-clean-grid.html" class="concept-card bg-slate-800 rounded-2xl p-6 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xs font-bold bg-blue-500/20 text-blue-400 px-2 py-1 rounded-md">V1</span>
+        <h2 class="text-lg font-bold text-white">Clean Grid</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-4">Panels ARE the interface. Large breathing cards with progress rings, inline tasks, and generous whitespace. Slim icon sidebar.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Panel Grid</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Progress Rings</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Session Log</span>
+      </div>
+    </a>
+
+    <a href="v2-command-center.html" class="concept-card bg-slate-800 rounded-2xl p-6 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xs font-bold bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-md">V2</span>
+        <h2 class="text-lg font-bold text-white">Command Center</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-4">Split layout — dominant active task hero with circular timer on the left, panel list + session feed on the right.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Split Layout</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Circular Timer</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Task Checklist</span>
+      </div>
+    </a>
+
+    <a href="v3-timeline.html" class="concept-card bg-slate-800 rounded-2xl p-6 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xs font-bold bg-orange-500/20 text-orange-400 px-2 py-1 rounded-md">V3</span>
+        <h2 class="text-lg font-bold text-white">Timeline</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-4">Your day is a visual story. Horizontal timeline bar shows proportional blocks. Vertical session history with color-coded rail.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Visual Timeline</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Hero Card</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Panel Switcher</span>
+      </div>
+    </a>
+
+    <a href="v4-dashboard-cards.html" class="concept-card bg-slate-800 rounded-2xl p-6 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xs font-bold bg-purple-500/20 text-purple-400 px-2 py-1 rounded-md">V4</span>
+        <h2 class="text-lg font-bold text-white">Dashboard Cards</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-4">Bento grid — everything visible at once. Active task, stats, charts, panel list, and session log in one viewport. No scrolling needed.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Bento Grid</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Chart Widget</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">At-a-Glance</span>
+      </div>
+    </a>
+
+    <a href="v5-minimal-focus.html" class="concept-card bg-slate-800 rounded-2xl p-6 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xs font-bold bg-pink-500/20 text-pink-400 px-2 py-1 rounded-md">V5</span>
+        <h2 class="text-lg font-bold text-white">Minimal Focus</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-4">Radically simple. One task centered, giant timer, zero distractions. Panel pills for switching. Session drawer at the bottom. Zen mode.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Centered UI</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Giant Timer</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Expandable Drawer</span>
+      </div>
+    </a>
+
+  </div>
+
+  <p class="text-sm text-slate-500 mt-10">Click any concept to view the full interactive mockup. All use the same data and color system from the marketing hero panels.</p>
+
+</body>
+</html>
