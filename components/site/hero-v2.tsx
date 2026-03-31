@@ -27,19 +27,20 @@ function DailySummaryPanel() {
         <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
           Time by Project
         </p>
-        <div className="flex items-end gap-1.5 h-14">
+        <div className="flex items-end gap-1.5" style={{ height: 56 }}>
           {[
-            { h: "80%", color: "bg-blue-500", label: "Web", time: "2h 40m" },
-            { h: "55%", color: "bg-emerald-500", label: "Launch", time: "1h 55m" },
-            { h: "35%", color: "bg-orange-400", label: "Ops", time: "1h 10m" },
-            { h: "22%", color: "bg-purple-500", label: "Review", time: "0h 45m" },
-            { h: "12%", color: "bg-teal-400", label: "Admin", time: "0h 25m" },
+            { h: 45, color: "bg-blue-500", label: "Web" },
+            { h: 31, color: "bg-emerald-500", label: "Launch" },
+            { h: 20, color: "bg-orange-400", label: "Ops" },
+            { h: 12, color: "bg-purple-500", label: "Review" },
+            { h: 7, color: "bg-teal-400", label: "Admin" },
           ].map((bar) => (
-            <div key={bar.label} className="flex-1 flex flex-col items-center gap-0.5">
-              <div className="w-full rounded-t-sm relative" style={{ height: bar.h }}>
-                <div className={`absolute inset-0 ${bar.color} rounded-t-sm opacity-80`} />
-              </div>
-              <span className="text-[7px] font-medium text-slate-400">{bar.label}</span>
+            <div key={bar.label} className="flex-1 flex flex-col items-center justify-end h-full">
+              <div
+                className={`w-full ${bar.color} rounded-t-sm opacity-80`}
+                style={{ height: bar.h }}
+              />
+              <span className="text-[7px] font-medium text-slate-400 mt-1">{bar.label}</span>
             </div>
           ))}
         </div>
