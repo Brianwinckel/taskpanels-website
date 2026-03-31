@@ -1,4 +1,4 @@
-import { HeroSection } from "@/components/site/hero-section";
+import { HeroV2 } from "@/components/site/hero-v2";
 import { ProblemSection } from "@/components/site/problem-section";
 import { ComparisonSection } from "@/components/site/comparison-section";
 import { HowItWorksSection } from "@/components/site/how-it-works-section";
@@ -14,7 +14,7 @@ import { FinalCtaSection } from "@/components/site/final-cta-section";
 export default function HomePage() {
   return (
     <>
-      <HeroSection />
+      <HeroV2 />
       <ProblemSection />
       <ComparisonSection />
       <HowItWorksSection />
