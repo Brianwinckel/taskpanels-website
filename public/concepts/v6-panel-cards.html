@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskPanels App — V6: Panel Cards</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+    }
+  }
+}
+</script>
+<style>
+  * { font-family: 'Inter', -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { background: #f8fafc; }
+
+  .timer-pulse { animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* Panel cards — colorful backgrounds matching the hero */
+  .panel-card {
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+  }
+  .panel-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  }
+  .panel-card:active {
+    transform: scale(0.98);
+  }
+
+  /* Bottom nav for mobile */
+  .bottom-nav-item {
+    transition: color 0.15s ease;
+  }
+  .bottom-nav-item.active {
+    color: #3b82f6;
+  }
+
+  /* Hide scrollbar but keep scrollable */
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Desktop sidebar */
+  .sidebar-item { transition: background 0.15s ease; }
+  .sidebar-item:hover { background: #f1f5f9; }
+  .sidebar-item.active-nav { background: #eff6ff; color: #2563eb; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ===== CONCEPT V6: PANEL CARDS =====
+     Philosophy: Directly inspired by the marketing hero's "Today's Panels"
+     card. Colorful panel rows with left color bar, task count, and timer.
+     Desktop: slim icon sidebar. Mobile: top header + bottom tab bar.
+     Tab bar navigation (Today / This Week / Archive) sits below header.
+     Clean, card-based, maximum horizontal space on mobile.
+     ===== -->
+
+<!-- ==========================================
+     DESKTOP LAYOUT (hidden on mobile)
+     ========================================== -->
+<div class="hidden md:flex h-screen overflow-hidden">
+
+  <!-- Slim Left Sidebar — Desktop only -->
+  <nav class="w-16 bg-white border-r border-slate-100 flex flex-col items-center py-4 gap-1 shrink-0">
+    <!-- Logo -->
+    <div class="mb-6">
+      <svg width="32" height="32" viewBox="0 0 32 32">
+        <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+        <circle cx="22" cy="10" r="5" fill="#f97316"/>
+        <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+        <circle cx="22" cy="22" r="5" fill="#10b981"/>
+      </svg>
+    </div>
+
+    <button class="sidebar-item active-nav w-10 h-10 rounded-xl flex items-center justify-center" title="Tracker">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </button>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Summary">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    </button>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Team">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    </button>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Reports">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+    </button>
+
+    <div class="flex-1"></div>
+
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Settings">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.573-1.066z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    <div class="mt-2 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold cursor-pointer">
+      BW
+    </div>
+  </nav>
+
+  <!-- Desktop Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Top Bar -->
+    <div class="bg-white border-b border-slate-100 px-8 py-4 flex items-center justify-between shrink-0">
+      <div>
+        <h1 class="text-xl font-bold text-slate-900">Today's Panels</h1>
+        <p class="text-sm text-slate-400 mt-0.5">Monday, March 30 — 6h 47m tracked</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="h-9 px-4 text-sm font-medium text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+          Add Panel
+        </button>
+        <button class="h-9 px-5 bg-slate-900 text-white text-sm font-semibold rounded-xl hover:bg-slate-800 transition-colors">
+          End My Day
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="bg-white border-b border-slate-100 px-8 flex items-center gap-1 shrink-0">
+      <button class="px-4 py-3 text-sm font-semibold text-slate-900 border-b-2 border-slate-900">Today</button>
+      <button class="px-4 py-3 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-600">This Week</button>
+      <button class="px-4 py-3 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-600">Archive</button>
+    </div>
+
+    <!-- Panel List + Sidebar -->
+    <div class="flex-1 overflow-auto">
+      <div class="flex gap-6 p-6 max-w-[1200px]">
+        <!-- Panel Cards — Main Column -->
+        <div class="flex-1 space-y-3">
+          <!-- Active Panel -->
+          <div class="panel-card bg-blue-50 rounded-2xl border border-blue-200 p-5 relative overflow-hidden">
+            <div class="flex items-center gap-4">
+              <div class="w-2 h-14 rounded-full bg-blue-500 shrink-0"></div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-0.5">
+                  <h3 class="text-lg font-bold text-slate-900">Website Refresh</h3>
+                  <div class="flex items-center gap-1">
+                    <span class="timer-pulse block w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-blue-500">Active</span>
+                  </div>
+                </div>
+                <p class="text-sm text-slate-500">3 tasks — 2 completed</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-2xl font-mono font-bold text-blue-600 tabular-nums tracking-tight">2:40:12</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2 -->
+          <div class="panel-card bg-emerald-50 rounded-2xl border border-emerald-200 p-5">
+            <div class="flex items-center gap-4">
+              <div class="w-2 h-14 rounded-full bg-emerald-500 shrink-0"></div>
+              <div class="flex-1 min-w-0">
+                <h3 class="text-lg font-bold text-slate-900">Launch Assets</h3>
+                <p class="text-sm text-slate-500">2 tasks</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-2xl font-mono font-bold text-slate-500 tabular-nums tracking-tight">1:55:00</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 3 -->
+          <div class="panel-card bg-orange-50 rounded-2xl border border-orange-200 p-5">
+            <div class="flex items-center gap-4">
+              <div class="w-2 h-14 rounded-full bg-orange-400 shrink-0"></div>
+              <div class="flex-1 min-w-0">
+                <h3 class="text-lg font-bold text-slate-900">Internal Ops</h3>
+                <p class="text-sm text-slate-500">2 tasks — 1 completed</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-2xl font-mono font-bold text-slate-500 tabular-nums tracking-tight">1:10:30</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 4 -->
+          <div class="panel-card bg-purple-50 rounded-2xl border border-purple-200 p-5">
+            <div class="flex items-center gap-4">
+              <div class="w-2 h-14 rounded-full bg-purple-500 shrink-0"></div>
+              <div class="flex-1 min-w-0">
+                <h3 class="text-lg font-bold text-slate-900">Client Review</h3>
+                <p class="text-sm text-slate-500">1 task</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-2xl font-mono font-bold text-slate-500 tabular-nums tracking-tight">0:45:18</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Break / Lunch row -->
+          <div class="flex gap-3">
+            <div class="panel-card flex-1 bg-amber-50 rounded-2xl border border-amber-200 p-4 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center">
+                <svg class="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-slate-700">Break</p>
+                <p class="text-xs text-slate-400">15 min</p>
+              </div>
+            </div>
+            <div class="panel-card flex-1 bg-rose-50 rounded-2xl border border-rose-200 p-4 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-rose-100 border border-rose-300 flex items-center justify-center">
+                <svg class="w-4 h-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 3h18M3 7h18M9 11l3 10 3-10"/></svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-slate-700">Lunch</p>
+                <p class="text-xs text-slate-400">60 min</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex gap-3 pt-2">
+            <button class="flex-1 h-12 bg-slate-900 text-white font-semibold rounded-xl hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/></svg>
+              Start Panel
+            </button>
+            <button class="flex-1 h-12 border border-slate-200 bg-white text-slate-600 font-semibold rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center gap-2">
+              Generate Summary
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Sidebar — Quick Stats + Session Log (desktop only) -->
+        <div class="w-[320px] shrink-0 space-y-4 hidden lg:block">
+          <!-- Quick Stats -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Today's Stats</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-slate-50 rounded-xl p-3 text-center">
+                <p class="text-xl font-bold text-blue-600">6h 47m</p>
+                <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-0.5">Focus Time</p>
+              </div>
+              <div class="bg-slate-50 rounded-xl p-3 text-center">
+                <p class="text-xl font-bold text-emerald-600">5 / 8</p>
+                <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-0.5">Tasks Done</p>
+              </div>
+              <div class="bg-slate-50 rounded-xl p-3 text-center">
+                <p class="text-xl font-bold text-purple-600">4</p>
+                <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-0.5">Panels</p>
+              </div>
+              <div class="bg-slate-50 rounded-xl p-3 text-center">
+                <p class="text-xl font-bold text-slate-700">87%</p>
+                <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-0.5">Productive</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Sessions -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Sessions</h3>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <div class="w-1 h-8 rounded-full bg-blue-500"></div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-slate-700 truncate">Website Refresh</p>
+                  <p class="text-[10px] text-slate-400">9:00 – 10:22 AM</p>
+                </div>
+                <span class="text-xs font-mono text-slate-500">1:22</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-1 h-8 rounded-full bg-orange-400"></div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-slate-700 truncate">Internal Ops</p>
+                  <p class="text-[10px] text-slate-400">10:30 – 11:41 AM</p>
+                </div>
+                <span class="text-xs font-mono text-slate-500">1:10</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-1 h-8 rounded-full bg-emerald-500"></div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-slate-700 truncate">Launch Assets</p>
+                  <p class="text-[10px] text-slate-400">11:45 AM – 1:40 PM</p>
+                </div>
+                <span class="text-xs font-mono text-slate-500">1:55</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-1 h-8 rounded-full bg-amber-300"></div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-slate-700 truncate">Break</p>
+                  <p class="text-[10px] text-slate-400">1:40 – 1:55 PM</p>
+                </div>
+                <span class="text-xs font-mono text-slate-500">0:15</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     MOBILE LAYOUT (hidden on desktop)
+     ========================================== -->
+<div class="md:hidden flex flex-col h-screen overflow-hidden">
+
+  <!-- Mobile Top Header -->
+  <header class="bg-white border-b border-slate-100 px-4 pt-3 pb-0 shrink-0">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2.5">
+        <svg width="28" height="28" viewBox="0 0 32 32">
+          <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+          <circle cx="22" cy="10" r="5" fill="#f97316"/>
+          <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+          <circle cx="22" cy="22" r="5" fill="#10b981"/>
+        </svg>
+        <h1 class="text-lg font-bold text-slate-900">Today's Panels</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500">
+          <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+        </button>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-[10px] font-bold">BW</div>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="flex items-center gap-1 -mb-px">
+      <button class="px-4 py-2.5 text-sm font-semibold text-slate-900 border-b-2 border-slate-900">Today</button>
+      <button class="px-4 py-2.5 text-sm font-medium text-slate-400">This Week</button>
+      <button class="px-4 py-2.5 text-sm font-medium text-slate-400">Archive</button>
+    </div>
+  </header>
+
+  <!-- Mobile Panel List -->
+  <div class="flex-1 overflow-auto hide-scrollbar px-4 py-4 space-y-3">
+
+    <!-- Active Panel -->
+    <div class="panel-card bg-blue-50 rounded-2xl border border-blue-200 p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-1.5 h-12 rounded-full bg-blue-500 shrink-0"></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-0.5">
+            <h3 class="text-base font-bold text-slate-900">Website Refresh</h3>
+          </div>
+          <p class="text-xs text-slate-500">3 tasks — 2 completed</p>
+        </div>
+        <div class="text-right shrink-0">
+          <p class="text-xl font-mono font-bold text-blue-600 tabular-nums tracking-tight">2:40:12</p>
+          <div class="flex items-center gap-1 justify-end mt-0.5">
+            <span class="timer-pulse block w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+            <span class="text-[9px] font-bold uppercase tracking-wider text-blue-500">Active</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2 -->
+    <div class="panel-card bg-emerald-50 rounded-2xl border border-emerald-200 p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-1.5 h-12 rounded-full bg-emerald-500 shrink-0"></div>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base font-bold text-slate-900">Launch Assets</h3>
+          <p class="text-xs text-slate-500">2 tasks</p>
+        </div>
+        <p class="text-xl font-mono font-bold text-slate-500 tabular-nums tracking-tight shrink-0">1:55:00</p>
+      </div>
+    </div>
+
+    <!-- Panel 3 -->
+    <div class="panel-card bg-orange-50 rounded-2xl border border-orange-200 p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-1.5 h-12 rounded-full bg-orange-400 shrink-0"></div>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base font-bold text-slate-900">Internal Ops</h3>
+          <p class="text-xs text-slate-500">2 tasks — 1 completed</p>
+        </div>
+        <p class="text-xl font-mono font-bold text-slate-500 tabular-nums tracking-tight shrink-0">1:10:30</p>
+      </div>
+    </div>
+
+    <!-- Panel 4 -->
+    <div class="panel-card bg-purple-50 rounded-2xl border border-purple-200 p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-1.5 h-12 rounded-full bg-purple-500 shrink-0"></div>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base font-bold text-slate-900">Client Review</h3>
+          <p class="text-xs text-slate-500">1 task</p>
+        </div>
+        <p class="text-xl font-mono font-bold text-slate-500 tabular-nums tracking-tight shrink-0">0:45:18</p>
+      </div>
+    </div>
+
+    <!-- Break / Lunch -->
+    <div class="flex gap-2.5">
+      <div class="panel-card flex-1 bg-amber-50 rounded-2xl border border-amber-200 p-3.5 flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0">
+          <svg class="w-3.5 h-3.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-slate-700">Break</p>
+          <p class="text-[10px] text-slate-400">15 min</p>
+        </div>
+      </div>
+      <div class="panel-card flex-1 bg-rose-50 rounded-2xl border border-rose-200 p-3.5 flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-full bg-rose-100 border border-rose-300 flex items-center justify-center shrink-0">
+          <svg class="w-3.5 h-3.5 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 3h18M3 7h18M9 11l3 10 3-10"/></svg>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-slate-700">Lunch</p>
+          <p class="text-[10px] text-slate-400">60 min</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-2.5 pt-1">
+      <button class="flex-1 h-12 bg-slate-900 text-white font-semibold rounded-xl flex items-center justify-center gap-2 text-sm">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/></svg>
+        Start Panel
+      </button>
+      <button class="flex-1 h-12 border border-slate-200 bg-white text-slate-600 font-semibold rounded-xl flex items-center justify-center text-sm">
+        Generate Summary
+      </button>
+    </div>
+
+    <!-- Session Summary (collapsed) -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4 mt-1">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Today's Sessions</h3>
+        <span class="text-xs text-slate-400">6h 47m total</span>
+      </div>
+      <div class="space-y-2.5">
+        <div class="flex items-center gap-2.5">
+          <div class="w-1 h-6 rounded-full bg-blue-500"></div>
+          <span class="text-sm text-slate-700 flex-1">Website Refresh</span>
+          <span class="text-xs font-mono text-slate-400">1:22</span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <div class="w-1 h-6 rounded-full bg-orange-400"></div>
+          <span class="text-sm text-slate-700 flex-1">Internal Ops</span>
+          <span class="text-xs font-mono text-slate-400">1:10</span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <div class="w-1 h-6 rounded-full bg-emerald-500"></div>
+          <span class="text-sm text-slate-700 flex-1">Launch Assets</span>
+          <span class="text-xs font-mono text-slate-400">1:55</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom spacer for tab bar -->
+    <div class="h-4"></div>
+  </div>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="bg-white border-t border-slate-100 px-2 pb-6 pt-2 flex items-center justify-around shrink-0">
+    <button class="bottom-nav-item active flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="text-[10px] font-semibold">Tracker</span>
+    </button>
+    <button class="bottom-nav-item text-slate-400 flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      <span class="text-[10px] font-medium">Summary</span>
+    </button>
+    <button class="bottom-nav-item text-slate-400 flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <span class="text-[10px] font-medium">Team</span>
+    </button>
+    <button class="bottom-nav-item text-slate-400 flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <span class="text-[10px] font-medium">More</span>
+    </button>
+  </nav>
+</div>
+
+<!-- Design Notes -->
+<div class="fixed bottom-0 left-0 right-0 bg-slate-900 text-white px-6 py-3 text-sm z-50 md:block hidden">
+  <strong>V6: Panel Cards</strong> — Directly inspired by the marketing hero's "Today's Panels" card. Colorful panel rows with left color bars. Desktop: slim icon sidebar + stats sidebar. Mobile: top header with tabs + bottom tab bar for max horizontal space. Resize your browser to see both layouts.
+</div>
+
+</body>
+</html>
