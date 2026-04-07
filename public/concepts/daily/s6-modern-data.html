@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskPanels — S6: Modern Data</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+    }
+  }
+}
+</script>
+<style>
+  * { font-family: 'Inter', -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { background: #f8fafc; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .sidebar-item { transition: background 0.15s ease; }
+  .sidebar-item:hover { background: #f1f5f9; }
+  .sidebar-item.active-nav { background: #eff6ff; color: #2563eb; }
+  .bottom-nav-item { transition: color 0.15s ease; }
+  .bottom-nav-item.active { color: #3b82f6; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ==========================================
+     DESKTOP LAYOUT
+     ========================================== -->
+<div class="hidden md:flex h-screen overflow-hidden">
+
+  <!-- Slim Left Sidebar -->
+  <nav class="w-16 bg-white border-r border-slate-100 flex flex-col items-center py-4 gap-1 shrink-0">
+    <div class="mb-6">
+      <svg width="32" height="32" viewBox="0 0 32 32">
+        <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+        <circle cx="22" cy="10" r="5" fill="#f97316"/>
+        <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+        <circle cx="22" cy="22" r="5" fill="#10b981"/>
+      </svg>
+    </div>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Tracker">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </button>
+    <button class="sidebar-item active-nav w-10 h-10 rounded-xl flex items-center justify-center" title="Summary">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    </button>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Team">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    </button>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Reports">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+    </button>
+    <div class="flex-1"></div>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Settings">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.573-1.066z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    <div class="mt-2 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold cursor-pointer">BW</div>
+  </nav>
+
+  <!-- Desktop Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Report Header -->
+    <div class="bg-white border-b border-slate-100 px-8 py-4 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-3">
+        <svg width="28" height="28" viewBox="0 0 32 32">
+          <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+          <circle cx="22" cy="10" r="5" fill="#f97316"/>
+          <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+          <circle cx="22" cy="22" r="5" fill="#10b981"/>
+        </svg>
+        <div>
+          <h1 class="text-xl font-bold text-slate-900">Daily Work Summary &mdash; March 24</h1>
+          <p class="text-sm text-slate-400 mt-0.5">S6: Modern Data &middot; 6h 47m tracked</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-50" title="Copy">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+        <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-50" title="Email">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </button>
+        <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-50" title="Download">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Scrollable Report Content -->
+    <div class="flex-1 overflow-auto hide-scrollbar">
+      <div class="max-w-[1000px] mx-auto p-6 space-y-6">
+
+        <!-- KPI RIBBON -->
+        <div class="grid grid-cols-5 gap-3">
+          <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 text-white">
+            <p class="text-xs font-medium text-blue-200 mb-1">Focus Time</p>
+            <p class="text-2xl font-black">6h 47m</p>
+          </div>
+          <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-4 text-white">
+            <p class="text-xs font-medium text-emerald-200 mb-1">Tasks Done</p>
+            <p class="text-2xl font-black">5 / 8</p>
+          </div>
+          <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-4 text-white">
+            <p class="text-xs font-medium text-purple-200 mb-1">Projects</p>
+            <p class="text-2xl font-black">4</p>
+          </div>
+          <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-4 text-white">
+            <p class="text-xs font-medium text-orange-200 mb-1">Productive</p>
+            <p class="text-2xl font-black">87%</p>
+          </div>
+          <div class="bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl p-4 text-white">
+            <p class="text-xs font-medium text-rose-200 mb-1">Deep Work</p>
+            <p class="text-2xl font-black">3h 12m</p>
+          </div>
+        </div>
+
+        <!-- CONNECTED SCATTER PLOT -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Work Flow: Time Spent vs Tasks Completed</h2>
+          <svg viewBox="0 0 800 340" class="w-full">
+            <!-- Grid lines -->
+            <line x1="60" y1="20" x2="60" y2="280" stroke="#e2e8f0" stroke-width="1"/>
+            <line x1="60" y1="280" x2="780" y2="280" stroke="#e2e8f0" stroke-width="1"/>
+            <line x1="60" y1="215" x2="780" y2="215" stroke="#f1f5f9" stroke-width="1"/>
+            <line x1="60" y1="150" x2="780" y2="150" stroke="#f1f5f9" stroke-width="1"/>
+            <line x1="60" y1="85" x2="780" y2="85" stroke="#f1f5f9" stroke-width="1"/>
+            <line x1="60" y1="20" x2="780" y2="20" stroke="#f1f5f9" stroke-width="1"/>
+
+            <!-- Y axis labels -->
+            <text x="50" y="284" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="10">0</text>
+            <text x="50" y="219" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="10">1</text>
+            <text x="50" y="154" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="10">2</text>
+            <text x="50" y="89" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="10">3</text>
+            <text x="50" y="24" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="10">4</text>
+            <text x="20" y="155" text-anchor="middle" fill="#64748b" font-family="Inter" font-size="10" transform="rotate(-90,20,155)">Tasks Completed</text>
+
+            <!-- X axis labels (time spent in hours) -->
+            <text x="60" y="300" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="10">0h</text>
+            <text x="240" y="300" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="10">1h</text>
+            <text x="420" y="300" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="10">2h</text>
+            <text x="600" y="300" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="10">3h</text>
+            <text x="420" y="325" text-anchor="middle" fill="#64748b" font-family="Inter" font-size="10">Time Spent</text>
+
+            <!-- Connected lines -->
+            <polyline points="540,85 395,150 250,215 175,150" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="6,3" opacity="0.4"/>
+            <polyline points="540,85 395,150" fill="none" stroke="#3b82f6" stroke-width="2" opacity="0.3"/>
+
+            <!-- Project dots -->
+            <!-- Website Refresh: 2h40m, 3 tasks -->
+            <circle cx="540" cy="85" r="18" fill="#3b82f6" opacity="0.15"/>
+            <circle cx="540" cy="85" r="10" fill="#3b82f6"/>
+            <text x="540" y="70" text-anchor="middle" fill="#3b82f6" font-family="Inter" font-weight="600" font-size="10">Website Refresh</text>
+
+            <!-- Launch Assets: 1h55m, 2 tasks -->
+            <circle cx="395" cy="150" r="14" fill="#10b981" opacity="0.15"/>
+            <circle cx="395" cy="150" r="8" fill="#10b981"/>
+            <text x="395" y="138" text-anchor="middle" fill="#10b981" font-family="Inter" font-weight="600" font-size="10">Launch Assets</text>
+
+            <!-- Internal Ops: 1h10m, 1 task -->
+            <circle cx="250" cy="215" r="12" fill="#f97316" opacity="0.15"/>
+            <circle cx="250" cy="215" r="7" fill="#f97316"/>
+            <text x="250" y="205" text-anchor="middle" fill="#f97316" font-family="Inter" font-weight="600" font-size="10">Internal Ops</text>
+
+            <!-- Client Review: 0h45m, 2 tasks -->
+            <circle cx="175" cy="150" r="11" fill="#8b5cf6" opacity="0.15"/>
+            <circle cx="175" cy="150" r="7" fill="#8b5cf6"/>
+            <text x="175" y="140" text-anchor="middle" fill="#8b5cf6" font-family="Inter" font-weight="600" font-size="10">Client Review</text>
+
+            <!-- Flow arrow -->
+            <text x="720" y="120" fill="#94a3b8" font-family="Inter" font-size="9" font-style="italic">morning</text>
+            <path d="M720,125 L720,200" stroke="#94a3b8" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+            <text x="720" y="220" fill="#94a3b8" font-family="Inter" font-size="9" font-style="italic">afternoon</text>
+            <defs><marker id="arrowhead" markerWidth="6" markerHeight="4" refX="3" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="#94a3b8"/></marker></defs>
+          </svg>
+        </div>
+
+        <!-- VIOLIN DISTRIBUTION + RADAR side by side -->
+        <div class="grid grid-cols-2 gap-6">
+
+          <!-- Violin Distribution -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Time Distribution by Focus Level</h2>
+            <svg viewBox="0 0 400 280" class="w-full">
+              <!-- Deep Work violin -->
+              <text x="70" y="20" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="11">Deep Work</text>
+              <text x="70" y="34" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="9">3h 12m</text>
+              <path d="M70,50 Q95,80 100,120 Q105,160 95,200 Q85,240 70,260 Q55,240 45,200 Q35,160 40,120 Q45,80 70,50Z" fill="#3b82f6" opacity="0.2"/>
+              <path d="M70,65 Q88,90 92,120 Q96,155 88,195 Q80,230 70,248 Q60,230 52,195 Q44,155 48,120 Q52,90 70,65Z" fill="#3b82f6" opacity="0.5"/>
+              <line x1="70" y1="50" x2="70" y2="260" stroke="#3b82f6" stroke-width="1.5" opacity="0.6"/>
+
+              <!-- Shallow Work violin -->
+              <text x="175" y="20" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="11">Shallow</text>
+              <text x="175" y="34" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="9">1h 45m</text>
+              <path d="M175,80 Q195,105 198,140 Q200,170 193,210 Q186,240 175,250 Q164,240 157,210 Q150,170 152,140 Q155,105 175,80Z" fill="#10b981" opacity="0.2"/>
+              <path d="M175,95 Q190,115 192,140 Q194,165 189,200 Q184,230 175,240 Q166,230 161,200 Q156,165 158,140 Q160,115 175,95Z" fill="#10b981" opacity="0.5"/>
+              <line x1="175" y1="80" x2="175" y2="250" stroke="#10b981" stroke-width="1.5" opacity="0.6"/>
+
+              <!-- Meetings violin -->
+              <text x="280" y="20" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="11">Meetings</text>
+              <text x="280" y="34" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="9">1h 15m</text>
+              <path d="M280,110 Q296,130 298,155 Q300,180 294,210 Q288,235 280,242 Q272,235 266,210 Q260,180 262,155 Q264,130 280,110Z" fill="#f59e0b" opacity="0.2"/>
+              <path d="M280,122 Q292,138 294,158 Q296,178 290,205 Q284,228 280,234 Q276,228 270,205 Q264,178 266,158 Q268,138 280,122Z" fill="#f59e0b" opacity="0.5"/>
+              <line x1="280" y1="110" x2="280" y2="242" stroke="#f59e0b" stroke-width="1.5" opacity="0.6"/>
+
+              <!-- Admin violin (smaller) -->
+              <text x="370" y="20" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="11">Admin</text>
+              <text x="370" y="34" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="9">35m</text>
+              <path d="M370,155 Q382,170 384,190 Q385,210 380,230 Q375,245 370,248 Q365,245 360,230 Q355,210 356,190 Q358,170 370,155Z" fill="#ef4444" opacity="0.2"/>
+              <path d="M370,165 Q378,177 380,193 Q381,208 377,225 Q373,238 370,241 Q367,238 363,225 Q359,208 360,193 Q362,177 370,165Z" fill="#ef4444" opacity="0.5"/>
+              <line x1="370" y1="155" x2="370" y2="248" stroke="#ef4444" stroke-width="1.5" opacity="0.6"/>
+            </svg>
+          </div>
+
+          <!-- Radar Chart -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Work Quality Radar</h2>
+            <svg viewBox="0 0 400 320" class="w-full">
+              <!-- Pentagon grid: center at 200,160, radius 120 -->
+              <!-- Axes at angles: -90, -18, 54, 126, 198 degrees -->
+              <!-- Level rings -->
+              <!-- Outer ring (100%) -->
+              <polygon points="200,40 314,87.6 270,219.6 130,219.6 86,87.6" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+              <!-- 75% ring -->
+              <polygon points="200,70 285.5,105.7 252.5,204.7 147.5,204.7 114.5,105.7" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+              <!-- 50% ring -->
+              <polygon points="200,100 257,123.8 235,189.8 165,189.8 143,123.8" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+              <!-- 25% ring -->
+              <polygon points="200,130 228.5,141.9 217.5,174.9 182.5,174.9 171.5,141.9" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+              <!-- Center dot -->
+              <circle cx="200" cy="160" r="2" fill="#cbd5e1"/>
+
+              <!-- Axis lines -->
+              <line x1="200" y1="160" x2="200" y2="40" stroke="#e2e8f0" stroke-width="1"/>
+              <line x1="200" y1="160" x2="314" y2="87.6" stroke="#e2e8f0" stroke-width="1"/>
+              <line x1="200" y1="160" x2="270" y2="219.6" stroke="#e2e8f0" stroke-width="1"/>
+              <line x1="200" y1="160" x2="130" y2="219.6" stroke="#e2e8f0" stroke-width="1"/>
+              <line x1="200" y1="160" x2="86" y2="87.6" stroke="#e2e8f0" stroke-width="1"/>
+
+              <!-- Labels -->
+              <text x="200" y="28" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="11">Quality</text>
+              <text x="324" y="85" text-anchor="start" fill="#334155" font-family="Inter" font-weight="600" font-size="11">Volume</text>
+              <text x="278" y="236" text-anchor="start" fill="#334155" font-family="Inter" font-weight="600" font-size="11">Focus</text>
+              <text x="122" y="236" text-anchor="end" fill="#334155" font-family="Inter" font-weight="600" font-size="11">Collab</text>
+              <text x="78" y="85" text-anchor="end" fill="#334155" font-family="Inter" font-weight="600" font-size="11">Impact</text>
+
+              <!-- Data polygon: Quality=85%, Volume=70%, Focus=90%, Collab=60%, Impact=75% -->
+              <!-- Q: 200, 40+(120*.15)=58 => 200,58 -->
+              <!-- V: 200+114*.7*cos(-18+90)... simplified pre-calculated -->
+              <polygon points="200,58 280,97 258,209 148,196 109,97" fill="#3b82f6" opacity="0.15"/>
+              <polygon points="200,58 280,97 258,209 148,196 109,97" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+
+              <!-- Data points -->
+              <circle cx="200" cy="58" r="4" fill="#3b82f6"/>
+              <circle cx="280" cy="97" r="4" fill="#3b82f6"/>
+              <circle cx="258" cy="209" r="4" fill="#3b82f6"/>
+              <circle cx="148" cy="196" r="4" fill="#3b82f6"/>
+              <circle cx="109" cy="97" r="4" fill="#3b82f6"/>
+
+              <!-- Score labels -->
+              <text x="206" y="52" fill="#3b82f6" font-family="Inter" font-weight="700" font-size="10">85</text>
+              <text x="286" y="92" fill="#3b82f6" font-family="Inter" font-weight="700" font-size="10">70</text>
+              <text x="264" y="216" fill="#3b82f6" font-family="Inter" font-weight="700" font-size="10">90</text>
+              <text x="138" y="203" text-anchor="end" fill="#3b82f6" font-family="Inter" font-weight="700" font-size="10">60</text>
+              <text x="103" y="92" text-anchor="end" fill="#3b82f6" font-family="Inter" font-weight="700" font-size="10">75</text>
+
+              <!-- Overall score -->
+              <text x="200" y="298" text-anchor="middle" fill="#0f172a" font-family="Inter" font-weight="800" font-size="14">Overall: 76 / 100</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- GRADIENT PROGRESS BARS -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Project Progress</h2>
+          <div class="space-y-4">
+            <!-- Website Refresh -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-semibold text-slate-700">Website Refresh</span>
+                <span class="text-sm font-bold text-slate-900">2h 40m</span>
+              </div>
+              <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full rounded-full" style="width: 39%; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);"></div>
+              </div>
+            </div>
+            <!-- Launch Assets -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-semibold text-slate-700">Launch Assets</span>
+                <span class="text-sm font-bold text-slate-900">1h 55m</span>
+              </div>
+              <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full rounded-full" style="width: 28%; background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);"></div>
+              </div>
+            </div>
+            <!-- Internal Ops -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-semibold text-slate-700">Internal Ops</span>
+                <span class="text-sm font-bold text-slate-900">1h 10m</span>
+              </div>
+              <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full rounded-full" style="width: 17%; background: linear-gradient(90deg, #f97316, #fb923c, #fdba74);"></div>
+              </div>
+            </div>
+            <!-- Client Review -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-semibold text-slate-700">Client Review</span>
+                <span class="text-sm font-bold text-slate-900">0h 45m</span>
+              </div>
+              <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full rounded-full" style="width: 11%; background: linear-gradient(90deg, #8b5cf6, #a78bfa, #c4b5fd);"></div>
+              </div>
+            </div>
+            <!-- Admin -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-semibold text-slate-700">Admin / Breaks</span>
+                <span class="text-sm font-bold text-slate-900">17m</span>
+              </div>
+              <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full rounded-full" style="width: 5%; background: linear-gradient(90deg, #64748b, #94a3b8, #cbd5e1);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI SUMMARY -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 text-white">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+              <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider">AI Summary</h2>
+          </div>
+          <p class="text-sm leading-relaxed text-slate-300">
+            You had a <span class="text-white font-semibold">highly productive day</span>, logging 6h 47m of focus time across 4 projects. Your morning was dominated by deep work on the <span class="text-blue-400 font-semibold">Website Refresh</span> (2h 40m), which accounted for 39% of your day and yielded 3 completed tasks including the homepage redesign. After a productive session on <span class="text-emerald-400 font-semibold">Launch Assets</span>, you hit a blocker on the API integration that requires DevOps credentials. Your <span class="text-white font-semibold">focus-to-meeting ratio was excellent at 4.3:1</span>, and you maintained 87% productivity. Consider front-loading the API dependency tomorrow to unblock downstream work.
+          </p>
+        </div>
+
+        <div class="h-6"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     MOBILE LAYOUT
+     ========================================== -->
+<div class="md:hidden flex flex-col h-screen overflow-hidden">
+
+  <!-- Mobile Top Header -->
+  <header class="bg-white border-b border-slate-100 px-4 py-3 shrink-0">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <svg width="24" height="24" viewBox="0 0 32 32" class="shrink-0">
+          <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+          <circle cx="22" cy="10" r="5" fill="#f97316"/>
+          <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+          <circle cx="22" cy="22" r="5" fill="#10b981"/>
+        </svg>
+        <h1 class="text-sm font-bold text-slate-900 truncate">Daily Work Summary &mdash; March 24</h1>
+      </div>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+        <button class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </button>
+        <button class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Scrollable Content -->
+  <div class="flex-1 overflow-auto hide-scrollbar px-4 py-4 space-y-4">
+
+    <!-- KPI Ribbon (scrollable) -->
+    <div class="flex gap-2.5 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
+      <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl px-3.5 py-3 text-white min-w-[100px] shrink-0">
+        <p class="text-[10px] text-blue-200 mb-0.5">Focus</p>
+        <p class="text-lg font-black">6h 47m</p>
+      </div>
+      <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl px-3.5 py-3 text-white min-w-[80px] shrink-0">
+        <p class="text-[10px] text-emerald-200 mb-0.5">Tasks</p>
+        <p class="text-lg font-black">5 / 8</p>
+      </div>
+      <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl px-3.5 py-3 text-white min-w-[70px] shrink-0">
+        <p class="text-[10px] text-purple-200 mb-0.5">Projects</p>
+        <p class="text-lg font-black">4</p>
+      </div>
+      <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl px-3.5 py-3 text-white min-w-[70px] shrink-0">
+        <p class="text-[10px] text-orange-200 mb-0.5">Productive</p>
+        <p class="text-lg font-black">87%</p>
+      </div>
+      <div class="bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl px-3.5 py-3 text-white min-w-[90px] shrink-0">
+        <p class="text-[10px] text-rose-200 mb-0.5">Deep Work</p>
+        <p class="text-lg font-black">3h 12m</p>
+      </div>
+    </div>
+
+    <!-- Connected Scatter Plot -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Work Flow: Time vs Tasks</h2>
+      <svg viewBox="0 0 400 220" class="w-full">
+        <line x1="40" y1="10" x2="40" y2="180" stroke="#e2e8f0" stroke-width="1"/>
+        <line x1="40" y1="180" x2="390" y2="180" stroke="#e2e8f0" stroke-width="1"/>
+        <line x1="40" y1="137.5" x2="390" y2="137.5" stroke="#f1f5f9" stroke-width="1"/>
+        <line x1="40" y1="95" x2="390" y2="95" stroke="#f1f5f9" stroke-width="1"/>
+        <line x1="40" y1="52.5" x2="390" y2="52.5" stroke="#f1f5f9" stroke-width="1"/>
+
+        <text x="35" y="184" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="8">0</text>
+        <text x="35" y="141" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="8">1</text>
+        <text x="35" y="99" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="8">2</text>
+        <text x="35" y="56" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="8">3</text>
+
+        <text x="40" y="200" fill="#94a3b8" font-family="Inter" font-size="8">0h</text>
+        <text x="155" y="200" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="8">1h</text>
+        <text x="273" y="200" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="8">2h</text>
+        <text x="390" y="200" text-anchor="end" fill="#94a3b8" font-family="Inter" font-size="8">3h</text>
+
+        <polyline points="310,52.5 230,95 145,137.5 105,95" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,2" opacity="0.4"/>
+
+        <circle cx="310" cy="52.5" r="12" fill="#3b82f6" opacity="0.15"/>
+        <circle cx="310" cy="52.5" r="6" fill="#3b82f6"/>
+        <text x="310" y="42" text-anchor="middle" fill="#3b82f6" font-family="Inter" font-weight="600" font-size="8">Website</text>
+
+        <circle cx="230" cy="95" r="10" fill="#10b981" opacity="0.15"/>
+        <circle cx="230" cy="95" r="5" fill="#10b981"/>
+        <text x="230" y="86" text-anchor="middle" fill="#10b981" font-family="Inter" font-weight="600" font-size="8">Launch</text>
+
+        <circle cx="145" cy="137.5" r="8" fill="#f97316" opacity="0.15"/>
+        <circle cx="145" cy="137.5" r="5" fill="#f97316"/>
+        <text x="145" y="129" text-anchor="middle" fill="#f97316" font-family="Inter" font-weight="600" font-size="8">Ops</text>
+
+        <circle cx="105" cy="95" r="8" fill="#8b5cf6" opacity="0.15"/>
+        <circle cx="105" cy="95" r="5" fill="#8b5cf6"/>
+        <text x="105" y="86" text-anchor="middle" fill="#8b5cf6" font-family="Inter" font-weight="600" font-size="8">Client</text>
+      </svg>
+    </div>
+
+    <!-- Violin Distribution -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Focus Distribution</h2>
+      <svg viewBox="0 0 400 200" class="w-full">
+        <!-- Deep Work -->
+        <text x="65" y="16" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="10">Deep</text>
+        <text x="65" y="28" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="8">3h 12m</text>
+        <path d="M65,38 Q85,60 88,90 Q90,120 84,150 Q78,175 65,185 Q52,175 46,150 Q40,120 42,90 Q45,60 65,38Z" fill="#3b82f6" opacity="0.2"/>
+        <path d="M65,50 Q80,68 82,92 Q84,115 79,145 Q74,168 65,176 Q56,168 51,145 Q46,115 48,92 Q50,68 65,50Z" fill="#3b82f6" opacity="0.5"/>
+        <line x1="65" y1="38" x2="65" y2="185" stroke="#3b82f6" stroke-width="1" opacity="0.6"/>
+
+        <!-- Shallow -->
+        <text x="165" y="16" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="10">Shallow</text>
+        <text x="165" y="28" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="8">1h 45m</text>
+        <path d="M165,60 Q182,80 184,105 Q186,130 180,158 Q174,178 165,185 Q156,178 150,158 Q144,130 146,105 Q148,80 165,60Z" fill="#10b981" opacity="0.2"/>
+        <path d="M165,72 Q178,88 180,108 Q182,128 177,152 Q172,172 165,178 Q158,172 153,152 Q148,128 150,108 Q152,88 165,72Z" fill="#10b981" opacity="0.5"/>
+        <line x1="165" y1="60" x2="165" y2="185" stroke="#10b981" stroke-width="1" opacity="0.6"/>
+
+        <!-- Meetings -->
+        <text x="265" y="16" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="10">Meetings</text>
+        <text x="265" y="28" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="8">1h 15m</text>
+        <path d="M265,80 Q279,98 280,118 Q282,138 277,160 Q272,176 265,180 Q258,176 253,160 Q248,138 250,118 Q251,98 265,80Z" fill="#f59e0b" opacity="0.2"/>
+        <path d="M265,90 Q275,104 276,120 Q278,136 274,155 Q270,170 265,174 Q260,170 256,155 Q252,136 254,120 Q255,104 265,90Z" fill="#f59e0b" opacity="0.5"/>
+        <line x1="265" y1="80" x2="265" y2="180" stroke="#f59e0b" stroke-width="1" opacity="0.6"/>
+
+        <!-- Admin -->
+        <text x="350" y="16" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="10">Admin</text>
+        <text x="350" y="28" text-anchor="middle" fill="#94a3b8" font-family="Inter" font-size="8">35m</text>
+        <path d="M350,115 Q360,128 362,145 Q363,162 359,175 Q355,184 350,186 Q345,184 341,175 Q337,162 338,145 Q340,128 350,115Z" fill="#ef4444" opacity="0.2"/>
+        <path d="M350,124 Q357,134 358,148 Q359,160 356,172 Q353,180 350,182 Q347,180 344,172 Q341,160 342,148 Q343,134 350,124Z" fill="#ef4444" opacity="0.5"/>
+        <line x1="350" y1="115" x2="350" y2="186" stroke="#ef4444" stroke-width="1" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <!-- Radar Chart -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Work Quality Radar</h2>
+      <svg viewBox="0 0 300 260" class="w-full max-w-[300px] mx-auto">
+        <!-- Pentagon grid: center at 150,120, radius 90 -->
+        <polygon points="150,30 235.6,65.7 210,164.7 90,164.7 64.4,65.7" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+        <polygon points="150,52.5 214.2,79.3 195,139 105,139 85.8,79.3" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+        <polygon points="150,75 192.8,92.8 180,113.5 120,113.5 107.2,92.8" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+
+        <line x1="150" y1="120" x2="150" y2="30" stroke="#e2e8f0" stroke-width="1"/>
+        <line x1="150" y1="120" x2="235.6" y2="65.7" stroke="#e2e8f0" stroke-width="1"/>
+        <line x1="150" y1="120" x2="210" y2="164.7" stroke="#e2e8f0" stroke-width="1"/>
+        <line x1="150" y1="120" x2="90" y2="164.7" stroke="#e2e8f0" stroke-width="1"/>
+        <line x1="150" y1="120" x2="64.4" y2="65.7" stroke="#e2e8f0" stroke-width="1"/>
+
+        <text x="150" y="22" text-anchor="middle" fill="#334155" font-family="Inter" font-weight="600" font-size="10">Quality</text>
+        <text x="244" y="63" text-anchor="start" fill="#334155" font-family="Inter" font-weight="600" font-size="10">Volume</text>
+        <text x="216" y="178" text-anchor="start" fill="#334155" font-family="Inter" font-weight="600" font-size="10">Focus</text>
+        <text x="84" y="178" text-anchor="end" fill="#334155" font-family="Inter" font-weight="600" font-size="10">Collab</text>
+        <text x="56" y="63" text-anchor="end" fill="#334155" font-family="Inter" font-weight="600" font-size="10">Impact</text>
+
+        <polygon points="150,43.5 210,72.8 199,157 111,147 82,72.8" fill="#3b82f6" opacity="0.15"/>
+        <polygon points="150,43.5 210,72.8 199,157 111,147 82,72.8" fill="none" stroke="#3b82f6" stroke-width="2"/>
+
+        <circle cx="150" cy="43.5" r="3" fill="#3b82f6"/>
+        <circle cx="210" cy="72.8" r="3" fill="#3b82f6"/>
+        <circle cx="199" cy="157" r="3" fill="#3b82f6"/>
+        <circle cx="111" cy="147" r="3" fill="#3b82f6"/>
+        <circle cx="82" cy="72.8" r="3" fill="#3b82f6"/>
+
+        <text x="150" y="240" text-anchor="middle" fill="#0f172a" font-family="Inter" font-weight="800" font-size="13">Overall: 76 / 100</text>
+      </svg>
+    </div>
+
+    <!-- Gradient Progress Bars -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Project Progress</h2>
+      <div class="space-y-3">
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="font-semibold text-slate-700">Website Refresh</span>
+            <span class="font-bold text-slate-900">2h 40m</span>
+          </div>
+          <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full rounded-full" style="width: 39%; background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="font-semibold text-slate-700">Launch Assets</span>
+            <span class="font-bold text-slate-900">1h 55m</span>
+          </div>
+          <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full rounded-full" style="width: 28%; background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="font-semibold text-slate-700">Internal Ops</span>
+            <span class="font-bold text-slate-900">1h 10m</span>
+          </div>
+          <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full rounded-full" style="width: 17%; background: linear-gradient(90deg, #f97316, #fb923c, #fdba74);"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="font-semibold text-slate-700">Client Review</span>
+            <span class="font-bold text-slate-900">0h 45m</span>
+          </div>
+          <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full rounded-full" style="width: 11%; background: linear-gradient(90deg, #8b5cf6, #a78bfa, #c4b5fd);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Summary -->
+    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-4 text-white">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+          <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h2 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">AI Summary</h2>
+      </div>
+      <p class="text-xs leading-relaxed text-slate-300">
+        You had a <span class="text-white font-semibold">highly productive day</span>, logging 6h 47m across 4 projects. Morning deep work on <span class="text-blue-400 font-semibold">Website Refresh</span> (2h 40m) yielded 3 completed tasks. <span class="text-white font-semibold">Focus-to-meeting ratio was 4.3:1</span> with 87% productivity. Consider front-loading the API dependency tomorrow.
+      </p>
+    </div>
+
+    <div class="h-4"></div>
+  </div>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="bg-white border-t border-slate-100 px-2 pb-6 pt-2 flex items-center justify-around shrink-0">
+    <button class="bottom-nav-item text-slate-400 flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="text-[10px] font-medium">Tracker</span>
+    </button>
+    <button class="bottom-nav-item active flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      <span class="text-[10px] font-semibold">Summary</span>
+    </button>
+    <button class="bottom-nav-item text-slate-400 flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <span class="text-[10px] font-medium">Team</span>
+    </button>
+    <button class="bottom-nav-item text-slate-400 flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <span class="text-[10px] font-medium">More</span>
+    </button>
+  </nav>
+</div>
+
+</body>
+</html>

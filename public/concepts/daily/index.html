@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskPanels — Daily Summary Concepts</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { font-family: 'Inter', -apple-system, sans-serif; }
+  body { background: #0f172a; }
+  .concept-card { transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+  .concept-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+</style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-8">
+  <div class="text-center mb-10">
+    <a href="/concepts/" class="text-sm text-slate-500 hover:text-slate-300 mb-4 inline-block">&larr; All Concepts</a>
+    <div class="flex items-center justify-center gap-3 mb-4">
+      <svg width="36" height="36" viewBox="0 0 32 32"><circle cx="10" cy="10" r="5" fill="#3b82f6"/><circle cx="22" cy="10" r="5" fill="#f97316"/><circle cx="10" cy="22" r="5" fill="#8b5cf6"/><circle cx="22" cy="22" r="5" fill="#10b981"/></svg>
+      <span class="text-2xl font-bold text-white">TaskPanels</span>
+    </div>
+    <h1 class="text-3xl font-extrabold text-white mb-3">Daily Summary Concepts</h1>
+    <p class="text-base text-slate-400 max-w-xl mx-auto">6 layout explorations for the daily work summary report. Each uses different chart types and visual approaches to present your day's work.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl w-full">
+    <a href="/concepts/daily/s1-classic.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-blue-500/20 text-blue-400 px-2 py-1 rounded-md">S1</span>
+        <h2 class="text-lg font-bold text-white">Classic Report</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Horizontal bar charts, donut status breakdown, completed/blockers lists. Clean 2-column PDF layout.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Bar Charts</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Donut</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Value Bar</span>
+      </div>
+    </a>
+
+    <a href="/concepts/daily/s2-heatmap.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-md">S2</span>
+        <h2 class="text-lg font-bold text-white">Heatmap Focus</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Hour-by-hour heatmap grid, sparklines, focus score gauge, session timeline strip.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Heatmap</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Sparklines</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Gauge</span>
+      </div>
+    </a>
+
+    <a href="/concepts/daily/s3-timeline-story.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-orange-500/20 text-orange-400 px-2 py-1 rounded-md">S3</span>
+        <h2 class="text-lg font-bold text-white">Timeline Story</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Vertical timeline with embedded charts, auto-generated narrative, productivity flow chart.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Timeline</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Narrative</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Flow Chart</span>
+      </div>
+    </a>
+
+    <a href="/concepts/daily/s4-treemap.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-purple-500/20 text-purple-400 px-2 py-1 rounded-md">S4</span>
+        <h2 class="text-lg font-bold text-white">Treemap View</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Proportional treemap, value category stacked bar, status pills, deliverable icons, day comparison.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Treemap</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Status Pills</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Comparison</span>
+      </div>
+    </a>
+
+    <a href="/concepts/daily/s5-dashboard.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-pink-500/20 text-pink-400 px-2 py-1 rounded-md">S5</span>
+        <h2 class="text-lg font-bold text-white">Dashboard Widgets</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Bento grid of 10 widget cards with radial progress, hourly activity bars, mini donuts, sparklines.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Bento Grid</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Widgets</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Radial</span>
+      </div>
+    </a>
+
+    <a href="/concepts/daily/s6-modern-data.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded-md">S6</span>
+        <h2 class="text-lg font-bold text-white">Modern Data</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Connected scatter, violin distribution, radar chart, gradient bars, AI-generated narrative summary.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Scatter</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Violin</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Radar</span>
+      </div>
+    </a>
+  </div>
+
+  <p class="text-sm text-slate-500 mt-8">All concepts are fully responsive — try on desktop and mobile.</p>
+</body>
+</html>

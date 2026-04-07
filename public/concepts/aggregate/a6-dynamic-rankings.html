@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A6: Dynamic Rankings — TaskPanels Performance Review</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+    }
+  }
+}
+</script>
+<style>
+  * { font-family: 'Inter', -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { background: #f8fafc; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .sidebar-item { transition: background 0.15s ease; }
+  .sidebar-item:hover { background: #f1f5f9; }
+  .sidebar-item.active-nav { background: #eff6ff; color: #2563eb; }
+  .bottom-nav-item { transition: color 0.15s ease; }
+  .bottom-nav-item.active { color: #3b82f6; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ==========================================
+     DESKTOP LAYOUT
+     ========================================== -->
+<div class="hidden md:flex h-screen overflow-hidden">
+
+  <!-- Slim Left Sidebar -->
+  <nav class="w-16 bg-white border-r border-slate-100 flex flex-col items-center py-4 gap-1 shrink-0">
+    <div class="mb-6">
+      <svg width="32" height="32" viewBox="0 0 32 32">
+        <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+        <circle cx="22" cy="10" r="5" fill="#f97316"/>
+        <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+        <circle cx="22" cy="22" r="5" fill="#10b981"/>
+      </svg>
+    </div>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Tracker">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </button>
+    <button class="sidebar-item active-nav w-10 h-10 rounded-xl flex items-center justify-center" title="Summary">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    </button>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Team">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    </button>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Reports">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+    </button>
+    <div class="flex-1"></div>
+    <button class="sidebar-item w-10 h-10 rounded-xl flex items-center justify-center text-slate-400" title="Settings">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.573-1.066z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    <div class="mt-2 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold cursor-pointer">BW</div>
+  </nav>
+
+  <!-- Desktop Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Report Header -->
+    <div class="bg-white border-b border-slate-100 px-8 py-4 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-3">
+        <svg width="28" height="28" viewBox="0 0 32 32">
+          <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+          <circle cx="22" cy="10" r="5" fill="#f97316"/>
+          <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+          <circle cx="22" cy="22" r="5" fill="#10b981"/>
+        </svg>
+        <div>
+          <h1 class="text-xl font-bold text-slate-900">Performance Review Proof — Q1 2026</h1>
+          <p class="text-sm text-slate-400 mt-0.5">A6: Dynamic Rankings</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        </button>
+        <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </button>
+        <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        </button>
+        <span class="ml-2 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg">PDF Export</span>
+      </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-auto hide-scrollbar">
+      <div class="max-w-[1100px] mx-auto p-8 space-y-8">
+
+        <!-- RACING BAR CHART -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <div class="flex items-center justify-between mb-1">
+            <h2 class="text-lg font-bold text-slate-900">Project Hours Race</h2>
+            <span class="px-3 py-1 bg-slate-100 text-slate-600 text-sm font-bold rounded-lg">Week 12 of 12</span>
+          </div>
+          <p class="text-sm text-slate-400 mb-5">Cumulative hours accumulated over Q1 — frozen at quarter end</p>
+          <svg viewBox="0 0 800 220" class="w-full" xmlns="http://www.w3.org/2000/svg">
+            <!-- Grid lines -->
+            <line x1="160" y1="15" x2="160" y2="195" stroke="#e2e8f0" stroke-width="0.5"/>
+            <line x1="320" y1="15" x2="320" y2="195" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+            <line x1="480" y1="15" x2="480" y2="195" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+            <line x1="640" y1="15" x2="640" y2="195" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+            <line x1="780" y1="15" x2="780" y2="195" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+            <!-- Scale labels -->
+            <text x="160" y="210" font-size="9" fill="#94a3b8" text-anchor="middle">0h</text>
+            <text x="320" y="210" font-size="9" fill="#94a3b8" text-anchor="middle">100h</text>
+            <text x="480" y="210" font-size="9" fill="#94a3b8" text-anchor="middle">200h</text>
+            <text x="640" y="210" font-size="9" fill="#94a3b8" text-anchor="middle">300h</text>
+
+            <!-- Web Redesign: 304h — winner -->
+            <text x="155" y="40" font-size="12" fill="#334155" text-anchor="end" font-weight="600">Web Redesign</text>
+            <rect x="160" y="24" width="590" height="28" rx="6" fill="url(#grad-blue)"/>
+            <text x="756" y="43" font-size="12" fill="white" font-weight="700">304h</text>
+            <!-- Speed lines -->
+            <line x1="740" y1="30" x2="755" y2="30" stroke="white" stroke-width="1.5" opacity="0.5"/>
+            <line x1="735" y1="38" x2="758" y2="38" stroke="white" stroke-width="1.5" opacity="0.4"/>
+            <line x1="738" y1="46" x2="752" y2="46" stroke="white" stroke-width="1.5" opacity="0.3"/>
+
+            <!-- Launch Campaign: 237h -->
+            <text x="155" y="88" font-size="12" fill="#334155" text-anchor="end" font-weight="600">Launch Campaign</text>
+            <rect x="160" y="72" width="460" height="28" rx="6" fill="url(#grad-orange)"/>
+            <text x="624" y="91" font-size="12" fill="white" font-weight="700">237h</text>
+            <line x1="610" y1="78" x2="625" y2="78" stroke="white" stroke-width="1.5" opacity="0.4"/>
+            <line x1="606" y1="86" x2="628" y2="86" stroke="white" stroke-width="1.5" opacity="0.3"/>
+
+            <!-- Internal Ops: 169h -->
+            <text x="155" y="136" font-size="12" fill="#334155" text-anchor="end" font-weight="600">Internal Ops</text>
+            <rect x="160" y="120" width="328" height="28" rx="6" fill="url(#grad-purple)"/>
+            <text x="494" y="139" font-size="12" fill="white" font-weight="700">169h</text>
+
+            <!-- Client Work: 118h -->
+            <text x="155" y="184" font-size="12" fill="#334155" text-anchor="end" font-weight="600">Client Work</text>
+            <rect x="160" y="168" width="230" height="28" rx="6" fill="url(#grad-green)"/>
+            <text x="396" y="187" font-size="12" fill="white" font-weight="700">118h</text>
+
+            <!-- Gradients -->
+            <defs>
+              <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.7"/>
+                <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1"/>
+              </linearGradient>
+              <linearGradient id="grad-orange" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#f97316;stop-opacity:0.7"/>
+                <stop offset="100%" style="stop-color:#ea580c;stop-opacity:1"/>
+              </linearGradient>
+              <linearGradient id="grad-purple" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.7"/>
+                <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1"/>
+              </linearGradient>
+              <linearGradient id="grad-green" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.7"/>
+                <stop offset="100%" style="stop-color:#059669;stop-opacity:1"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- ROW: Violin Plot + Bump Chart -->
+        <div class="grid grid-cols-2 gap-6">
+
+          <!-- VIOLIN PLOT -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-1">Daily Hours Distribution</h2>
+            <p class="text-sm text-slate-400 mb-4">Violin plots showing spread of daily hours per project</p>
+            <svg viewBox="0 0 440 300" class="w-full" xmlns="http://www.w3.org/2000/svg">
+              <!-- Y-axis grid -->
+              <line x1="40" y1="260" x2="420" y2="260" stroke="#cbd5e1" stroke-width="0.5"/>
+              <line x1="40" y1="210" x2="420" y2="210" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+              <line x1="40" y1="160" x2="420" y2="160" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+              <line x1="40" y1="110" x2="420" y2="110" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+              <line x1="40" y1="60" x2="420" y2="60" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+              <text x="32" y="264" font-size="9" fill="#94a3b8" text-anchor="end">0h</text>
+              <text x="32" y="214" font-size="9" fill="#94a3b8" text-anchor="end">2h</text>
+              <text x="32" y="164" font-size="9" fill="#94a3b8" text-anchor="end">4h</text>
+              <text x="32" y="114" font-size="9" fill="#94a3b8" text-anchor="end">6h</text>
+              <text x="32" y="64" font-size="9" fill="#94a3b8" text-anchor="end">8h</text>
+
+              <!-- Web Redesign violin — centered at x=100, wide around 4-6h -->
+              <path d="M100,60 C115,80 125,100 128,130 C130,150 128,175 124,195 C120,220 115,240 110,260
+                       L90,260 C85,240 80,220 76,195 C72,175 70,150 72,130 C75,100 85,80 100,60Z"
+                    fill="#3b82f6" opacity="0.3" stroke="#3b82f6" stroke-width="1.5"/>
+              <!-- Median line -->
+              <line x1="78" y1="145" x2="122" y2="145" stroke="#3b82f6" stroke-width="2"/>
+              <circle cx="100" cy="145" r="3" fill="#3b82f6"/>
+              <text x="100" y="280" font-size="10" fill="#334155" text-anchor="middle" font-weight="500">Web</text>
+
+              <!-- Launch Campaign violin — centered at x=200, wide around 3-5h -->
+              <path d="M200,80 C212,100 218,120 222,148 C224,168 222,190 218,210 C214,230 210,245 206,260
+                       L194,260 C190,245 186,230 182,210 C178,190 176,168 178,148 C182,120 188,100 200,80Z"
+                    fill="#f97316" opacity="0.3" stroke="#f97316" stroke-width="1.5"/>
+              <line x1="182" y1="168" x2="218" y2="168" stroke="#f97316" stroke-width="2"/>
+              <circle cx="200" cy="168" r="3" fill="#f97316"/>
+              <text x="200" y="280" font-size="10" fill="#334155" text-anchor="middle" font-weight="500">Launch</text>
+
+              <!-- Internal Ops violin — centered at x=300, narrower, peak at 2-3h -->
+              <path d="M300,120 C308,140 314,160 316,185 C318,200 316,220 312,235 C310,245 306,255 303,260
+                       L297,260 C294,255 290,245 288,235 C284,220 282,200 284,185 C286,160 292,140 300,120Z"
+                    fill="#8b5cf6" opacity="0.3" stroke="#8b5cf6" stroke-width="1.5"/>
+              <line x1="288" y1="200" x2="312" y2="200" stroke="#8b5cf6" stroke-width="2"/>
+              <circle cx="300" cy="200" r="3" fill="#8b5cf6"/>
+              <text x="300" y="280" font-size="10" fill="#334155" text-anchor="middle" font-weight="500">Ops</text>
+
+              <!-- Client Work violin — centered at x=390, smallest, narrow -->
+              <path d="M390,150 C396,170 400,190 402,210 C403,225 402,240 400,250 C398,255 396,258 393,260
+                       L387,260 C384,258 382,255 380,250 C378,240 377,225 378,210 C380,190 384,170 390,150Z"
+                    fill="#10b981" opacity="0.3" stroke="#10b981" stroke-width="1.5"/>
+              <line x1="380" y1="220" x2="400" y2="220" stroke="#10b981" stroke-width="2"/>
+              <circle cx="390" cy="220" r="3" fill="#10b981"/>
+              <text x="390" y="280" font-size="10" fill="#334155" text-anchor="middle" font-weight="500">Client</text>
+            </svg>
+          </div>
+
+          <!-- BUMP CHART -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-1">Priority Rankings Over Time</h2>
+            <p class="text-sm text-slate-400 mb-4">How project focus shifted week to week</p>
+            <svg viewBox="0 0 440 300" class="w-full" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid -->
+              <line x1="40" y1="50" x2="420" y2="50" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+              <line x1="40" y1="120" x2="420" y2="120" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+              <line x1="40" y1="190" x2="420" y2="190" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+              <line x1="40" y1="260" x2="420" y2="260" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+              <!-- Rank labels -->
+              <text x="22" y="54" font-size="10" fill="#64748b" text-anchor="middle" font-weight="600">#1</text>
+              <text x="22" y="124" font-size="10" fill="#64748b" text-anchor="middle" font-weight="600">#2</text>
+              <text x="22" y="194" font-size="10" fill="#64748b" text-anchor="middle" font-weight="600">#3</text>
+              <text x="22" y="264" font-size="10" fill="#64748b" text-anchor="middle" font-weight="600">#4</text>
+
+              <!-- Week labels at bottom -->
+              <text x="55" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W1</text>
+              <text x="88" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W2</text>
+              <text x="121" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W3</text>
+              <text x="154" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W4</text>
+              <text x="187" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W5</text>
+              <text x="220" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W6</text>
+              <text x="253" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W7</text>
+              <text x="286" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W8</text>
+              <text x="319" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W9</text>
+              <text x="352" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W10</text>
+              <text x="385" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W11</text>
+              <text x="418" y="285" font-size="8" fill="#94a3b8" text-anchor="middle">W12</text>
+
+              <!-- Web Redesign (blue): starts #2, becomes #1 from W3 on -->
+              <polyline points="55,120 88,120 121,50 154,50 187,50 220,50 253,50 286,50 319,50 352,50 385,50 418,50"
+                        fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="55" cy="120" r="5" fill="#3b82f6"/>
+              <circle cx="418" cy="50" r="5" fill="#3b82f6"/>
+
+              <!-- Launch Campaign (orange): starts #1, drops to #2 -->
+              <polyline points="55,50 88,50 121,120 154,120 187,120 220,120 253,120 286,120 319,120 352,120 385,120 418,120"
+                        fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="55" cy="50" r="5" fill="#f97316"/>
+              <circle cx="418" cy="120" r="5" fill="#f97316"/>
+
+              <!-- Internal Ops (purple): starts #3, briefly #4 at W6-7, back to #3 -->
+              <polyline points="55,190 88,190 121,190 154,190 187,190 220,260 253,260 286,190 319,190 352,190 385,190 418,190"
+                        fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="55" cy="190" r="5" fill="#8b5cf6"/>
+              <circle cx="418" cy="190" r="5" fill="#8b5cf6"/>
+
+              <!-- Client Work (green): starts #4, briefly #3 at W6-7, back to #4 -->
+              <polyline points="55,260 88,260 121,260 154,260 187,260 220,190 253,190 286,260 319,260 352,260 385,260 418,260"
+                        fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="55" cy="260" r="5" fill="#10b981"/>
+              <circle cx="418" cy="260" r="5" fill="#10b981"/>
+
+              <!-- End labels -->
+              <text x="430" y="54" font-size="9" fill="#3b82f6" font-weight="600">Web</text>
+              <text x="430" y="124" font-size="9" fill="#f97316" font-weight="600">Launch</text>
+              <text x="430" y="194" font-size="9" fill="#8b5cf6" font-weight="600">Ops</text>
+              <text x="430" y="264" font-size="9" fill="#10b981" font-weight="600">Client</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ACHIEVEMENT BADGES -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-1">Achievement Badges</h2>
+          <p class="text-sm text-slate-400 mb-5">Milestones unlocked during Q1 2026</p>
+          <div class="grid grid-cols-5 gap-4">
+            <!-- 100 Tasks -->
+            <div class="text-center">
+              <svg viewBox="0 0 100 100" class="w-20 h-20 mx-auto mb-2">
+                <circle cx="50" cy="50" r="45" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5"/>
+                <circle cx="50" cy="50" r="36" fill="#fde68a" stroke="#f59e0b" stroke-width="1"/>
+                <text x="50" y="42" font-size="20" font-weight="800" fill="#92400e" text-anchor="middle">100</text>
+                <text x="50" y="58" font-size="9" font-weight="600" fill="#b45309" text-anchor="middle">TASKS</text>
+                <!-- Star on top -->
+                <polygon points="50,6 53,14 62,14 55,19 58,28 50,23 42,28 45,19 38,14 47,14" fill="#f59e0b"/>
+              </svg>
+              <p class="text-xs font-semibold text-slate-700">Century Club</p>
+              <p class="text-[10px] text-slate-400">100+ tasks done</p>
+            </div>
+            <!-- 50 Summaries -->
+            <div class="text-center">
+              <svg viewBox="0 0 100 100" class="w-20 h-20 mx-auto mb-2">
+                <circle cx="50" cy="50" r="45" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5"/>
+                <circle cx="50" cy="50" r="36" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1"/>
+                <text x="50" y="42" font-size="20" font-weight="800" fill="#1e40af" text-anchor="middle">50</text>
+                <text x="50" y="58" font-size="8" font-weight="600" fill="#1d4ed8" text-anchor="middle">SUMMARIES</text>
+                <polygon points="50,6 53,14 62,14 55,19 58,28 50,23 42,28 45,19 38,14 47,14" fill="#3b82f6"/>
+              </svg>
+              <p class="text-xs font-semibold text-slate-700">Storyteller</p>
+              <p class="text-[10px] text-slate-400">50+ summaries sent</p>
+            </div>
+            <!-- 30-Day Streak -->
+            <div class="text-center">
+              <svg viewBox="0 0 100 100" class="w-20 h-20 mx-auto mb-2">
+                <circle cx="50" cy="50" r="45" fill="#fce7f3" stroke="#ec4899" stroke-width="2.5"/>
+                <circle cx="50" cy="50" r="36" fill="#fbcfe8" stroke="#ec4899" stroke-width="1"/>
+                <text x="50" y="42" font-size="20" font-weight="800" fill="#9d174d" text-anchor="middle">30</text>
+                <text x="50" y="58" font-size="9" font-weight="600" fill="#be185d" text-anchor="middle">DAYS</text>
+                <polygon points="50,6 53,14 62,14 55,19 58,28 50,23 42,28 45,19 38,14 47,14" fill="#ec4899"/>
+              </svg>
+              <p class="text-xs font-semibold text-slate-700">Iron Streak</p>
+              <p class="text-[10px] text-slate-400">30-day tracking streak</p>
+            </div>
+            <!-- 800+ Hours -->
+            <div class="text-center">
+              <svg viewBox="0 0 100 100" class="w-20 h-20 mx-auto mb-2">
+                <circle cx="50" cy="50" r="45" fill="#d1fae5" stroke="#10b981" stroke-width="2.5"/>
+                <circle cx="50" cy="50" r="36" fill="#a7f3d0" stroke="#10b981" stroke-width="1"/>
+                <text x="50" y="42" font-size="18" font-weight="800" fill="#065f46" text-anchor="middle">800+</text>
+                <text x="50" y="58" font-size="9" font-weight="600" fill="#047857" text-anchor="middle">HOURS</text>
+                <polygon points="50,6 53,14 62,14 55,19 58,28 50,23 42,28 45,19 38,14 47,14" fill="#10b981"/>
+              </svg>
+              <p class="text-xs font-semibold text-slate-700">Time Titan</p>
+              <p class="text-[10px] text-slate-400">800+ hours in quarter</p>
+            </div>
+            <!-- Multi-Project -->
+            <div class="text-center">
+              <svg viewBox="0 0 100 100" class="w-20 h-20 mx-auto mb-2">
+                <circle cx="50" cy="50" r="45" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2.5"/>
+                <circle cx="50" cy="50" r="36" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="1"/>
+                <text x="50" y="42" font-size="22" font-weight="800" fill="#5b21b6" text-anchor="middle">4</text>
+                <text x="50" y="58" font-size="8" font-weight="600" fill="#6d28d9" text-anchor="middle">PROJECTS</text>
+                <polygon points="50,6 53,14 62,14 55,19 58,28 50,23 42,28 45,19 38,14 47,14" fill="#8b5cf6"/>
+              </svg>
+              <p class="text-xs font-semibold text-slate-700">Versatile</p>
+              <p class="text-[10px] text-slate-400">4+ active projects</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- IMPACT SCORE WATERFALL -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-1">Impact Score Waterfall</h2>
+          <p class="text-sm text-slate-400 mb-5">How each project contribution builds the total impact score</p>
+          <svg viewBox="0 0 800 280" class="w-full" xmlns="http://www.w3.org/2000/svg">
+            <!-- Grid -->
+            <line x1="60" y1="240" x2="740" y2="240" stroke="#cbd5e1" stroke-width="0.5"/>
+            <line x1="60" y1="200" x2="740" y2="200" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+            <line x1="60" y1="160" x2="740" y2="160" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+            <line x1="60" y1="120" x2="740" y2="120" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+            <line x1="60" y1="80" x2="740" y2="80" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+            <line x1="60" y1="40" x2="740" y2="40" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+            <!-- Y labels -->
+            <text x="52" y="244" font-size="9" fill="#94a3b8" text-anchor="end">0</text>
+            <text x="52" y="204" font-size="9" fill="#94a3b8" text-anchor="end">20</text>
+            <text x="52" y="164" font-size="9" fill="#94a3b8" text-anchor="end">40</text>
+            <text x="52" y="124" font-size="9" fill="#94a3b8" text-anchor="end">60</text>
+            <text x="52" y="84" font-size="9" fill="#94a3b8" text-anchor="end">80</text>
+            <text x="52" y="44" font-size="9" fill="#94a3b8" text-anchor="end">100</text>
+
+            <!-- Base Score bar -->
+            <rect x="80" y="200" width="90" height="40" rx="4" fill="#94a3b8" opacity="0.4"/>
+            <text x="125" y="225" font-size="11" fill="#475569" text-anchor="middle" font-weight="700">+20</text>
+            <text x="125" y="258" font-size="10" fill="#64748b" text-anchor="middle" font-weight="500">Base</text>
+
+            <!-- Connector line -->
+            <line x1="170" y1="200" x2="210" y2="200" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3"/>
+
+            <!-- Web Redesign contribution -->
+            <rect x="210" y="138" width="90" height="62" rx="4" fill="#3b82f6" opacity="0.6"/>
+            <text x="255" y="175" font-size="11" fill="white" text-anchor="middle" font-weight="700">+31</text>
+            <text x="255" y="258" font-size="10" fill="#64748b" text-anchor="middle" font-weight="500">Web</text>
+            <line x1="300" y1="138" x2="340" y2="138" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3"/>
+
+            <!-- Launch Campaign contribution -->
+            <rect x="340" y="90" width="90" height="48" rx="4" fill="#f97316" opacity="0.6"/>
+            <text x="385" y="120" font-size="11" fill="white" text-anchor="middle" font-weight="700">+24</text>
+            <text x="385" y="258" font-size="10" fill="#64748b" text-anchor="middle" font-weight="500">Launch</text>
+            <line x1="430" y1="90" x2="470" y2="90" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3"/>
+
+            <!-- Internal Ops contribution -->
+            <rect x="470" y="60" width="90" height="30" rx="4" fill="#8b5cf6" opacity="0.6"/>
+            <text x="515" y="80" font-size="11" fill="white" text-anchor="middle" font-weight="700">+15</text>
+            <text x="515" y="258" font-size="10" fill="#64748b" text-anchor="middle" font-weight="500">Ops</text>
+            <line x1="560" y1="60" x2="600" y2="60" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3"/>
+
+            <!-- Client Work contribution -->
+            <rect x="600" y="46" width="90" height="14" rx="4" fill="#10b981" opacity="0.6"/>
+            <text x="645" y="57" font-size="9" fill="white" text-anchor="middle" font-weight="700">+7</text>
+            <text x="645" y="258" font-size="10" fill="#64748b" text-anchor="middle" font-weight="500">Client</text>
+
+            <!-- Total Score -->
+            <rect x="710" y="46" width="50" height="194" rx="4" fill="#1e293b" opacity="0.85"/>
+            <text x="735" y="148" font-size="16" fill="white" text-anchor="middle" font-weight="800">97</text>
+            <text x="735" y="164" font-size="8" fill="white" text-anchor="middle" opacity="0.7">TOTAL</text>
+            <text x="735" y="258" font-size="10" fill="#334155" text-anchor="middle" font-weight="700">Score</text>
+          </svg>
+        </div>
+
+        <!-- MONTHLY PODIUM -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 class="text-lg font-bold text-slate-900 mb-1">Monthly Podium</h2>
+          <p class="text-sm text-slate-400 mb-5">Top 3 projects each month by hours invested</p>
+          <div class="grid grid-cols-3 gap-8">
+            <!-- January Podium -->
+            <div>
+              <h3 class="text-sm font-bold text-slate-700 text-center mb-4">January</h3>
+              <svg viewBox="0 0 200 180" class="w-full" xmlns="http://www.w3.org/2000/svg">
+                <!-- 2nd place (left) -->
+                <rect x="10" y="90" width="52" height="70" rx="4" fill="#f97316" opacity="0.3"/>
+                <rect x="10" y="90" width="52" height="4" rx="2" fill="#f97316"/>
+                <text x="36" y="110" font-size="14" font-weight="800" fill="#9a3412" text-anchor="middle">2</text>
+                <text x="36" y="126" font-size="8" font-weight="600" fill="#9a3412" text-anchor="middle">Launch</text>
+                <text x="36" y="140" font-size="8" fill="#c2410c" text-anchor="middle">72h</text>
+
+                <!-- 1st place (center, tallest) -->
+                <rect x="72" y="50" width="56" height="110" rx="4" fill="#3b82f6" opacity="0.3"/>
+                <rect x="72" y="50" width="56" height="4" rx="2" fill="#3b82f6"/>
+                <!-- Crown -->
+                <polygon points="100,30 107,42 114,32 110,44 90,44 86,32 93,42" fill="#f59e0b"/>
+                <text x="100" y="76" font-size="16" font-weight="800" fill="#1e40af" text-anchor="middle">1</text>
+                <text x="100" y="94" font-size="8" font-weight="600" fill="#1e40af" text-anchor="middle">Web</text>
+                <text x="100" y="108" font-size="8" fill="#2563eb" text-anchor="middle">86h</text>
+
+                <!-- 3rd place (right) -->
+                <rect x="138" y="110" width="52" height="50" rx="4" fill="#8b5cf6" opacity="0.3"/>
+                <rect x="138" y="110" width="52" height="4" rx="2" fill="#8b5cf6"/>
+                <text x="164" y="132" font-size="14" font-weight="800" fill="#5b21b6" text-anchor="middle">3</text>
+                <text x="164" y="146" font-size="8" font-weight="600" fill="#5b21b6" text-anchor="middle">Ops</text>
+                <text x="164" y="156" font-size="8" fill="#7c3aed" text-anchor="middle">52h</text>
+
+                <!-- Ground line -->
+                <line x1="5" y1="160" x2="195" y2="160" stroke="#e2e8f0" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <!-- February Podium -->
+            <div>
+              <h3 class="text-sm font-bold text-slate-700 text-center mb-4">February</h3>
+              <svg viewBox="0 0 200 180" class="w-full" xmlns="http://www.w3.org/2000/svg">
+                <!-- 2nd place -->
+                <rect x="10" y="90" width="52" height="70" rx="4" fill="#f97316" opacity="0.3"/>
+                <rect x="10" y="90" width="52" height="4" rx="2" fill="#f97316"/>
+                <text x="36" y="110" font-size="14" font-weight="800" fill="#9a3412" text-anchor="middle">2</text>
+                <text x="36" y="126" font-size="8" font-weight="600" fill="#9a3412" text-anchor="middle">Launch</text>
+                <text x="36" y="140" font-size="8" fill="#c2410c" text-anchor="middle">82h</text>
+
+                <!-- 1st place -->
+                <rect x="72" y="50" width="56" height="110" rx="4" fill="#3b82f6" opacity="0.3"/>
+                <rect x="72" y="50" width="56" height="4" rx="2" fill="#3b82f6"/>
+                <polygon points="100,30 107,42 114,32 110,44 90,44 86,32 93,42" fill="#f59e0b"/>
+                <text x="100" y="76" font-size="16" font-weight="800" fill="#1e40af" text-anchor="middle">1</text>
+                <text x="100" y="94" font-size="8" font-weight="600" fill="#1e40af" text-anchor="middle">Web</text>
+                <text x="100" y="108" font-size="8" fill="#2563eb" text-anchor="middle">104h</text>
+
+                <!-- 3rd place -->
+                <rect x="138" y="110" width="52" height="50" rx="4" fill="#8b5cf6" opacity="0.3"/>
+                <rect x="138" y="110" width="52" height="4" rx="2" fill="#8b5cf6"/>
+                <text x="164" y="132" font-size="14" font-weight="800" fill="#5b21b6" text-anchor="middle">3</text>
+                <text x="164" y="146" font-size="8" font-weight="600" fill="#5b21b6" text-anchor="middle">Ops</text>
+                <text x="164" y="156" font-size="8" fill="#7c3aed" text-anchor="middle">58h</text>
+
+                <line x1="5" y1="160" x2="195" y2="160" stroke="#e2e8f0" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <!-- March Podium -->
+            <div>
+              <h3 class="text-sm font-bold text-slate-700 text-center mb-4">March</h3>
+              <svg viewBox="0 0 200 180" class="w-full" xmlns="http://www.w3.org/2000/svg">
+                <!-- 2nd place -->
+                <rect x="10" y="90" width="52" height="70" rx="4" fill="#f97316" opacity="0.3"/>
+                <rect x="10" y="90" width="52" height="4" rx="2" fill="#f97316"/>
+                <text x="36" y="110" font-size="14" font-weight="800" fill="#9a3412" text-anchor="middle">2</text>
+                <text x="36" y="126" font-size="8" font-weight="600" fill="#9a3412" text-anchor="middle">Launch</text>
+                <text x="36" y="140" font-size="8" fill="#c2410c" text-anchor="middle">83h</text>
+
+                <!-- 1st place -->
+                <rect x="72" y="50" width="56" height="110" rx="4" fill="#3b82f6" opacity="0.3"/>
+                <rect x="72" y="50" width="56" height="4" rx="2" fill="#3b82f6"/>
+                <polygon points="100,30 107,42 114,32 110,44 90,44 86,32 93,42" fill="#f59e0b"/>
+                <text x="100" y="76" font-size="16" font-weight="800" fill="#1e40af" text-anchor="middle">1</text>
+                <text x="100" y="94" font-size="8" font-weight="600" fill="#1e40af" text-anchor="middle">Web</text>
+                <text x="100" y="108" font-size="8" fill="#2563eb" text-anchor="middle">114h</text>
+
+                <!-- 3rd place -->
+                <rect x="138" y="110" width="52" height="50" rx="4" fill="#10b981" opacity="0.3"/>
+                <rect x="138" y="110" width="52" height="4" rx="2" fill="#10b981"/>
+                <text x="164" y="132" font-size="14" font-weight="800" fill="#065f46" text-anchor="middle">3</text>
+                <text x="164" y="146" font-size="8" font-weight="600" fill="#065f46" text-anchor="middle">Client</text>
+                <text x="164" y="156" font-size="8" fill="#059669" text-anchor="middle">48h</text>
+
+                <line x1="5" y1="160" x2="195" y2="160" stroke="#e2e8f0" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="h-8"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     MOBILE LAYOUT
+     ========================================== -->
+<div class="md:hidden flex flex-col h-screen overflow-hidden">
+
+  <!-- Mobile Top Header -->
+  <header class="bg-white border-b border-slate-100 px-4 py-3 shrink-0">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <svg width="28" height="28" viewBox="0 0 32 32">
+          <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+          <circle cx="22" cy="10" r="5" fill="#f97316"/>
+          <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+          <circle cx="22" cy="22" r="5" fill="#10b981"/>
+        </svg>
+        <h1 class="text-base font-bold text-slate-900">Performance Review — Q1 2026</h1>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        </button>
+        <button class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </button>
+        <button class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Scrollable Content -->
+  <div class="flex-1 overflow-auto hide-scrollbar px-4 py-4 space-y-4">
+
+    <!-- Report Header Card -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <svg width="24" height="24" viewBox="0 0 32 32">
+            <circle cx="10" cy="10" r="5" fill="#3b82f6"/>
+            <circle cx="22" cy="10" r="5" fill="#f97316"/>
+            <circle cx="10" cy="22" r="5" fill="#8b5cf6"/>
+            <circle cx="22" cy="22" r="5" fill="#10b981"/>
+          </svg>
+          <div>
+            <h2 class="text-sm font-bold text-slate-900">Performance Review Proof</h2>
+            <p class="text-xs text-slate-400">Q1 2026 — Dynamic Rankings</p>
+          </div>
+        </div>
+        <span class="px-2.5 py-1 bg-slate-900 text-white text-[10px] font-semibold rounded-md">PDF Export</span>
+      </div>
+    </div>
+
+    <!-- Racing Bar Chart -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <div class="flex items-center justify-between mb-1">
+        <h2 class="text-base font-bold text-slate-900">Project Hours Race</h2>
+        <span class="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold rounded">W12</span>
+      </div>
+      <p class="text-xs text-slate-400 mb-3">Cumulative hours at quarter end</p>
+      <svg viewBox="0 0 340 170" class="w-full" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="m-grad-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.7"/>
+            <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1"/>
+          </linearGradient>
+          <linearGradient id="m-grad-orange" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#f97316;stop-opacity:0.7"/>
+            <stop offset="100%" style="stop-color:#ea580c;stop-opacity:1"/>
+          </linearGradient>
+          <linearGradient id="m-grad-purple" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.7"/>
+            <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1"/>
+          </linearGradient>
+          <linearGradient id="m-grad-green" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.7"/>
+            <stop offset="100%" style="stop-color:#059669;stop-opacity:1"/>
+          </linearGradient>
+        </defs>
+
+        <text x="94" y="26" font-size="10" fill="#334155" text-anchor="end" font-weight="600">Web Redesign</text>
+        <rect x="98" y="14" width="226" height="20" rx="4" fill="url(#m-grad-blue)"/>
+        <text x="328" y="28" font-size="9" fill="white" font-weight="700" text-anchor="end">304h</text>
+        <line x1="314" y1="18" x2="326" y2="18" stroke="white" stroke-width="1" opacity="0.4"/>
+        <line x1="316" y1="30" x2="324" y2="30" stroke="white" stroke-width="1" opacity="0.3"/>
+
+        <text x="94" y="62" font-size="10" fill="#334155" text-anchor="end" font-weight="600">Launch Campaign</text>
+        <rect x="98" y="50" width="177" height="20" rx="4" fill="url(#m-grad-orange)"/>
+        <text x="279" y="64" font-size="9" fill="white" font-weight="700" text-anchor="end">237h</text>
+
+        <text x="94" y="98" font-size="10" fill="#334155" text-anchor="end" font-weight="600">Internal Ops</text>
+        <rect x="98" y="86" width="126" height="20" rx="4" fill="url(#m-grad-purple)"/>
+        <text x="228" y="100" font-size="9" fill="white" font-weight="700" text-anchor="end">169h</text>
+
+        <text x="94" y="134" font-size="10" fill="#334155" text-anchor="end" font-weight="600">Client Work</text>
+        <rect x="98" y="122" width="88" height="20" rx="4" fill="url(#m-grad-green)"/>
+        <text x="190" y="136" font-size="9" fill="white" font-weight="700" text-anchor="end">118h</text>
+      </svg>
+    </div>
+
+    <!-- Violin Plot -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <h2 class="text-base font-bold text-slate-900 mb-1">Daily Hours Distribution</h2>
+      <p class="text-xs text-slate-400 mb-3">Spread of daily hours per project</p>
+      <svg viewBox="0 0 340 220" class="w-full" xmlns="http://www.w3.org/2000/svg">
+        <line x1="30" y1="190" x2="320" y2="190" stroke="#cbd5e1" stroke-width="0.5"/>
+        <line x1="30" y1="150" x2="320" y2="150" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <line x1="30" y1="110" x2="320" y2="110" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <line x1="30" y1="70" x2="320" y2="70" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <line x1="30" y1="30" x2="320" y2="30" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <text x="24" y="194" font-size="8" fill="#94a3b8" text-anchor="end">0h</text>
+        <text x="24" y="154" font-size="8" fill="#94a3b8" text-anchor="end">2h</text>
+        <text x="24" y="114" font-size="8" fill="#94a3b8" text-anchor="end">4h</text>
+        <text x="24" y="74" font-size="8" fill="#94a3b8" text-anchor="end">6h</text>
+        <text x="24" y="34" font-size="8" fill="#94a3b8" text-anchor="end">8h</text>
+
+        <!-- Web violin at x=70 -->
+        <path d="M70,30 C82,48 88,68 90,90 C92,110 90,135 86,155 C82,170 78,182 74,190 L66,190 C62,182 58,170 54,155 C50,135 48,110 50,90 C52,68 58,48 70,30Z"
+              fill="#3b82f6" opacity="0.3" stroke="#3b82f6" stroke-width="1.5"/>
+        <line x1="54" y1="100" x2="86" y2="100" stroke="#3b82f6" stroke-width="2"/>
+        <circle cx="70" cy="100" r="2.5" fill="#3b82f6"/>
+        <text x="70" y="206" font-size="9" fill="#334155" text-anchor="middle" font-weight="500">Web</text>
+
+        <!-- Launch violin at x=145 -->
+        <path d="M145,48 C154,65 158,82 160,105 C162,122 160,142 157,158 C155,170 152,180 149,190 L141,190 C138,180 135,170 133,158 C130,142 128,122 130,105 C132,82 136,65 145,48Z"
+              fill="#f97316" opacity="0.3" stroke="#f97316" stroke-width="1.5"/>
+        <line x1="132" y1="120" x2="158" y2="120" stroke="#f97316" stroke-width="2"/>
+        <circle cx="145" cy="120" r="2.5" fill="#f97316"/>
+        <text x="145" y="206" font-size="9" fill="#334155" text-anchor="middle" font-weight="500">Launch</text>
+
+        <!-- Ops violin at x=220 -->
+        <path d="M220,80 C226,98 230,115 232,138 C233,152 232,168 229,178 C228,184 226,188 224,190 L216,190 C214,188 212,184 211,178 C208,168 207,152 208,138 C210,115 214,98 220,80Z"
+              fill="#8b5cf6" opacity="0.3" stroke="#8b5cf6" stroke-width="1.5"/>
+        <line x1="210" y1="148" x2="230" y2="148" stroke="#8b5cf6" stroke-width="2"/>
+        <circle cx="220" cy="148" r="2.5" fill="#8b5cf6"/>
+        <text x="220" y="206" font-size="9" fill="#334155" text-anchor="middle" font-weight="500">Ops</text>
+
+        <!-- Client violin at x=290 -->
+        <path d="M290,105 C294,120 297,138 298,155 C299,165 298,176 296,184 C295,187 294,189 292,190 L288,190 C286,189 285,187 284,184 C282,176 281,165 282,155 C283,138 286,120 290,105Z"
+              fill="#10b981" opacity="0.3" stroke="#10b981" stroke-width="1.5"/>
+        <line x1="282" y1="162" x2="298" y2="162" stroke="#10b981" stroke-width="2"/>
+        <circle cx="290" cy="162" r="2.5" fill="#10b981"/>
+        <text x="290" y="206" font-size="9" fill="#334155" text-anchor="middle" font-weight="500">Client</text>
+      </svg>
+    </div>
+
+    <!-- Bump Chart -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <h2 class="text-base font-bold text-slate-900 mb-1">Priority Rankings</h2>
+      <p class="text-xs text-slate-400 mb-3">Project focus shifts week to week</p>
+      <svg viewBox="0 0 340 220" class="w-full" xmlns="http://www.w3.org/2000/svg">
+        <line x1="30" y1="40" x2="310" y2="40" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <line x1="30" y1="85" x2="310" y2="85" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <line x1="30" y1="130" x2="310" y2="130" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <line x1="30" y1="175" x2="310" y2="175" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <text x="18" y="44" font-size="9" fill="#64748b" text-anchor="middle" font-weight="600">#1</text>
+        <text x="18" y="89" font-size="9" fill="#64748b" text-anchor="middle" font-weight="600">#2</text>
+        <text x="18" y="134" font-size="9" fill="#64748b" text-anchor="middle" font-weight="600">#3</text>
+        <text x="18" y="179" font-size="9" fill="#64748b" text-anchor="middle" font-weight="600">#4</text>
+
+        <!-- Week labels -->
+        <text x="40" y="198" font-size="7" fill="#94a3b8" text-anchor="middle">W1</text>
+        <text x="90" y="198" font-size="7" fill="#94a3b8" text-anchor="middle">W3</text>
+        <text x="140" y="198" font-size="7" fill="#94a3b8" text-anchor="middle">W5</text>
+        <text x="190" y="198" font-size="7" fill="#94a3b8" text-anchor="middle">W7</text>
+        <text x="240" y="198" font-size="7" fill="#94a3b8" text-anchor="middle">W9</text>
+        <text x="290" y="198" font-size="7" fill="#94a3b8" text-anchor="middle">W11</text>
+
+        <!-- Web Redesign: #2 -> #1 from W3 -->
+        <polyline points="40,85 65,85 90,40 115,40 140,40 165,40 190,40 215,40 240,40 265,40 290,40 310,40"
+                  fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="40" cy="85" r="4" fill="#3b82f6"/>
+        <circle cx="310" cy="40" r="4" fill="#3b82f6"/>
+
+        <!-- Launch: #1 -> #2 -->
+        <polyline points="40,40 65,40 90,85 115,85 140,85 165,85 190,85 215,85 240,85 265,85 290,85 310,85"
+                  fill="none" stroke="#f97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="40" cy="40" r="4" fill="#f97316"/>
+        <circle cx="310" cy="85" r="4" fill="#f97316"/>
+
+        <!-- Ops: #3, dips to #4 mid-Q -->
+        <polyline points="40,130 65,130 90,130 115,130 140,130 165,175 190,175 215,130 240,130 265,130 290,130 310,130"
+                  fill="none" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="40" cy="130" r="4" fill="#8b5cf6"/>
+        <circle cx="310" cy="130" r="4" fill="#8b5cf6"/>
+
+        <!-- Client: #4, briefly #3 -->
+        <polyline points="40,175 65,175 90,175 115,175 140,175 165,130 190,130 215,175 240,175 265,175 290,175 310,175"
+                  fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="40" cy="175" r="4" fill="#10b981"/>
+        <circle cx="310" cy="175" r="4" fill="#10b981"/>
+
+        <!-- End labels -->
+        <text x="320" y="44" font-size="8" fill="#3b82f6" font-weight="600">Web</text>
+        <text x="320" y="89" font-size="8" fill="#f97316" font-weight="600">Launch</text>
+        <text x="320" y="134" font-size="8" fill="#8b5cf6" font-weight="600">Ops</text>
+        <text x="320" y="179" font-size="8" fill="#10b981" font-weight="600">Client</text>
+      </svg>
+    </div>
+
+    <!-- Achievement Badges -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <h2 class="text-base font-bold text-slate-900 mb-3">Achievement Badges</h2>
+      <div class="grid grid-cols-3 gap-3">
+        <div class="text-center">
+          <svg viewBox="0 0 80 80" class="w-14 h-14 mx-auto mb-1">
+            <circle cx="40" cy="40" r="36" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+            <circle cx="40" cy="40" r="28" fill="#fde68a" stroke="#f59e0b" stroke-width="0.8"/>
+            <text x="40" y="36" font-size="16" font-weight="800" fill="#92400e" text-anchor="middle">100</text>
+            <text x="40" y="48" font-size="7" font-weight="600" fill="#b45309" text-anchor="middle">TASKS</text>
+            <polygon points="40,4 42.5,10 49,10 44,14 46,21 40,17 34,21 36,14 31,10 37.5,10" fill="#f59e0b"/>
+          </svg>
+          <p class="text-[10px] font-semibold text-slate-700">Century Club</p>
+        </div>
+        <div class="text-center">
+          <svg viewBox="0 0 80 80" class="w-14 h-14 mx-auto mb-1">
+            <circle cx="40" cy="40" r="36" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+            <circle cx="40" cy="40" r="28" fill="#bfdbfe" stroke="#3b82f6" stroke-width="0.8"/>
+            <text x="40" y="36" font-size="16" font-weight="800" fill="#1e40af" text-anchor="middle">50</text>
+            <text x="40" y="48" font-size="6" font-weight="600" fill="#1d4ed8" text-anchor="middle">SUMMARIES</text>
+            <polygon points="40,4 42.5,10 49,10 44,14 46,21 40,17 34,21 36,14 31,10 37.5,10" fill="#3b82f6"/>
+          </svg>
+          <p class="text-[10px] font-semibold text-slate-700">Storyteller</p>
+        </div>
+        <div class="text-center">
+          <svg viewBox="0 0 80 80" class="w-14 h-14 mx-auto mb-1">
+            <circle cx="40" cy="40" r="36" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+            <circle cx="40" cy="40" r="28" fill="#fbcfe8" stroke="#ec4899" stroke-width="0.8"/>
+            <text x="40" y="36" font-size="16" font-weight="800" fill="#9d174d" text-anchor="middle">30</text>
+            <text x="40" y="48" font-size="7" font-weight="600" fill="#be185d" text-anchor="middle">DAYS</text>
+            <polygon points="40,4 42.5,10 49,10 44,14 46,21 40,17 34,21 36,14 31,10 37.5,10" fill="#ec4899"/>
+          </svg>
+          <p class="text-[10px] font-semibold text-slate-700">Iron Streak</p>
+        </div>
+        <div class="text-center">
+          <svg viewBox="0 0 80 80" class="w-14 h-14 mx-auto mb-1">
+            <circle cx="40" cy="40" r="36" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+            <circle cx="40" cy="40" r="28" fill="#a7f3d0" stroke="#10b981" stroke-width="0.8"/>
+            <text x="40" y="36" font-size="14" font-weight="800" fill="#065f46" text-anchor="middle">800+</text>
+            <text x="40" y="48" font-size="7" font-weight="600" fill="#047857" text-anchor="middle">HOURS</text>
+            <polygon points="40,4 42.5,10 49,10 44,14 46,21 40,17 34,21 36,14 31,10 37.5,10" fill="#10b981"/>
+          </svg>
+          <p class="text-[10px] font-semibold text-slate-700">Time Titan</p>
+        </div>
+        <div class="text-center">
+          <svg viewBox="0 0 80 80" class="w-14 h-14 mx-auto mb-1">
+            <circle cx="40" cy="40" r="36" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/>
+            <circle cx="40" cy="40" r="28" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="0.8"/>
+            <text x="40" y="38" font-size="18" font-weight="800" fill="#5b21b6" text-anchor="middle">4</text>
+            <text x="40" y="50" font-size="6" font-weight="600" fill="#6d28d9" text-anchor="middle">PROJECTS</text>
+            <polygon points="40,4 42.5,10 49,10 44,14 46,21 40,17 34,21 36,14 31,10 37.5,10" fill="#8b5cf6"/>
+          </svg>
+          <p class="text-[10px] font-semibold text-slate-700">Versatile</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact Waterfall -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <h2 class="text-base font-bold text-slate-900 mb-1">Impact Score Waterfall</h2>
+      <p class="text-xs text-slate-400 mb-3">Building total impact from project contributions</p>
+      <svg viewBox="0 0 340 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+        <line x1="30" y1="170" x2="320" y2="170" stroke="#cbd5e1" stroke-width="0.5"/>
+        <line x1="30" y1="136" x2="320" y2="136" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <line x1="30" y1="102" x2="320" y2="102" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <line x1="30" y1="68" x2="320" y2="68" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <line x1="30" y1="34" x2="320" y2="34" stroke="#e2e8f0" stroke-width="0.5" stroke-dasharray="3"/>
+        <text x="24" y="174" font-size="8" fill="#94a3b8" text-anchor="end">0</text>
+        <text x="24" y="104" font-size="8" fill="#94a3b8" text-anchor="end">50</text>
+        <text x="24" y="38" font-size="8" fill="#94a3b8" text-anchor="end">100</text>
+
+        <!-- Base -->
+        <rect x="38" y="142" width="40" height="28" rx="3" fill="#94a3b8" opacity="0.4"/>
+        <text x="58" y="160" font-size="9" fill="#475569" text-anchor="middle" font-weight="700">+20</text>
+        <text x="58" y="186" font-size="8" fill="#64748b" text-anchor="middle">Base</text>
+        <line x1="78" y1="142" x2="95" y2="142" stroke="#cbd5e1" stroke-width="0.5" stroke-dasharray="2"/>
+
+        <!-- Web -->
+        <rect x="95" y="100" width="40" height="42" rx="3" fill="#3b82f6" opacity="0.6"/>
+        <text x="115" y="126" font-size="9" fill="white" text-anchor="middle" font-weight="700">+31</text>
+        <text x="115" y="186" font-size="8" fill="#64748b" text-anchor="middle">Web</text>
+        <line x1="135" y1="100" x2="152" y2="100" stroke="#cbd5e1" stroke-width="0.5" stroke-dasharray="2"/>
+
+        <!-- Launch -->
+        <rect x="152" y="68" width="40" height="32" rx="3" fill="#f97316" opacity="0.6"/>
+        <text x="172" y="88" font-size="9" fill="white" text-anchor="middle" font-weight="700">+24</text>
+        <text x="172" y="186" font-size="8" fill="#64748b" text-anchor="middle">Launch</text>
+        <line x1="192" y1="68" x2="209" y2="68" stroke="#cbd5e1" stroke-width="0.5" stroke-dasharray="2"/>
+
+        <!-- Ops -->
+        <rect x="209" y="48" width="40" height="20" rx="3" fill="#8b5cf6" opacity="0.6"/>
+        <text x="229" y="62" font-size="9" fill="white" text-anchor="middle" font-weight="700">+15</text>
+        <text x="229" y="186" font-size="8" fill="#64748b" text-anchor="middle">Ops</text>
+        <line x1="249" y1="48" x2="266" y2="48" stroke="#cbd5e1" stroke-width="0.5" stroke-dasharray="2"/>
+
+        <!-- Client -->
+        <rect x="266" y="38" width="40" height="10" rx="3" fill="#10b981" opacity="0.6"/>
+        <text x="286" y="47" font-size="7" fill="white" text-anchor="middle" font-weight="700">+7</text>
+        <text x="286" y="186" font-size="8" fill="#64748b" text-anchor="middle">Client</text>
+
+        <!-- Total -->
+        <rect x="310" y="38" width="24" height="132" rx="3" fill="#1e293b" opacity="0.85"/>
+        <text x="322" y="110" font-size="13" fill="white" text-anchor="middle" font-weight="800">97</text>
+        <text x="322" y="186" font-size="8" fill="#334155" text-anchor="middle" font-weight="700">Total</text>
+      </svg>
+    </div>
+
+    <!-- Monthly Podium -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+      <h2 class="text-base font-bold text-slate-900 mb-3">Monthly Podium</h2>
+      <div class="grid grid-cols-3 gap-2">
+        <!-- January -->
+        <div>
+          <h3 class="text-[10px] font-bold text-slate-500 text-center mb-2 uppercase">January</h3>
+          <svg viewBox="0 0 120 120" class="w-full" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="60" width="30" height="45" rx="3" fill="#f97316" opacity="0.3"/>
+            <rect x="5" y="60" width="30" height="3" rx="1.5" fill="#f97316"/>
+            <text x="20" y="76" font-size="10" font-weight="800" fill="#9a3412" text-anchor="middle">2</text>
+            <text x="20" y="88" font-size="6" fill="#9a3412" text-anchor="middle" font-weight="600">72h</text>
+
+            <rect x="42" y="30" width="36" height="75" rx="3" fill="#3b82f6" opacity="0.3"/>
+            <rect x="42" y="30" width="36" height="3" rx="1.5" fill="#3b82f6"/>
+            <polygon points="60,16 65,24 70,18 67,28 53,28 50,18 55,24" fill="#f59e0b"/>
+            <text x="60" y="52" font-size="12" font-weight="800" fill="#1e40af" text-anchor="middle">1</text>
+            <text x="60" y="66" font-size="6" fill="#1e40af" text-anchor="middle" font-weight="600">86h</text>
+
+            <rect x="85" y="72" width="30" height="33" rx="3" fill="#8b5cf6" opacity="0.3"/>
+            <rect x="85" y="72" width="30" height="3" rx="1.5" fill="#8b5cf6"/>
+            <text x="100" y="88" font-size="10" font-weight="800" fill="#5b21b6" text-anchor="middle">3</text>
+            <text x="100" y="100" font-size="6" fill="#5b21b6" text-anchor="middle" font-weight="600">52h</text>
+
+            <line x1="2" y1="105" x2="118" y2="105" stroke="#e2e8f0" stroke-width="1"/>
+          </svg>
+        </div>
+        <!-- February -->
+        <div>
+          <h3 class="text-[10px] font-bold text-slate-500 text-center mb-2 uppercase">February</h3>
+          <svg viewBox="0 0 120 120" class="w-full" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="60" width="30" height="45" rx="3" fill="#f97316" opacity="0.3"/>
+            <rect x="5" y="60" width="30" height="3" rx="1.5" fill="#f97316"/>
+            <text x="20" y="76" font-size="10" font-weight="800" fill="#9a3412" text-anchor="middle">2</text>
+            <text x="20" y="88" font-size="6" fill="#9a3412" text-anchor="middle" font-weight="600">82h</text>
+
+            <rect x="42" y="30" width="36" height="75" rx="3" fill="#3b82f6" opacity="0.3"/>
+            <rect x="42" y="30" width="36" height="3" rx="1.5" fill="#3b82f6"/>
+            <polygon points="60,16 65,24 70,18 67,28 53,28 50,18 55,24" fill="#f59e0b"/>
+            <text x="60" y="52" font-size="12" font-weight="800" fill="#1e40af" text-anchor="middle">1</text>
+            <text x="60" y="66" font-size="6" fill="#1e40af" text-anchor="middle" font-weight="600">104h</text>
+
+            <rect x="85" y="72" width="30" height="33" rx="3" fill="#8b5cf6" opacity="0.3"/>
+            <rect x="85" y="72" width="30" height="3" rx="1.5" fill="#8b5cf6"/>
+            <text x="100" y="88" font-size="10" font-weight="800" fill="#5b21b6" text-anchor="middle">3</text>
+            <text x="100" y="100" font-size="6" fill="#5b21b6" text-anchor="middle" font-weight="600">58h</text>
+
+            <line x1="2" y1="105" x2="118" y2="105" stroke="#e2e8f0" stroke-width="1"/>
+          </svg>
+        </div>
+        <!-- March -->
+        <div>
+          <h3 class="text-[10px] font-bold text-slate-500 text-center mb-2 uppercase">March</h3>
+          <svg viewBox="0 0 120 120" class="w-full" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="60" width="30" height="45" rx="3" fill="#f97316" opacity="0.3"/>
+            <rect x="5" y="60" width="30" height="3" rx="1.5" fill="#f97316"/>
+            <text x="20" y="76" font-size="10" font-weight="800" fill="#9a3412" text-anchor="middle">2</text>
+            <text x="20" y="88" font-size="6" fill="#9a3412" text-anchor="middle" font-weight="600">83h</text>
+
+            <rect x="42" y="30" width="36" height="75" rx="3" fill="#3b82f6" opacity="0.3"/>
+            <rect x="42" y="30" width="36" height="3" rx="1.5" fill="#3b82f6"/>
+            <polygon points="60,16 65,24 70,18 67,28 53,28 50,18 55,24" fill="#f59e0b"/>
+            <text x="60" y="52" font-size="12" font-weight="800" fill="#1e40af" text-anchor="middle">1</text>
+            <text x="60" y="66" font-size="6" fill="#1e40af" text-anchor="middle" font-weight="600">114h</text>
+
+            <rect x="85" y="72" width="30" height="33" rx="3" fill="#10b981" opacity="0.3"/>
+            <rect x="85" y="72" width="30" height="3" rx="1.5" fill="#10b981"/>
+            <text x="100" y="88" font-size="10" font-weight="800" fill="#065f46" text-anchor="middle">3</text>
+            <text x="100" y="100" font-size="6" fill="#065f46" text-anchor="middle" font-weight="600">48h</text>
+
+            <line x1="2" y1="105" x2="118" y2="105" stroke="#e2e8f0" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="h-4"></div>
+  </div>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="bg-white border-t border-slate-100 px-2 pb-6 pt-2 flex items-center justify-around shrink-0">
+    <button class="bottom-nav-item text-slate-400 flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="text-[10px] font-medium">Tracker</span>
+    </button>
+    <button class="bottom-nav-item active flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      <span class="text-[10px] font-semibold">Summary</span>
+    </button>
+    <button class="bottom-nav-item text-slate-400 flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <span class="text-[10px] font-medium">Team</span>
+    </button>
+    <button class="bottom-nav-item text-slate-400 flex flex-col items-center gap-0.5 px-3 py-1">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <span class="text-[10px] font-medium">More</span>
+    </button>
+  </nav>
+</div>
+
+</body>
+</html>

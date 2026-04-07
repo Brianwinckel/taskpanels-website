@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskPanels — Performance Review Concepts</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { font-family: 'Inter', -apple-system, sans-serif; }
+  body { background: #0f172a; }
+  .concept-card { transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+  .concept-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+</style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-8">
+  <div class="text-center mb-10">
+    <a href="/concepts/" class="text-sm text-slate-500 hover:text-slate-300 mb-4 inline-block">&larr; All Concepts</a>
+    <div class="flex items-center justify-center gap-3 mb-4">
+      <svg width="36" height="36" viewBox="0 0 32 32"><circle cx="10" cy="10" r="5" fill="#3b82f6"/><circle cx="22" cy="10" r="5" fill="#f97316"/><circle cx="10" cy="22" r="5" fill="#8b5cf6"/><circle cx="22" cy="22" r="5" fill="#10b981"/></svg>
+      <span class="text-2xl font-bold text-white">TaskPanels</span>
+    </div>
+    <h1 class="text-3xl font-extrabold text-white mb-3">Performance Review Concepts</h1>
+    <p class="text-base text-slate-400 max-w-xl mx-auto">6 layout explorations for aggregate performance review proof reports. Quarter-level data compiled for review evidence.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl w-full">
+    <a href="/concepts/aggregate/a1-executive.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-blue-500/20 text-blue-400 px-2 py-1 rounded-md">A1</span>
+        <h2 class="text-lg font-bold text-white">Executive Summary</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Big KPI cards, 12-week trend line, donut breakdown, achievement list, quarter-over-quarter comparison.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">KPI Cards</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Trend Line</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">QoQ Compare</span>
+      </div>
+    </a>
+
+    <a href="/concepts/aggregate/a2-heatmap-calendar.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-md">A2</span>
+        <h2 class="text-lg font-bold text-white">Heatmap Calendar</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Full quarter calendar heatmap, weekly patterns, monthly grouped bars, distribution curve, streak counter.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Calendar Heatmap</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Distribution</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Patterns</span>
+      </div>
+    </a>
+
+    <a href="/concepts/aggregate/a3-trend-analysis.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-orange-500/20 text-orange-400 px-2 py-1 rounded-md">A3</span>
+        <h2 class="text-lg font-bold text-white">Trend Analysis</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Candlestick charts, moving averages, stacked area evolution, momentum gauge, regression scatter.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Candlestick</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Moving Avg</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Regression</span>
+      </div>
+    </a>
+
+    <a href="/concepts/aggregate/a4-treemap-deep-dive.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-purple-500/20 text-purple-400 px-2 py-1 rounded-md">A4</span>
+        <h2 class="text-lg font-bold text-white">Treemap Deep Dive</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Nested treemap, stacked area chart, project cards with mini donuts, value realization funnel.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Treemap</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Stacked Area</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Funnel</span>
+      </div>
+    </a>
+
+    <a href="/concepts/aggregate/a5-comparative.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-pink-500/20 text-pink-400 px-2 py-1 rounded-md">A5</span>
+        <h2 class="text-lg font-bold text-white">Comparative Analysis</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Scatter plot with trend line, radar chart profile, peer benchmarks, ROI rankings, skills growth bars.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Scatter</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Radar</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Benchmarks</span>
+      </div>
+    </a>
+
+    <a href="/concepts/aggregate/a6-dynamic-rankings.html" class="concept-card bg-slate-800 rounded-2xl p-5 border border-slate-700 block">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded-md">A6</span>
+        <h2 class="text-lg font-bold text-white">Dynamic Rankings</h2>
+      </div>
+      <p class="text-sm text-slate-400 mb-3">Racing bar charts, violin plots, bump chart rankings, achievement badges, impact waterfall, podiums.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Racing Bars</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Violin</span>
+        <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Badges</span>
+      </div>
+    </a>
+  </div>
+
+  <p class="text-sm text-slate-500 mt-8">All concepts are fully responsive — try on desktop and mobile.</p>
+</body>
+</html>
