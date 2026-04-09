@@ -22,56 +22,51 @@ tailwind.config = {
   .hide-scrollbar::-webkit-scrollbar { display: none; }
   .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-  /* State tab */
+  /* State tab (Simple/Messy toggle) */
   .state-tab { transition: all 0.2s ease; cursor: pointer; user-select: none; }
   .state-tab.active { background: #1e293b; color: #fff; }
 
+  /* Report type toggle */
+  .report-type { transition: all 0.15s ease; cursor: pointer; user-select: none; }
+  .report-type.active { background: #1e293b; color: #fff; }
+
   /* Outcome chip */
-  .outcome-chip {
-    transition: all 0.15s ease;
-    cursor: pointer; user-select: none;
-  }
+  .outcome-chip { transition: all 0.15s ease; cursor: pointer; user-select: none; }
   .outcome-chip:active { transform: scale(0.96); }
   .outcome-chip.selected-completed { background: #ecfdf5; border-color: #6ee7b7; color: #059669; }
   .outcome-chip.selected-progress { background: #eff6ff; border-color: #93c5fd; color: #2563eb; }
-  .outcome-chip.selected-followup { background: #fefce8; border-color: #fde047; color: #a16207; }
-  .outcome-chip.selected-passedoff { background: #f5f3ff; border-color: #c4b5fd; color: #7c3aed; }
-  .outcome-chip.selected-deferred { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
+  .outcome-chip.selected-blocked { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
+  .outcome-chip.selected-review { background: #fefce8; border-color: #fde047; color: #a16207; }
+  .outcome-chip.selected-followup { background: #f5f3ff; border-color: #c4b5fd; color: #7c3aed; }
   .outcome-chip.selected-abandoned { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
 
-  /* Audience / Style chip */
-  .choice-chip {
-    transition: all 0.15s ease;
-    cursor: pointer; user-select: none;
-  }
+  /* Choice chip (audience / style) */
+  .choice-chip { transition: all 0.15s ease; cursor: pointer; user-select: none; }
   .choice-chip:hover { background: #f1f5f9; }
   .choice-chip:active { transform: scale(0.96); }
   .choice-chip.selected { background: #eff6ff; border-color: #93c5fd; color: #2563eb; }
 
   /* Include toggle */
-  .include-toggle {
-    transition: all 0.15s ease;
-    cursor: pointer; user-select: none;
-  }
+  .include-toggle { transition: all 0.15s ease; cursor: pointer; user-select: none; }
   .include-toggle.on { background: #ecfdf5; border-color: #6ee7b7; color: #059669; }
   .include-toggle.off { background: #f8fafc; border-color: #e2e8f0; color: #94a3b8; }
 
-  /* Source chip */
-  .source-chip { transition: all 0.15s ease; }
+  /* Source toggle */
+  .source-toggle { transition: all 0.15s ease; cursor: pointer; user-select: none; }
+  .source-toggle.on { opacity: 1; }
+  .source-toggle.off { opacity: 0.45; }
 
-  /* Unrealized effort */
-  .effort-choice {
-    transition: all 0.15s ease;
-    cursor: pointer; user-select: none;
-  }
+  /* Effort choice */
+  .effort-choice { transition: all 0.15s ease; cursor: pointer; user-select: none; }
   .effort-choice:active { transform: scale(0.96); }
   .effort-choice.selected-yes { background: #fefce8; border-color: #fde047; color: #a16207; }
   .effort-choice.selected-no { background: #f8fafc; border-color: #e2e8f0; color: #64748b; }
 
-  /* AI card shimmer */
-  .ai-shimmer {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
+  /* Conditional detail input */
+  .cond-input {
+    transition: border-color 0.15s ease;
   }
+  .cond-input:focus { border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(147,197,253,0.15); }
 
   /* Sidebar nav */
   .sidebar-item { transition: background 0.15s ease; }
@@ -156,61 +151,40 @@ function showState(state) {
     <div class="flex-1 overflow-auto hide-scrollbar">
       <div class="max-w-3xl mx-auto px-8 py-8 space-y-8">
 
-        <!-- ═══ Included Sources ═══ -->
+        <!-- ═══ Report Type Toggle ═══ -->
+        <div>
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Report Type</h2>
+          <div class="inline-flex bg-slate-100 rounded-xl p-1 gap-1">
+            <span class="report-type active px-5 py-2.5 rounded-lg text-sm font-semibold">Daily Summary</span>
+            <span class="report-type px-5 py-2.5 rounded-lg text-sm font-semibold text-slate-500">Performance Review</span>
+          </div>
+        </div>
+
+        <!-- ═══ Included Sources (toggleable) ═══ -->
         <div>
           <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Included Sources</h2>
           <div class="flex flex-wrap gap-2">
-            <div class="source-chip flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-100">
+            <div class="source-toggle on flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 cursor-pointer">
               <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
               <span class="text-sm font-medium text-blue-700">TaskPanels Activity</span>
               <span class="text-[10px] font-semibold text-blue-400 bg-blue-100 px-1.5 py-0.5 rounded">5 panels</span>
+              <svg class="w-4 h-4 text-blue-400 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
             </div>
-            <div class="source-chip flex items-center gap-2 px-3.5 py-2 rounded-xl bg-orange-50 border border-orange-100">
+            <div class="source-toggle on flex items-center gap-2 px-3.5 py-2 rounded-xl bg-orange-50 border border-orange-200 cursor-pointer">
               <svg class="w-4 h-4 text-orange-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
               <span class="text-sm font-medium text-orange-700">Claude Work Digest</span>
               <span class="text-[10px] font-semibold text-orange-400 bg-orange-100 px-1.5 py-0.5 rounded">3 sessions</span>
+              <svg class="w-4 h-4 text-orange-400 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
             </div>
-            <div class="source-chip flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-50 border border-purple-100">
-              <svg class="w-4 h-4 text-purple-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
-              <span class="text-sm font-medium text-purple-700">Browser AI Activity</span>
-              <span class="text-[10px] font-semibold text-purple-400 bg-purple-100 px-1.5 py-0.5 rounded">12 items</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ AI Summary Assistant Card ═══ -->
-        <div class="ai-shimmer rounded-2xl p-6 border border-slate-700/50 relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/3"></div>
-          <div class="relative">
-            <div class="flex items-center gap-2 mb-4">
-              <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
-                <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-              </div>
-              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">AI Summary Assistant</span>
-              <span class="text-[10px] font-medium text-slate-500 ml-auto">Based on 3 sources</span>
-            </div>
-
-            <!-- SIMPLE DAY narrative -->
-            <div class="view-simple">
-              <p class="text-sm text-slate-300 leading-relaxed">
-                A focused day anchored on two main efforts. You spent the morning on the <span class="text-blue-400 font-medium">Website Refresh</span> — primarily front-end work with Claude assisting on responsive layout refinements. The afternoon shifted to <span class="text-emerald-400 font-medium">Product Launch</span> prep, including landing page copy and asset review. A short <span class="text-orange-400 font-medium">Internal Ops</span> session rounded out the day. Overall: productive and well-structured.
-              </p>
-            </div>
-
-            <!-- MESSY DAY narrative -->
-            <div class="view-messy" style="display:none">
-              <p class="text-sm text-slate-300 leading-relaxed">
-                A scattered day with five active workstreams. <span class="text-blue-400 font-medium">Website Refresh</span> took the largest block, with Claude providing code review support. <span class="text-emerald-400 font-medium">Product Launch</span> prep continued but was interrupted by an extended <span class="text-orange-400 font-medium">Client Review</span>. Browser activity shows research across competitor landing pages. Two smaller items — <span class="text-purple-400 font-medium">Internal Ops</span> and <span class="text-rose-400 font-medium">Onboarding Docs</span> — were started but not completed. Some effort may be unreported.
-              </p>
-            </div>
-
-            <div class="flex items-center gap-3 mt-4 pt-4 border-t border-slate-700/50">
-              <span class="text-[10px] text-slate-500">This is a draft preview. Your final report will be generated after confirming the details below.</span>
+            <div class="source-toggle off flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+              <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+              <span class="text-sm font-medium text-slate-400">Browser AI Activity</span>
+              <span class="text-[10px] font-semibold text-slate-300 bg-slate-100 px-1.5 py-0.5 rounded">12 items</span>
             </div>
           </div>
         </div>
 
-        <!-- ═══ Missing Outcomes ═══ -->
+        <!-- ═══ Complete Outcomes ═══ -->
         <div>
           <div class="flex items-center justify-between mb-4">
             <div>
@@ -227,9 +201,10 @@ function showState(state) {
 
           <div class="space-y-3">
 
-            <!-- === SIMPLE DAY: 2 items === -->
+            <!-- === SIMPLE DAY === -->
             <div class="view-simple">
-              <!-- Item 1: Website Refresh -->
+
+              <!-- Website Refresh — In Progress -->
               <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
                 <div class="flex items-center gap-3">
                   <div class="w-1.5 h-10 rounded-full bg-blue-500 shrink-0"></div>
@@ -243,16 +218,16 @@ function showState(state) {
                   <span class="text-sm font-mono font-semibold text-slate-600 tabular-nums shrink-0">2h 48m</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5 pl-4">
+                  <span class="outcome-chip selected-completed px-3 py-1.5 rounded-lg border text-xs font-medium">Completed</span>
                   <span class="outcome-chip selected-progress px-3 py-1.5 rounded-lg border text-xs font-medium">In Progress</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Completed</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Blocked</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Review</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Follow-Up</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Passed Off</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Deferred</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Abandoned</span>
                 </div>
               </div>
 
-              <!-- Item 2: Internal Ops -->
+              <!-- Internal Ops — Completed -->
               <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3 mt-3">
                 <div class="flex items-center gap-3">
                   <div class="w-1.5 h-10 rounded-full bg-orange-400 shrink-0"></div>
@@ -266,20 +241,21 @@ function showState(state) {
                   <span class="text-sm font-mono font-semibold text-slate-600 tabular-nums shrink-0">0h 38m</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5 pl-4">
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
                   <span class="outcome-chip selected-completed px-3 py-1.5 rounded-lg border text-xs font-medium">Completed</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Blocked</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Review</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Follow-Up</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Passed Off</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Deferred</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Abandoned</span>
                 </div>
               </div>
+
             </div>
 
-            <!-- === MESSY DAY: 5 items === -->
+            <!-- === MESSY DAY === -->
             <div class="view-messy" style="display:none">
 
-              <!-- Item 1: Website Refresh -->
+              <!-- Item 1: Website Refresh — In Progress -->
               <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
                 <div class="flex items-center gap-3">
                   <div class="w-1.5 h-10 rounded-full bg-blue-500 shrink-0"></div>
@@ -293,17 +269,17 @@ function showState(state) {
                   <span class="text-sm font-mono font-semibold text-slate-600 tabular-nums shrink-0">2h 12m</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5 pl-4">
-                  <span class="outcome-chip selected-progress px-3 py-1.5 rounded-lg border text-xs font-medium">In Progress</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Completed</span>
+                  <span class="outcome-chip selected-progress px-3 py-1.5 rounded-lg border text-xs font-medium">In Progress</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Blocked</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Review</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Follow-Up</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Passed Off</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Deferred</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Abandoned</span>
                 </div>
               </div>
 
-              <!-- Item 2: Product Launch -->
-              <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3 mt-3">
+              <!-- Item 2: Product Launch — Needs Follow-Up (with conditional) -->
+              <div class="bg-white rounded-2xl border border-purple-200 p-5 space-y-3 mt-3">
                 <div class="flex items-center gap-3">
                   <div class="w-1.5 h-10 rounded-full bg-emerald-500 shrink-0"></div>
                   <div class="flex-1 min-w-0">
@@ -316,16 +292,31 @@ function showState(state) {
                   <span class="text-sm font-mono font-semibold text-slate-600 tabular-nums shrink-0">1h 35m</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5 pl-4">
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Completed</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Blocked</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Review</span>
                   <span class="outcome-chip selected-followup px-3 py-1.5 rounded-lg border text-xs font-medium">Needs Follow-Up</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Passed Off</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Deferred</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Abandoned</span>
+                </div>
+                <!-- Conditional: Follow-Up details -->
+                <div class="ml-4 bg-purple-50 rounded-xl border border-purple-200 p-4 space-y-2.5">
+                  <div>
+                    <label class="text-[10px] font-semibold text-purple-600 uppercase tracking-wider block mb-1">Waiting on</label>
+                    <input type="text" value="Client approval on hero copy" class="cond-input w-full h-9 px-3 bg-white border border-purple-200 rounded-lg text-xs text-slate-700 outline-none">
+                  </div>
+                  <div>
+                    <label class="text-[10px] font-semibold text-purple-600 uppercase tracking-wider block mb-1">Passed off to</label>
+                    <input type="text" value="Sarah — design review" class="cond-input w-full h-9 px-3 bg-white border border-purple-200 rounded-lg text-xs text-slate-700 outline-none">
+                  </div>
+                  <div>
+                    <label class="text-[10px] font-semibold text-purple-600 uppercase tracking-wider block mb-1">Next step</label>
+                    <input type="text" value="Finalize copy after client feedback" class="cond-input w-full h-9 px-3 bg-white border border-purple-200 rounded-lg text-xs text-slate-700 outline-none">
+                  </div>
                 </div>
               </div>
 
-              <!-- Item 3: Client Review -->
+              <!-- Item 3: Client Review — Completed -->
               <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3 mt-3">
                 <div class="flex items-center gap-3">
                   <div class="w-1.5 h-10 rounded-full bg-purple-500 shrink-0"></div>
@@ -339,17 +330,16 @@ function showState(state) {
                   <span class="text-sm font-mono font-semibold text-slate-600 tabular-nums shrink-0">1h 15m</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5 pl-4">
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
                   <span class="outcome-chip selected-completed px-3 py-1.5 rounded-lg border text-xs font-medium">Completed</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Blocked</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Review</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Follow-Up</span>
-                  <span class="outcome-chip selected-passedoff px-3 py-1.5 rounded-lg border text-xs font-medium" style="display:none">Passed Off</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Passed Off</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Deferred</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Abandoned</span>
                 </div>
               </div>
 
-              <!-- Item 4: Internal Ops — DEFERRED with unrealized effort -->
+              <!-- Item 4: Internal Ops — Blocked (with conditional) -->
               <div class="bg-white rounded-2xl border border-orange-200 p-5 space-y-3 mt-3">
                 <div class="flex items-center gap-3">
                   <div class="w-1.5 h-10 rounded-full bg-orange-400 shrink-0"></div>
@@ -363,24 +353,21 @@ function showState(state) {
                   <span class="text-sm font-mono font-semibold text-slate-600 tabular-nums shrink-0">0h 52m</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5 pl-4">
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Completed</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
+                  <span class="outcome-chip selected-blocked px-3 py-1.5 rounded-lg border text-xs font-medium">Blocked</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Review</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Follow-Up</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Passed Off</span>
-                  <span class="outcome-chip selected-deferred px-3 py-1.5 rounded-lg border text-xs font-medium">Deferred</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Abandoned</span>
                 </div>
-                <!-- Unrealized Effort follow-up -->
-                <div class="ml-4 bg-amber-50 rounded-xl border border-amber-200 p-4">
-                  <p class="text-xs font-semibold text-amber-800 mb-2.5">Was this still valuable work?</p>
-                  <div class="flex gap-2">
-                    <span class="effort-choice selected-yes px-4 py-2 rounded-lg border text-xs font-medium">Yes — Count as unrealized effort</span>
-                    <span class="effort-choice px-4 py-2 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">No — Exclude</span>
-                  </div>
+                <!-- Conditional: Blocked detail -->
+                <div class="ml-4 bg-orange-50 rounded-xl border border-orange-200 p-4">
+                  <label class="text-[10px] font-semibold text-orange-700 uppercase tracking-wider block mb-1.5">What's blocking this? <span class="font-normal normal-case text-orange-400">optional</span></label>
+                  <input type="text" value="Waiting on IT to provision staging server" class="cond-input w-full h-9 px-3 bg-white border border-orange-200 rounded-lg text-xs text-slate-700 outline-none">
                 </div>
               </div>
 
-              <!-- Item 5: Onboarding Docs — ABANDONED with unrealized effort -->
+              <!-- Item 5: Onboarding Docs — Abandoned (with unrealized effort) -->
               <div class="bg-white rounded-2xl border border-rose-200 p-5 space-y-3 mt-3">
                 <div class="flex items-center gap-3">
                   <div class="w-1.5 h-10 rounded-full bg-rose-500 shrink-0"></div>
@@ -394,19 +381,19 @@ function showState(state) {
                   <span class="text-sm font-mono font-semibold text-slate-600 tabular-nums shrink-0">0h 28m</span>
                 </div>
                 <div class="flex flex-wrap gap-1.5 pl-4">
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Completed</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">In Progress</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Blocked</span>
+                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Review</span>
                   <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Needs Follow-Up</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Passed Off</span>
-                  <span class="outcome-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Deferred</span>
                   <span class="outcome-chip selected-abandoned px-3 py-1.5 rounded-lg border text-xs font-medium">Abandoned</span>
                 </div>
-                <!-- Unrealized Effort follow-up -->
+                <!-- Conditional: Unrealized effort -->
                 <div class="ml-4 bg-amber-50 rounded-xl border border-amber-200 p-4">
-                  <p class="text-xs font-semibold text-amber-800 mb-2.5">Was this still valuable work?</p>
+                  <p class="text-xs font-semibold text-amber-800 mb-2.5">Count as unrealized effort?</p>
                   <div class="flex gap-2">
-                    <span class="effort-choice px-4 py-2 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Yes — Count as unrealized effort</span>
-                    <span class="effort-choice selected-no px-4 py-2 rounded-lg border text-xs font-medium">No — Exclude</span>
+                    <span class="effort-choice selected-yes px-4 py-2 rounded-lg border text-xs font-medium">Yes</span>
+                    <span class="effort-choice px-4 py-2 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">No</span>
                   </div>
                 </div>
               </div>
@@ -417,7 +404,6 @@ function showState(state) {
 
         <!-- ═══ Audience & Style (side by side) ═══ -->
         <div class="grid grid-cols-2 gap-6">
-          <!-- Audience -->
           <div>
             <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Report Audience</h2>
             <div class="flex flex-wrap gap-2">
@@ -427,7 +413,6 @@ function showState(state) {
               <span class="choice-chip px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-500">Personal Log</span>
             </div>
           </div>
-          <!-- Style -->
           <div>
             <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Summary Style</h2>
             <div class="flex flex-wrap gap-2">
@@ -478,54 +463,37 @@ function showState(state) {
   <!-- Mobile Scrollable Content -->
   <div class="flex-1 overflow-auto hide-scrollbar px-4 py-5 space-y-5">
 
-    <!-- Included Sources -->
+    <!-- Report Type -->
+    <div>
+      <h2 class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-2">Report Type</h2>
+      <div class="inline-flex bg-slate-100 rounded-lg p-0.5 gap-0.5">
+        <span class="report-type active px-4 py-2 rounded-md text-xs font-semibold">Daily Summary</span>
+        <span class="report-type px-4 py-2 rounded-md text-xs font-semibold text-slate-500">Performance Review</span>
+      </div>
+    </div>
+
+    <!-- Included Sources (toggleable) -->
     <div>
       <h2 class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-2">Included Sources</h2>
       <div class="flex flex-wrap gap-1.5">
-        <div class="source-chip flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-100">
+        <div class="source-toggle on flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 cursor-pointer">
           <svg class="w-3.5 h-3.5 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           <span class="text-xs font-medium text-blue-700">TaskPanels</span>
+          <svg class="w-3 h-3 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
         </div>
-        <div class="source-chip flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-orange-50 border border-orange-100">
+        <div class="source-toggle on flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-orange-50 border border-orange-200 cursor-pointer">
           <svg class="w-3.5 h-3.5 text-orange-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
           <span class="text-xs font-medium text-orange-700">Claude</span>
+          <svg class="w-3 h-3 text-orange-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
         </div>
-        <div class="source-chip flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-purple-50 border border-purple-100">
-          <svg class="w-3.5 h-3.5 text-purple-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
-          <span class="text-xs font-medium text-purple-700">Browser AI</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- AI Summary Assistant Card -->
-    <div class="ai-shimmer rounded-2xl p-4 border border-slate-700/50 relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/3"></div>
-      <div class="relative">
-        <div class="flex items-center gap-2 mb-3">
-          <div class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
-            <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          </div>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">AI Summary Assistant</span>
-        </div>
-
-        <div class="view-simple">
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Focused day on <span class="text-blue-400 font-medium">Website Refresh</span> and <span class="text-emerald-400 font-medium">Product Launch</span> prep, with a short <span class="text-orange-400 font-medium">Internal Ops</span> session. Claude assisted on responsive layouts. Productive and well-structured.
-          </p>
-        </div>
-        <div class="view-messy" style="display:none">
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Five workstreams today. <span class="text-blue-400 font-medium">Website Refresh</span> led the day with Claude code review support. <span class="text-emerald-400 font-medium">Product Launch</span> interrupted by <span class="text-purple-400 font-medium">Client Review</span>. Two items started but not completed. Some effort may be unreported.
-          </p>
-        </div>
-
-        <div class="mt-3 pt-3 border-t border-slate-700/50">
-          <span class="text-[9px] text-slate-500">Draft preview from 3 sources. Final report generated below.</span>
+        <div class="source-toggle off flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 cursor-pointer">
+          <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+          <span class="text-xs font-medium text-slate-400">Browser AI</span>
         </div>
       </div>
     </div>
 
-    <!-- Missing Outcomes -->
+    <!-- Complete Outcomes -->
     <div>
       <div class="flex items-center justify-between mb-3">
         <div>
@@ -542,9 +510,10 @@ function showState(state) {
 
       <div class="space-y-2.5">
 
-        <!-- SIMPLE DAY mobile items -->
+        <!-- SIMPLE DAY mobile -->
         <div class="view-simple">
-          <!-- Item 1 -->
+
+          <!-- Website Refresh -->
           <div class="bg-white rounded-xl border border-slate-200 p-3.5 space-y-2.5">
             <div class="flex items-center gap-2.5">
               <div class="w-1 h-8 rounded-full bg-blue-500 shrink-0"></div>
@@ -557,16 +526,16 @@ function showState(state) {
               </div>
             </div>
             <div class="flex flex-wrap gap-1 pl-3.5">
-              <span class="outcome-chip selected-progress px-2.5 py-1 rounded-lg border text-[11px] font-medium">In Progress</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Completed</span>
+              <span class="outcome-chip selected-progress px-2.5 py-1 rounded-lg border text-[11px] font-medium">In Progress</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Blocked</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Review</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Follow-Up</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Passed Off</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Deferred</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Abandoned</span>
             </div>
           </div>
 
-          <!-- Item 2 -->
+          <!-- Internal Ops -->
           <div class="bg-white rounded-xl border border-slate-200 p-3.5 space-y-2.5 mt-2.5">
             <div class="flex items-center gap-2.5">
               <div class="w-1 h-8 rounded-full bg-orange-400 shrink-0"></div>
@@ -579,20 +548,21 @@ function showState(state) {
               </div>
             </div>
             <div class="flex flex-wrap gap-1 pl-3.5">
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
               <span class="outcome-chip selected-completed px-2.5 py-1 rounded-lg border text-[11px] font-medium">Completed</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Blocked</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Review</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Follow-Up</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Passed Off</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Deferred</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Abandoned</span>
             </div>
           </div>
+
         </div>
 
-        <!-- MESSY DAY mobile items -->
+        <!-- MESSY DAY mobile -->
         <div class="view-messy" style="display:none">
 
-          <!-- Item 1: Website Refresh -->
+          <!-- Website Refresh — In Progress -->
           <div class="bg-white rounded-xl border border-slate-200 p-3.5 space-y-2.5">
             <div class="flex items-center gap-2.5">
               <div class="w-1 h-8 rounded-full bg-blue-500 shrink-0"></div>
@@ -605,17 +575,17 @@ function showState(state) {
               </div>
             </div>
             <div class="flex flex-wrap gap-1 pl-3.5">
-              <span class="outcome-chip selected-progress px-2.5 py-1 rounded-lg border text-[11px] font-medium">In Progress</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Completed</span>
+              <span class="outcome-chip selected-progress px-2.5 py-1 rounded-lg border text-[11px] font-medium">In Progress</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Blocked</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Review</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Follow-Up</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Passed Off</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Deferred</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Abandoned</span>
             </div>
           </div>
 
-          <!-- Item 2: Product Launch -->
-          <div class="bg-white rounded-xl border border-slate-200 p-3.5 space-y-2.5 mt-2.5">
+          <!-- Product Launch — Needs Follow-Up -->
+          <div class="bg-white rounded-xl border border-purple-200 p-3.5 space-y-2.5 mt-2.5">
             <div class="flex items-center gap-2.5">
               <div class="w-1 h-8 rounded-full bg-emerald-500 shrink-0"></div>
               <div class="flex-1 min-w-0">
@@ -627,16 +597,30 @@ function showState(state) {
               </div>
             </div>
             <div class="flex flex-wrap gap-1 pl-3.5">
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Completed</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Blocked</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Review</span>
               <span class="outcome-chip selected-followup px-2.5 py-1 rounded-lg border text-[11px] font-medium">Follow-Up</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Passed Off</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Deferred</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Abandoned</span>
+            </div>
+            <div class="ml-3.5 bg-purple-50 rounded-lg border border-purple-200 p-3 space-y-2">
+              <div>
+                <label class="text-[9px] font-semibold text-purple-600 uppercase tracking-wider block mb-0.5">Waiting on</label>
+                <input type="text" value="Client approval on hero copy" class="cond-input w-full h-8 px-2.5 bg-white border border-purple-200 rounded-md text-[11px] text-slate-700 outline-none">
+              </div>
+              <div>
+                <label class="text-[9px] font-semibold text-purple-600 uppercase tracking-wider block mb-0.5">Passed off to</label>
+                <input type="text" value="Sarah — design review" class="cond-input w-full h-8 px-2.5 bg-white border border-purple-200 rounded-md text-[11px] text-slate-700 outline-none">
+              </div>
+              <div>
+                <label class="text-[9px] font-semibold text-purple-600 uppercase tracking-wider block mb-0.5">Next step</label>
+                <input type="text" value="Finalize copy after feedback" class="cond-input w-full h-8 px-2.5 bg-white border border-purple-200 rounded-md text-[11px] text-slate-700 outline-none">
+              </div>
             </div>
           </div>
 
-          <!-- Item 3: Client Review -->
+          <!-- Client Review — Completed -->
           <div class="bg-white rounded-xl border border-slate-200 p-3.5 space-y-2.5 mt-2.5">
             <div class="flex items-center gap-2.5">
               <div class="w-1 h-8 rounded-full bg-purple-500 shrink-0"></div>
@@ -649,16 +633,16 @@ function showState(state) {
               </div>
             </div>
             <div class="flex flex-wrap gap-1 pl-3.5">
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
               <span class="outcome-chip selected-completed px-2.5 py-1 rounded-lg border text-[11px] font-medium">Completed</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Blocked</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Review</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Follow-Up</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Passed Off</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Deferred</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Abandoned</span>
             </div>
           </div>
 
-          <!-- Item 4: Internal Ops — DEFERRED -->
+          <!-- Internal Ops — Blocked -->
           <div class="bg-white rounded-xl border border-orange-200 p-3.5 space-y-2.5 mt-2.5">
             <div class="flex items-center gap-2.5">
               <div class="w-1 h-8 rounded-full bg-orange-400 shrink-0"></div>
@@ -671,23 +655,20 @@ function showState(state) {
               </div>
             </div>
             <div class="flex flex-wrap gap-1 pl-3.5">
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Completed</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
+              <span class="outcome-chip selected-blocked px-2.5 py-1 rounded-lg border text-[11px] font-medium">Blocked</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Review</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Follow-Up</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Passed Off</span>
-              <span class="outcome-chip selected-deferred px-2.5 py-1 rounded-lg border text-[11px] font-medium">Deferred</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Abandoned</span>
             </div>
-            <div class="ml-3.5 bg-amber-50 rounded-lg border border-amber-200 p-3">
-              <p class="text-[11px] font-semibold text-amber-800 mb-2">Valuable work?</p>
-              <div class="flex gap-1.5">
-                <span class="effort-choice selected-yes px-3 py-1.5 rounded-lg border text-[11px] font-medium">Yes — Unrealized</span>
-                <span class="effort-choice px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">No</span>
-              </div>
+            <div class="ml-3.5 bg-orange-50 rounded-lg border border-orange-200 p-3">
+              <label class="text-[9px] font-semibold text-orange-700 uppercase tracking-wider block mb-1">Blocker <span class="font-normal normal-case text-orange-400">optional</span></label>
+              <input type="text" value="Waiting on IT staging server" class="cond-input w-full h-8 px-2.5 bg-white border border-orange-200 rounded-md text-[11px] text-slate-700 outline-none">
             </div>
           </div>
 
-          <!-- Item 5: Onboarding Docs — ABANDONED -->
+          <!-- Onboarding Docs — Abandoned -->
           <div class="bg-white rounded-xl border border-rose-200 p-3.5 space-y-2.5 mt-2.5">
             <div class="flex items-center gap-2.5">
               <div class="w-1 h-8 rounded-full bg-rose-500 shrink-0"></div>
@@ -700,18 +681,18 @@ function showState(state) {
               </div>
             </div>
             <div class="flex flex-wrap gap-1 pl-3.5">
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Completed</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">In Progress</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Blocked</span>
+              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Review</span>
               <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Follow-Up</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Passed Off</span>
-              <span class="outcome-chip px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Deferred</span>
               <span class="outcome-chip selected-abandoned px-2.5 py-1 rounded-lg border text-[11px] font-medium">Abandoned</span>
             </div>
             <div class="ml-3.5 bg-amber-50 rounded-lg border border-amber-200 p-3">
-              <p class="text-[11px] font-semibold text-amber-800 mb-2">Valuable work?</p>
+              <p class="text-[11px] font-semibold text-amber-800 mb-2">Count as unrealized effort?</p>
               <div class="flex gap-1.5">
-                <span class="effort-choice px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">Yes</span>
-                <span class="effort-choice selected-no px-3 py-1.5 rounded-lg border text-[11px] font-medium">No — Exclude</span>
+                <span class="effort-choice selected-yes px-3 py-1.5 rounded-lg border text-[11px] font-medium">Yes</span>
+                <span class="effort-choice px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-[11px] font-medium text-slate-500">No</span>
               </div>
             </div>
           </div>
@@ -741,7 +722,6 @@ function showState(state) {
       </div>
     </div>
 
-    <!-- Spacer for bottom action bar -->
     <div class="h-2"></div>
   </div>
 
