@@ -36,7 +36,7 @@ tailwind.config = {
     -webkit-appearance: none; appearance: none;
     width: 22px; height: 22px;
     border-radius: 50%;
-    background: #3b82f6;
+    background: #10b981;
     border: 3px solid #ffffff;
     box-shadow: 0 1px 4px rgba(0,0,0,0.15);
     cursor: pointer;
@@ -44,7 +44,7 @@ tailwind.config = {
   .time-slider::-moz-range-thumb {
     width: 22px; height: 22px;
     border-radius: 50%;
-    background: #3b82f6;
+    background: #10b981;
     border: 3px solid #ffffff;
     box-shadow: 0 1px 4px rgba(0,0,0,0.15);
     cursor: pointer;
@@ -59,9 +59,9 @@ tailwind.config = {
   .work-chip:hover { background: #f1f5f9; }
   .work-chip:active { transform: scale(0.96); }
   .work-chip.selected {
-    background: #eff6ff;
-    border-color: #93c5fd;
-    color: #2563eb;
+    background: #ecfdf5;
+    border-color: #6ee7b7;
+    color: #059669;
   }
 
   /* State toggle */
@@ -91,7 +91,7 @@ tailwind.config = {
     cursor: pointer;
   }
   .icon-opt:hover { background: #f1f5f9; }
-  .icon-opt.selected { background: #eff6ff; border-color: #93c5fd; }
+  .icon-opt.selected { background: #ecfdf5; border-color: #6ee7b7; }
 </style>
 </head>
 <body class="min-h-screen">
@@ -112,7 +112,7 @@ tailwind.config = {
   <div class="flex-1 flex flex-col">
 
     <!-- Header Bar -->
-    <header class="px-6 py-4 border-b border-slate-100 flex items-center gap-4 shrink-0">
+    <header class="px-6 py-4 border-b border-emerald-100 bg-emerald-50 flex items-center gap-4 shrink-0">
       <!-- Close button -->
       <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-colors shrink-0" title="Back to Home">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
@@ -122,7 +122,7 @@ tailwind.config = {
       <div class="flex items-center gap-3 flex-1 min-w-0">
         <!-- Panel icon (clickable to edit) -->
         <div class="relative group">
-          <div class="w-10 h-10 rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600 cursor-pointer group-hover:border-blue-300 transition-colors">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-600 cursor-pointer group-hover:border-emerald-300 transition-colors">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
           </div>
           <!-- Subtle edit hint -->
@@ -133,16 +133,16 @@ tailwind.config = {
 
         <!-- Panel color bar + name -->
         <div class="flex items-center gap-2.5 min-w-0">
-          <div class="w-1 h-8 rounded-full bg-blue-500 shrink-0"></div>
+          <div class="w-1 h-8 rounded-full bg-emerald-500 shrink-0"></div>
           <div class="min-w-0">
-            <h1 class="text-lg font-bold text-slate-900 truncate">Website Refresh</h1>
+            <h1 class="text-lg font-bold text-slate-900 truncate">Product Launch</h1>
           </div>
         </div>
 
         <!-- State label -->
         <div class="flex items-center gap-1.5 shrink-0">
-          <span class="timer-pulse block w-2 h-2 rounded-full bg-blue-500"></span>
-          <span class="text-xs font-bold uppercase tracking-wider text-blue-500">Active</span>
+          <span class="timer-pulse block w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-500">Active</span>
         </div>
       </div>
 
@@ -159,7 +159,7 @@ tailwind.config = {
         <!-- ═══ Primary Actions ═══ -->
         <div class="flex gap-3">
           <button class="flex-1 h-14 bg-amber-50 border border-amber-200 text-amber-700 font-semibold rounded-2xl hover:bg-amber-100 transition-colors flex items-center justify-center gap-2 text-base">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+            <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
             Pause
           </button>
           <button class="flex-1 h-14 bg-slate-900 text-white font-semibold rounded-2xl hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 text-base">
@@ -193,11 +193,11 @@ tailwind.config = {
 
           <!-- Visual duration bar -->
           <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
-            <div class="h-full bg-blue-500 rounded-full" style="width: 56%"></div>
+            <div class="h-full bg-emerald-500 rounded-full" style="width: 56%"></div>
           </div>
           <div class="flex items-center justify-between mt-2">
             <span class="text-[10px] text-slate-400">2:15 PM</span>
-            <span class="text-[10px] font-medium text-blue-500">Now — 4:56 PM</span>
+            <span class="text-[10px] font-medium text-emerald-500">Now — 4:56 PM</span>
           </div>
         </div>
 
@@ -208,7 +208,7 @@ tailwind.config = {
           <div>
             <label class="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-2">Project</label>
             <div class="relative">
-              <select class="w-full h-11 px-4 pr-10 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 appearance-none cursor-pointer hover:border-slate-300 focus:border-blue-300 focus:ring-2 focus:ring-blue-100 outline-none transition-all">
+              <select class="w-full h-11 px-4 pr-10 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 appearance-none cursor-pointer hover:border-slate-300 focus:border-emerald-300 focus:ring-2 focus:ring-emerald-100 outline-none transition-all">
                 <option>Web Redesign</option>
                 <option>Launch Campaign</option>
                 <option>Internal Ops</option>
@@ -221,14 +221,14 @@ tailwind.config = {
           <!-- Focus note -->
           <div>
             <label class="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-2">What are you working on?</label>
-            <input type="text" placeholder="e.g., Pricing page layout and responsive testing" class="w-full h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-300 hover:border-slate-300 focus:border-blue-300 focus:ring-2 focus:ring-blue-100 outline-none transition-all">
+            <input type="text" placeholder="e.g., Landing page copy and hero section" class="w-full h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-300 hover:border-slate-300 focus:border-emerald-300 focus:ring-2 focus:ring-emerald-100 outline-none transition-all">
           </div>
 
           <!-- Work type chips -->
           <div>
             <label class="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-2.5">Work Type</label>
             <div class="flex flex-wrap gap-2">
-              <span class="work-chip selected px-3.5 py-2 rounded-xl border border-blue-200 bg-blue-50 text-sm font-medium text-blue-600">Coding</span>
+              <span class="work-chip selected px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50 text-sm font-medium text-emerald-600">Coding</span>
               <span class="work-chip px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-500">Writing</span>
               <span class="work-chip px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-500">Strategy</span>
               <span class="work-chip px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-500">Research</span>
@@ -280,7 +280,7 @@ tailwind.config = {
         <!-- ═══ Notes (optional, secondary) ═══ -->
         <div>
           <label class="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-2">Notes <span class="font-normal normal-case text-slate-300">optional</span></label>
-          <textarea rows="2" placeholder="Any quick notes about this session..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-300 hover:border-slate-300 focus:border-blue-300 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none"></textarea>
+          <textarea rows="2" placeholder="Any quick notes about this session..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-300 hover:border-slate-300 focus:border-emerald-300 focus:ring-2 focus:ring-emerald-100 outline-none transition-all resize-none"></textarea>
         </div>
 
         <!-- ═══ Panel Customization (secondary) ═══ -->
@@ -294,8 +294,8 @@ tailwind.config = {
             <div>
               <label class="text-xs font-medium text-slate-400 block mb-2.5">Panel Color</label>
               <div class="flex gap-2.5">
-                <div class="color-opt ring w-8 h-8 rounded-full bg-blue-500" style="color: #3b82f6"></div>
-                <div class="color-opt w-8 h-8 rounded-full bg-emerald-500"></div>
+                <div class="color-opt w-8 h-8 rounded-full bg-blue-500</div>
+                <div class="color-opt ring w-8 h-8 rounded-full bg-emerald-500" style="color: #10b981"></div>
                 <div class="color-opt w-8 h-8 rounded-full bg-orange-400"></div>
                 <div class="color-opt w-8 h-8 rounded-full bg-purple-500"></div>
                 <div class="color-opt w-8 h-8 rounded-full bg-rose-500"></div>
@@ -308,7 +308,7 @@ tailwind.config = {
             <div>
               <label class="text-xs font-medium text-slate-400 block mb-2.5">Panel Icon</label>
               <div class="flex gap-2">
-                <div class="icon-opt selected w-10 h-10 rounded-xl border border-blue-200 bg-blue-50 flex items-center justify-center text-blue-600">
+                <div class="icon-opt selected w-10 h-10 rounded-xl border border-emerald-200 bg-emerald-50 flex items-center justify-center text-emerald-600">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 </div>
                 <div class="icon-opt w-10 h-10 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400">
@@ -345,23 +345,23 @@ tailwind.config = {
 <div class="md:hidden flex flex-col h-screen overflow-hidden bg-white">
 
   <!-- Mobile Header -->
-  <header class="px-4 py-3 border-b border-slate-100 flex items-center gap-3 shrink-0">
+  <header class="px-4 py-3 border-b border-emerald-100 bg-emerald-50 flex items-center gap-3 shrink-0">
     <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 shrink-0">
       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
 
     <div class="relative group shrink-0">
-      <div class="w-9 h-9 rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600">
-        <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      <div class="w-9 h-9 rounded-xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-600">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       </div>
     </div>
 
     <div class="flex items-center gap-2 flex-1 min-w-0">
-      <div class="w-1 h-6 rounded-full bg-blue-500 shrink-0"></div>
-      <h1 class="text-base font-bold text-slate-900 truncate">Website Refresh</h1>
+      <div class="w-1 h-6 rounded-full bg-emerald-500 shrink-0"></div>
+      <h1 class="text-base font-bold text-slate-900 truncate">Product Launch</h1>
       <div class="flex items-center gap-1 shrink-0">
-        <span class="timer-pulse block w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-        <span class="text-[9px] font-bold uppercase tracking-wider text-blue-500">Active</span>
+        <span class="timer-pulse block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-emerald-500">Active</span>
       </div>
     </div>
 
@@ -374,7 +374,7 @@ tailwind.config = {
     <!-- Primary Actions -->
     <div class="flex gap-2.5">
       <button class="flex-1 h-13 bg-amber-50 border border-amber-200 text-amber-700 font-semibold rounded-2xl flex items-center justify-center gap-2 text-sm" style="height: 52px">
-        <svg class="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
         Pause
       </button>
       <button class="flex-1 bg-slate-900 text-white font-semibold rounded-2xl flex items-center justify-center gap-2 text-sm" style="height: 52px">
@@ -400,11 +400,11 @@ tailwind.config = {
         </div>
       </div>
       <div class="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-        <div class="h-full bg-blue-500 rounded-full" style="width: 56%"></div>
+        <div class="h-full bg-emerald-500 rounded-full" style="width: 56%"></div>
       </div>
       <div class="flex items-center justify-between mt-1.5">
         <span class="text-[9px] text-slate-400">2:15 PM</span>
-        <span class="text-[9px] font-medium text-blue-500">Now — 4:56 PM</span>
+        <span class="text-[9px] font-medium text-emerald-500">Now — 4:56 PM</span>
       </div>
     </div>
 
@@ -425,14 +425,14 @@ tailwind.config = {
     <!-- Focus Note -->
     <div>
       <label class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block mb-1.5">What are you working on?</label>
-      <input type="text" placeholder="e.g., Pricing page layout" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-300">
+      <input type="text" placeholder="e.g., Landing page copy" class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-300">
     </div>
 
     <!-- Work Type -->
     <div>
       <label class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block mb-2">Work Type</label>
       <div class="flex flex-wrap gap-1.5">
-        <span class="work-chip selected px-3 py-1.5 rounded-lg border border-blue-200 bg-blue-50 text-xs font-medium text-blue-600">Coding</span>
+        <span class="work-chip selected px-3 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-xs font-medium text-emerald-600">Coding</span>
         <span class="work-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Writing</span>
         <span class="work-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Strategy</span>
         <span class="work-chip px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-500">Research</span>
@@ -496,8 +496,8 @@ tailwind.config = {
         <div>
           <label class="text-[10px] font-medium text-slate-400 block mb-2">Color</label>
           <div class="flex gap-2">
-            <div class="color-opt ring w-7 h-7 rounded-full bg-blue-500" style="color: #3b82f6"></div>
-            <div class="color-opt w-7 h-7 rounded-full bg-emerald-500"></div>
+            <div class="color-opt w-7 h-7 rounded-full bg-blue-500</div>
+            <div class="color-opt ring w-7 h-7 rounded-full bg-emerald-500" style="color: #10b981"></div>
             <div class="color-opt w-7 h-7 rounded-full bg-orange-400"></div>
             <div class="color-opt w-7 h-7 rounded-full bg-purple-500"></div>
             <div class="color-opt w-7 h-7 rounded-full bg-rose-500"></div>
@@ -509,7 +509,7 @@ tailwind.config = {
         <div>
           <label class="text-[10px] font-medium text-slate-400 block mb-2">Icon</label>
           <div class="flex gap-1.5">
-            <div class="icon-opt selected w-9 h-9 rounded-xl border border-blue-200 bg-blue-50 flex items-center justify-center text-blue-600">
+            <div class="icon-opt selected w-9 h-9 rounded-xl border border-emerald-200 bg-emerald-50 flex items-center justify-center text-emerald-600">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
             <div class="icon-opt w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400">
