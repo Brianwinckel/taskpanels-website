@@ -25,7 +25,7 @@ export function FinalCtaSection() {
           </a>
         </div>
         <p className="mt-4 text-sm text-slate-400">
-          No credit card required. Set up in minutes.
+          Set up in minutes.
         </p>
       </div>
 

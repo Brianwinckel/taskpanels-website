@@ -140,9 +140,6 @@ export default function FeaturesPage() {
               <ArrowRight className="size-4" />
             </a>
           </div>
-          <p className="mt-3 text-sm text-slate-400">
-            No credit card required.
-          </p>
         </div>
       </section>
     </>

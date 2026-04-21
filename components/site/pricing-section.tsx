@@ -20,7 +20,7 @@ const tiers = [
       "Weekly reporting",
       "Export & email tools",
     ],
-    cta: "Start Pro Trial",
+    cta: "Get Started",
     highlighted: true,
   },
   {
@@ -35,7 +35,7 @@ const tiers = [
       "Shared rollups",
       "Admin controls",
     ],
-    cta: "Start Team Trial",
+    cta: "Get Started",
     highlighted: false,
   },
 ];

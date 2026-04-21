@@ -382,8 +382,6 @@ export function HeroV2() {
 
       {/* Trust strip */}
       <div className="hero-v2-trust">
-        <span><span className="hero-v2-trust-dot" />No credit card required</span>
-        <div className="hero-v2-trust-divider" />
         <span><span className="hero-v2-trust-dot" />Set up in minutes</span>
         <div className="hero-v2-trust-divider" />
         <span><span className="hero-v2-trust-dot" />Cancel anytime</span>
