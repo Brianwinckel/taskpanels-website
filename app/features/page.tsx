@@ -136,7 +136,7 @@ export default function FeaturesPage() {
               href={CTA_LINKS.primary}
               className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 text-base font-medium text-white transition-colors hover:bg-slate-800"
             >
-              Try TaskPanels Free
+              Try TaskPanels
               <ArrowRight className="size-4" />
             </a>
           </div>

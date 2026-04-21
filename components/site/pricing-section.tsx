@@ -8,19 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const tiers = [
   {
-    name: "Free",
-    monthlyPrice: 0,
-    period: "",
-    description: "For trying the workflow",
-    features: [
-      "Basic daily tracking",
-      "Limited history",
-      "Sample summaries",
-    ],
-    cta: "Get Started",
-    highlighted: false,
-  },
-  {
     name: "Pro",
     monthlyPrice: 12,
     period: "/mo",
@@ -33,7 +20,7 @@ const tiers = [
       "Weekly reporting",
       "Export & email tools",
     ],
-    cta: "Start Pro Free",
+    cta: "Start Pro Trial",
     highlighted: true,
   },
   {
@@ -42,6 +29,7 @@ const tiers = [
     period: "/user/mo",
     description: "For teams that want better updates without more meetings",
     features: [
+      "Everything in Pro",
       "Manager dashboard",
       "Team visibility",
       "Shared rollups",
@@ -107,7 +95,7 @@ export function PricingSection() {
         </div>
       </div>
 
-      <div className="mx-auto mt-14 grid max-w-5xl gap-6 sm:grid-cols-3">
+      <div className="mx-auto mt-14 grid max-w-3xl gap-6 sm:grid-cols-2">
         {tiers.map((tier) => (
           <div
             key={tier.name}

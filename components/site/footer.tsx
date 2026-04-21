@@ -85,7 +85,7 @@ export function Footer() {
               href={CTA_LINKS.primary}
               className="mt-3 inline-flex h-9 items-center rounded-lg bg-slate-900 px-4 text-sm font-medium text-white transition-colors hover:bg-slate-800"
             >
-              Try TaskPanels Free
+              Try TaskPanels
             </a>
           </div>
         </div>

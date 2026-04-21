@@ -304,7 +304,7 @@ export function HeroV2() {
       {/* CTAs */}
       <div className="hero-v2-ctas">
         <a href={CTA_LINKS.primary} className="hero-v2-btn-primary">
-          Try TaskPanels Free
+          Try TaskPanels
           <ArrowRight className="size-4" />
         </a>
         <a href={CTA_LINKS.sampleSummary} className="hero-v2-btn-ghost">
@@ -386,7 +386,7 @@ export function HeroV2() {
         <div className="hero-v2-trust-divider" />
         <span><span className="hero-v2-trust-dot" />Set up in minutes</span>
         <div className="hero-v2-trust-divider" />
-        <span><span className="hero-v2-trust-dot" />Free plan available</span>
+        <span><span className="hero-v2-trust-dot" />Cancel anytime</span>
       </div>
     </section>
   );

@@ -85,13 +85,6 @@ const softwareSchema = {
   offers: [
     {
       "@type": "Offer",
-      name: "Free",
-      price: "0",
-      priceCurrency: "USD",
-      description: "Basic daily tracking with limited history and sample summaries",
-    },
-    {
-      "@type": "Offer",
       name: "Pro",
       price: "12",
       priceCurrency: "USD",
