@@ -6,7 +6,18 @@ import { CTA_LINKS } from "@/lib/constants";
 import { Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const tiers = [
+interface Tier {
+  name: string;
+  monthlyPrice: number;
+  period: string;
+  description: string;
+  features: string[];
+  cta: string;
+  highlighted: boolean;
+  comingSoon?: boolean;
+}
+
+const tiers: Tier[] = [
   {
     name: "Pro",
     monthlyPrice: 12,
@@ -35,8 +46,9 @@ const tiers = [
       "Shared rollups",
       "Admin controls",
     ],
-    cta: "Get Started",
+    cta: "Coming Soon",
     highlighted: false,
+    comingSoon: true,
   },
 ];
 
@@ -99,16 +111,25 @@ export function PricingSection() {
         {tiers.map((tier) => (
           <div
             key={tier.name}
-            className={`relative rounded-2xl border bg-white p-7 shadow-sm transition-shadow hover:shadow-md ${
-              tier.highlighted
-                ? "border-slate-900 ring-1 ring-slate-900 shadow-md"
-                : "border-slate-200/80"
+            className={`relative rounded-2xl border bg-white p-7 shadow-sm transition-shadow ${
+              tier.comingSoon
+                ? "border-slate-200/80 opacity-75"
+                : tier.highlighted
+                  ? "border-slate-900 ring-1 ring-slate-900 shadow-md hover:shadow-md"
+                  : "border-slate-200/80 hover:shadow-md"
             }`}
           >
-            {tier.highlighted && (
+            {tier.highlighted && !tier.comingSoon && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-medium text-white">
                   Most Popular
+                </span>
+              </div>
+            )}
+            {tier.comingSoon && (
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-medium text-white">
+                  Coming Soon
                 </span>
               </div>
             )}
@@ -149,16 +170,26 @@ export function PricingSection() {
               ))}
             </ul>
 
-            <a
-              href={CTA_LINKS.primary}
-              className={`mt-8 flex h-11 w-full items-center justify-center rounded-xl text-sm font-medium transition-colors ${
-                tier.highlighted
-                  ? "bg-slate-900 text-white hover:bg-slate-800"
-                  : "bg-slate-100 text-slate-900 hover:bg-slate-200"
-              }`}
-            >
-              {tier.cta}
-            </a>
+            {tier.comingSoon ? (
+              <button
+                type="button"
+                disabled
+                className="mt-8 flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl bg-slate-100 text-sm font-medium text-slate-400"
+              >
+                {tier.cta}
+              </button>
+            ) : (
+              <a
+                href={CTA_LINKS.primary}
+                className={`mt-8 flex h-11 w-full items-center justify-center rounded-xl text-sm font-medium transition-colors ${
+                  tier.highlighted
+                    ? "bg-slate-900 text-white hover:bg-slate-800"
+                    : "bg-slate-100 text-slate-900 hover:bg-slate-200"
+                }`}
+              >
+                {tier.cta}
+              </a>
+            )}
           </div>
         ))}
       </div>
