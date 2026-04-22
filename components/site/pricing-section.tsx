@@ -19,7 +19,7 @@ interface Tier {
 
 const tiers: Tier[] = [
   {
-    name: "Pro",
+    name: "Individual",
     monthlyPrice: 12,
     period: "/mo",
     description: "For professionals who want full work visibility",
@@ -40,7 +40,7 @@ const tiers: Tier[] = [
     period: "/user/mo",
     description: "For teams that want better updates without more meetings",
     features: [
-      "Everything in Pro",
+      "Everything in Individual",
       "Manager dashboard",
       "Team visibility",
       "Shared rollups",

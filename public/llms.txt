@@ -28,8 +28,8 @@ TaskPanels is a work tracking and summary generation tool for professionals. It 
 
 ## Pricing
 
-- Pro: $12/month — Unlimited panels, full summaries, blockers, unrealized effort, weekly reporting, export tools
-- Team: $9/user/month — Manager dashboard, team visibility, shared rollups, admin controls
+- Individual: $12/month — Unlimited panels, full summaries, blockers, unrealized effort, weekly reporting, export tools
+- Team (coming soon): $9/user/month — Manager dashboard, team visibility, shared rollups, admin controls
 
 ## Target Audience
 

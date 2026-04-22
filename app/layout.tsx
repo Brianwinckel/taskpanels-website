@@ -85,7 +85,7 @@ const softwareSchema = {
   offers: [
     {
       "@type": "Offer",
-      name: "Pro",
+      name: "Individual",
       price: "12",
       priceCurrency: "USD",
       priceSpecification: {
