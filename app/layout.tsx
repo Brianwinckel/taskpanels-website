@@ -58,7 +58,13 @@ const organizationSchema = {
   "@type": "Organization",
   name: "TaskPanels",
   url: MARKETING_URL,
-  logo: `${MARKETING_URL}/og/taskpanels-og.png`,
+  // Points at the dynamic OG image (1200x630 PNG with TaskPanels wordmark
+  // prominently shown). Wider than Google's preferred Organization.logo
+  // dimensions (≤600x60), but a valid image AI engines can use for entity
+  // recognition. A proper square brand mark is queued under audit H-3
+  // ("Organization schema has empty sameAs, no contactPoint, no absolute
+  // logo URL") — when shipped, swap this to the square asset URL.
+  logo: `${MARKETING_URL}/opengraph-image`,
   description: SEO.description,
   foundingDate: "2026",
   sameAs: [],
