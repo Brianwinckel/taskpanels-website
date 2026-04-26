@@ -24,19 +24,21 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
+    // og:image is auto-injected by Next.js from app/opengraph-image.tsx
+    // (file convention). Don't set images here or the explicit value would
+    // shadow the auto-generated one.
     title: SEO.title,
     description: SEO.description,
     url: MARKETING_URL,
-    images: [{ url: SEO.ogImage, width: 1200, height: 630 }],
     type: "website",
     siteName: SITE_NAME,
     locale: "en_US",
   },
   twitter: {
+    // twitter:image is auto-injected from app/twitter-image.tsx.
     card: "summary_large_image",
     title: SEO.title,
     description: SEO.description,
-    images: [SEO.ogImage],
   },
   robots: {
     index: true,

@@ -22,7 +22,10 @@ export const SEO = {
   title: "TaskPanels — Turn your work into proof.",
   description:
     "TaskPanels helps professionals track their day and automatically turn it into a clean, manager-ready work summary with completed work, blockers, approvals, and next steps.",
-  ogImage: "/og/taskpanels-og.png",
+  // OG/Twitter images are now generated dynamically via the file conventions
+  // app/opengraph-image.tsx and app/twitter-image.tsx (statically optimized at
+  // build time). Next.js auto-injects them into <head> — no explicit reference
+  // needed in metadata.openGraph.images or metadata.twitter.images.
 };
 
 export const PANEL_COLORS = {
