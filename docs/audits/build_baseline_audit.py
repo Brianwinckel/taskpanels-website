@@ -55,20 +55,21 @@ audit = {
         ),
     },
     "composite_score": {
-        "score": 55,
-        "grade": "D",
+        "score": 60,
+        "grade": "D+",
         "summary": (
             "Site is publicly reachable at taskpanels.app (HTTP 200, HSTS set, SSR confirmed, robots meta = "
             "index/follow). Technical groundwork is meaningfully complete: 4 JSON-LD blocks (Organization, "
             "WebSite, SoftwareApplication with 3 Offers, FAQPage), explicit AI-crawler allow-list in robots.txt, "
             "sitemap.xml and llms.txt both serving 200, canonical URLs on all 5 pages, /privacy and /terms "
-            "shipped, GTM + CookieYes + Consent Mode v2 wired and publishing properly-signaled GA4 hits. "
-            "Remaining gaps cluster on three fronts: the OG image referenced in metadata still returns 404 "
-            "(every social share preview is broken), the entire content engine is one homepage with 869 "
-            "visible words and 0 spokes, and authority signals are near-zero — testimonials lack named "
-            "attribution + Review schema, Organization.sameAs is empty, no /about page, no LinkedIn "
-            "company page, no brand-mention coverage anywhere. Headroom is large; easy wins are "
-            "concentrated in 5–10 hours of work plus the Phase 1 spoke buildout."
+            "shipped, GTM + CookieYes + Consent Mode v2 wired and publishing properly-signaled GA4 hits, "
+            "dynamic Open Graph + Twitter cards via app/opengraph-image.tsx (statically optimized at build "
+            "time), Organization.logo JSON-LD repointed at the live OG endpoint. Remaining gaps cluster on "
+            "two fronts: the entire content engine is one homepage with 869 visible words and 0 spokes, and "
+            "authority signals are near-zero — testimonials lack named attribution + Review schema, "
+            "Organization.sameAs is empty, no /about page, no LinkedIn company page, no brand-mention "
+            "coverage. Zero remaining Critical findings. Headroom is large; the next compounding move is "
+            "the Phase 1 spoke buildout starting with /about."
         ),
     },
     "scores": {
@@ -216,28 +217,6 @@ audit = {
         "word_count_visible": 869,
     },
     "critical_findings": [
-        {
-            "id": "C-1",
-            "severity": "Critical",
-            "phase": 5,
-            "title": "OG image is broken (404) — every social share preview is blank",
-            "detail": (
-                "metadata.openGraph.images and metadata.twitter.images both reference "
-                "https://taskpanels.app/og/taskpanels-og.png (driven by lib/constants.ts SEO.ogImage). "
-                "The URL is rendered into og:image and twitter:image in &lt;head&gt;, but the file does not exist "
-                "at /public/og/taskpanels-og.png. Probe confirms HTTP 404. Result: every share on LinkedIn, "
-                "X/Twitter, Slack, iMessage, Discord, and Bluesky shows a blank or generic preview. AI "
-                "engines extracting og:image get a dead link. This was flagged in the March 2026 audit as "
-                "high-priority and is still open."
-            ),
-            "fix": (
-                "Two paths: (1) drop a static /public/og/taskpanels-og.png at 1200×630 reflecting the "
-                "homepage hero composition (Inter, slate-900 ink, blue accent — match the marketing site), "
-                "OR (2) implement app/api/og/route.ts using next/og to generate per-page OG dynamically. "
-                "Recommend (2) so each Phase 1 spoke gets its own card without manual image work. Either "
-                "way, validate at opengraph.xyz before merging."
-            ),
-        },
     ],
     "high_findings": [
         {
@@ -457,14 +436,10 @@ audit = {
         "Robots meta = index, follow with Googlebot max-snippet/-image/-video directives",
         "OG locale = en_US already sitewide",
         "Strong differentiation copy (\"built for the worker, not the watcher\") — clear anti-positioning vs surveillance software",
+        "Open Graph + Twitter cards generated dynamically via app/opengraph-image.tsx (Next.js file convention, statically optimized at build time) — branded 1200×630 PNG with TaskPanels wordmark, H1 lockup, subtitle, and four colored task-panel chips. Returns HTTP 200 image/png. Each Phase 1 spoke can drop its own opengraph-image.tsx for a per-page card with no metadata wiring.",
+        "Organization.logo JSON-LD repointed from the dead /og/taskpanels-og.png to the live /opengraph-image route — AI engines extracting logo URL get a real PNG instead of a 404",
     ],
     "next_actions": [
-        {
-            "phase": 5,
-            "action": "Build the missing OG image — recommend app/api/og/route.ts using next/og for per-page variants. Validate at opengraph.xyz.",
-            "owner": "Claude",
-            "blocking": True,
-        },
         {
             "phase": 6,
             "action": "Update /privacy to enumerate GA4 + the cookies CookieYes sets (cky-consent, cky-action, _ga, _ga_*). Banner is live; only the policy text needs to catch up.",
@@ -596,7 +571,7 @@ def cover_page(canvas, doc):
     canvas.setFont("Helvetica-Oblique", 9)
     canvas.setFillColor(HexColor("#94a3b8"))
     canvas.drawString(MARGIN + 130, PAGE_H - 5.10 * inch,
-                      "Strong technical floor; on-site authority and OG image are the gating fixes.")
+                      "Strong technical floor; Phase 1 spokes + on-site authority are the next levers.")
 
     canvas.setFont("Helvetica-Oblique", 9)
     canvas.setFillColor(HexColor("#94a3b8"))
@@ -809,7 +784,11 @@ def build_pdf():
     # Critical findings
     story.append(Paragraph("Critical findings", H1))
     story.append(Paragraph(
-        "C-2 (cookie consent + Consent Mode v2) closed on 2026-04-26 with the GTM-MMVK7FPJ V2 publish — verified end-to-end in Tag Assistant. C-1 (broken OG image) remains and bleeds signal on every social share; fix before Phase 1 spokes ship.",
+        "Both Critical findings closed in this iteration. C-2 (cookie consent + Consent Mode v2) closed with the GTM-MMVK7FPJ V2 publish on 2026-04-26 — Tag Assistant verified gcs=G100 → G111 across the consent transition. C-1 (broken OG image) closed by replacing the dead static /og/taskpanels-og.png reference with a dynamic app/opengraph-image.tsx via Next.js's file convention; og:image + twitter:image + Organization.logo JSON-LD all now point at a real PNG.",
+        BODY,
+    ))
+    story.append(Paragraph(
+        "<i>No open Critical findings. Phase 1 spoke buildout is unblocked.</i>",
         BODY,
     ))
     for f in audit["critical_findings"]:
@@ -910,7 +889,7 @@ def build_pdf():
         "Re-run this baseline at the end of each completed phase and quarterly thereafter. "
         "Save outputs as <font face=\"Courier\">docs/audits/post-phase-N-YYYY-MM.{json,pdf}</font>. "
         "Compare composite score deltas — that's the single best leading indicator that the playbook is working. "
-        "C-2 closed in this iteration moved the score 50 → 55. Expected lift after the remaining 1 Critical + 7 High fixes is roughly another +15 points (55 → 70).",
+        "Closures so far: C-2 (cookie consent) 50 → 55, C-1 (OG image) 55 → 60. Expected lift after the remaining 7 High fixes (single-page hub, named testimonials + Review schema, Organization.sameAs + LinkedIn, /about + Person schema, meta description tighten, brand-mention coverage, citable stat) is roughly another +12 points (60 → 72).",
         BODY,
     ))
 

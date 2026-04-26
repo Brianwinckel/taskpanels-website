@@ -8,9 +8,9 @@
     "note": "Production host is taskpanels.app (marketing) with the product at app.taskpanels.app. Both return HTTP 200. lib/constants.ts MARKETING_URL matches the rendered canonical, og:url, JSON-LD url, and sitemap base \u2014 no canonical-host mismatch. A March 2026 GEO remediation pass shipped robots.txt, sitemap.xml, llms.txt, four JSON-LD schemas, canonicals across all 5 pages, and metadataBase. On 2026-04-26 the analytics + consent stack went live: GTM container GTM-MMVK7FPJ V2 published, CookieYes consent banner active, Google Consent Mode v2 defaults registered inline in &lt;head&gt; ahead of the GTM IIFE, GA4 (G-G00NB917QJ) wired exclusively through GTM with Built-in Consent Checks. Verified in Tag Assistant: pre-consent /collect emits gcs=G100 (cookieless ping, no _ga cookie), post-Accept emits gcs=G111 (full payload, _ga set), cid preserved across the consent transition. C-2 (cookie consent) and M-2 (GTM single-controller) both closed in this iteration."
   },
   "composite_score": {
-    "score": 55,
-    "grade": "D",
-    "summary": "Site is publicly reachable at taskpanels.app (HTTP 200, HSTS set, SSR confirmed, robots meta = index/follow). Technical groundwork is meaningfully complete: 4 JSON-LD blocks (Organization, WebSite, SoftwareApplication with 3 Offers, FAQPage), explicit AI-crawler allow-list in robots.txt, sitemap.xml and llms.txt both serving 200, canonical URLs on all 5 pages, /privacy and /terms shipped, GTM + CookieYes + Consent Mode v2 wired and publishing properly-signaled GA4 hits. Remaining gaps cluster on three fronts: the OG image referenced in metadata still returns 404 (every social share preview is broken), the entire content engine is one homepage with 869 visible words and 0 spokes, and authority signals are near-zero \u2014 testimonials lack named attribution + Review schema, Organization.sameAs is empty, no /about page, no LinkedIn company page, no brand-mention coverage anywhere. Headroom is large; easy wins are concentrated in 5\u201310 hours of work plus the Phase 1 spoke buildout."
+    "score": 60,
+    "grade": "D+",
+    "summary": "Site is publicly reachable at taskpanels.app (HTTP 200, HSTS set, SSR confirmed, robots meta = index/follow). Technical groundwork is meaningfully complete: 4 JSON-LD blocks (Organization, WebSite, SoftwareApplication with 3 Offers, FAQPage), explicit AI-crawler allow-list in robots.txt, sitemap.xml and llms.txt both serving 200, canonical URLs on all 5 pages, /privacy and /terms shipped, GTM + CookieYes + Consent Mode v2 wired and publishing properly-signaled GA4 hits, dynamic Open Graph + Twitter cards via app/opengraph-image.tsx (statically optimized at build time), Organization.logo JSON-LD repointed at the live OG endpoint. Remaining gaps cluster on two fronts: the entire content engine is one homepage with 869 visible words and 0 spokes, and authority signals are near-zero \u2014 testimonials lack named attribution + Review schema, Organization.sameAs is empty, no /about page, no LinkedIn company page, no brand-mention coverage. Zero remaining Critical findings. Headroom is large; the next compounding move is the Phase 1 spoke buildout starting with /about."
   },
   "scores": {
     "citability": {
@@ -102,16 +102,7 @@
     ],
     "word_count_visible": 869
   },
-  "critical_findings": [
-    {
-      "id": "C-1",
-      "severity": "Critical",
-      "phase": 5,
-      "title": "OG image is broken (404) \u2014 every social share preview is blank",
-      "detail": "metadata.openGraph.images and metadata.twitter.images both reference https://taskpanels.app/og/taskpanels-og.png (driven by lib/constants.ts SEO.ogImage). The URL is rendered into og:image and twitter:image in &lt;head&gt;, but the file does not exist at /public/og/taskpanels-og.png. Probe confirms HTTP 404. Result: every share on LinkedIn, X/Twitter, Slack, iMessage, Discord, and Bluesky shows a blank or generic preview. AI engines extracting og:image get a dead link. This was flagged in the March 2026 audit as high-priority and is still open.",
-      "fix": "Two paths: (1) drop a static /public/og/taskpanels-og.png at 1200\u00d7630 reflecting the homepage hero composition (Inter, slate-900 ink, blue accent \u2014 match the marketing site), OR (2) implement app/api/og/route.ts using next/og to generate per-page OG dynamically. Recommend (2) so each Phase 1 spoke gets its own card without manual image work. Either way, validate at opengraph.xyz before merging."
-    }
-  ],
+  "critical_findings": [],
   "high_findings": [
     {
       "id": "H-1",
@@ -231,15 +222,11 @@
     "OG / Twitter card structure in place (just needs the actual image \u2014 see C-1)",
     "Robots meta = index, follow with Googlebot max-snippet/-image/-video directives",
     "OG locale = en_US already sitewide",
-    "Strong differentiation copy (\"built for the worker, not the watcher\") \u2014 clear anti-positioning vs surveillance software"
+    "Strong differentiation copy (\"built for the worker, not the watcher\") \u2014 clear anti-positioning vs surveillance software",
+    "Open Graph + Twitter cards generated dynamically via app/opengraph-image.tsx (Next.js file convention, statically optimized at build time) \u2014 branded 1200\u00d7630 PNG with TaskPanels wordmark, H1 lockup, subtitle, and four colored task-panel chips. Returns HTTP 200 image/png. Each Phase 1 spoke can drop its own opengraph-image.tsx for a per-page card with no metadata wiring.",
+    "Organization.logo JSON-LD repointed from the dead /og/taskpanels-og.png to the live /opengraph-image route \u2014 AI engines extracting logo URL get a real PNG instead of a 404"
   ],
   "next_actions": [
-    {
-      "phase": 5,
-      "action": "Build the missing OG image \u2014 recommend app/api/og/route.ts using next/og for per-page variants. Validate at opengraph.xyz.",
-      "owner": "Claude",
-      "blocking": true
-    },
     {
       "phase": 6,
       "action": "Update /privacy to enumerate GA4 + the cookies CookieYes sets (cky-consent, cky-action, _ga, _ga_*). Banner is live; only the policy text needs to catch up.",
