@@ -242,19 +242,21 @@ audit = {
             "id": "H-2",
             "severity": "High",
             "phase": 3,
-            "title": "Testimonials lack named attribution and Review schema",
+            "title": "Testimonials lack named attribution and Review schema [DEFERRED]",
             "detail": (
                 "components/site/testimonials-section.tsx renders quotes but the GEO-AUDIT-REPORT.md "
                 "(March 2026) flagged that testimonials have no verifiable attribution. AI engines cannot "
                 "attribute anonymous quotes to a Person, cannot cross-reference them against LinkedIn "
-                "profiles, and cannot count them toward SoftwareApplication.aggregateRating. The strongest "
-                "social-proof asset on the site is currently invisible to entity-recognition systems."
+                "profiles, and cannot count them toward SoftwareApplication.aggregateRating. "
+                "**Deferred until the app has real users outside the founding org** — there's no honest "
+                "attribution to add yet. Revisit once 3+ external customers have used the product and "
+                "given quotable feedback."
             ),
             "fix": (
-                "Recruit 3–5 named testimonials (real first name + last initial + title + company). Wrap "
-                "each in JSON-LD Review schema with itemReviewed pointing at the SoftwareApplication and "
-                "author as a Person with affiliation. Add aggregateRating to SoftwareApplication once 3+ "
-                "reviews are live."
+                "When deferral lifts: recruit 3–5 named testimonials (real first name + last initial + "
+                "title + company). Wrap each in JSON-LD Review schema with itemReviewed pointing at the "
+                "SoftwareApplication and author as a Person with affiliation. Add aggregateRating to "
+                "SoftwareApplication once 3+ reviews are live."
             ),
         },
         {
@@ -319,20 +321,23 @@ audit = {
             "id": "H-7",
             "severity": "High",
             "phase": 4,
-            "title": "No quotable stat anywhere on the site",
+            "title": "No quotable stat anywhere on the site [DEFERRED]",
             "detail": (
                 "GEO-AUDIT-REPORT.md (March) flagged this and the playbook (Phase 4.2) reiterates it: "
                 "every spoke and blog post should contain at least one quotable sentence with concrete "
                 "data, ideally promoted into a stat callout. TaskPanels currently has none — the homepage "
                 "has 'why early users love TaskPanels' but no number. AI engines cite specific claims; "
-                "narrative paragraphs are summarized, not quoted."
+                "narrative paragraphs are summarized, not quoted. "
+                "**Deferred until the app has real users outside the founding org** — any stat published "
+                "now would be unsubstantiated. Revisit once telemetry from external usage gives an "
+                "honest number to cite."
             ),
             "fix": (
-                "Either (a) survey existing users on minutes/week saved writing status updates, or (b) "
-                "instrument the product to measure summary-generation time vs manual baseline, or (c) "
-                "publish a 'State of work tracking 2026' mini-report sourced from a Typeform of "
-                "early-access users. Promote the headline stat into a visually distinct callout on the "
-                "homepage."
+                "When deferral lifts, three viable sources: (a) survey existing users on minutes/week "
+                "saved writing status updates, (b) instrument the product to measure summary-generation "
+                "time vs manual baseline, or (c) publish a 'State of work tracking 2026' mini-report "
+                "sourced from a Typeform of early-access users. Promote the headline stat into a "
+                "visually distinct callout on the homepage."
             ),
         },
     ],
