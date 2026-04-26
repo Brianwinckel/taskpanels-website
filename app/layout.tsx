@@ -67,7 +67,17 @@ const organizationSchema = {
   logo: `${MARKETING_URL}/opengraph-image`,
   description: SEO.description,
   foundingDate: "2026",
+  // Organization-level sameAs is intentionally empty until a TaskPanels
+  // company-level LinkedIn page / X handle exists. Founder-level sameAs
+  // lives on the Person schema at /about (Brian's personal LinkedIn, X,
+  // brianwinckel.com). The founder field below establishes the entity link
+  // AI engines use for "who built TaskPanels" queries.
   sameAs: [],
+  founder: {
+    "@type": "Person",
+    name: "Brian Winckel",
+    url: `${MARKETING_URL}/about`,
+  },
 };
 
 const websiteSchema = {

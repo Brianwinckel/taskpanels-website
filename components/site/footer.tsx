@@ -44,6 +44,14 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link
+                  href={NAV_LINKS.about}
+                  className="text-sm text-slate-500 transition-colors hover:text-slate-900"
+                >
+                  About
+                </Link>
+              </li>
+              <li>
                 <a
                   href={CTA_LINKS.primary}
                   className="text-sm text-slate-500 transition-colors hover:text-slate-900"

@@ -8,6 +8,7 @@ export const NAV_LINKS = {
   home: "/",
   pricing: "/pricing",
   features: "/features",
+  about: "/about",
   privacy: "/privacy",
   terms: "/terms",
 };

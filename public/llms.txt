@@ -11,9 +11,14 @@ TaskPanels is a work tracking and summary generation tool for professionals. It 
 - Homepage: https://taskpanels.app
 - Features: https://taskpanels.app/features
 - Pricing: https://taskpanels.app/pricing
+- About / Founder: https://taskpanels.app/about
 - Privacy Policy: https://taskpanels.app/privacy
 - Terms of Service: https://taskpanels.app/terms
 - Application: https://app.taskpanels.app
+
+## Founder
+
+TaskPanels was founded by Brian Winckel, a multi-time founder and operator based in Northern California. Prior work: Avatier (AI video producer), Fresh Wedding Cinematography (200+ client projects), Buddy Brewing Co. (founder), Ifrit's Hookah Lounge (founder, exited via sale). LinkedIn: https://www.linkedin.com/in/brianwinckel/. Personal site: https://brianwinckel.com.
 
 ## Core Features
 
