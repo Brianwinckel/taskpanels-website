@@ -15,7 +15,7 @@ export default function TermsPage() {
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           Terms of Service
         </h1>
-        <p className="mt-4 text-sm text-slate-400">Last updated: March 2026</p>
+        <p className="mt-4 text-sm text-slate-400">Last updated: April 2026</p>
 
         <div className="mt-10 space-y-8 text-sm leading-relaxed text-slate-600">
           <div>
@@ -70,6 +70,25 @@ export default function TermsPage() {
               You agree to use TaskPanels only for lawful purposes and in
               accordance with these terms. You may not misuse the service or
               interfere with its operation.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Privacy &amp; Cookies
+            </h2>
+            <p className="mt-2">
+              Your use of TaskPanels is also governed by our{" "}
+              <a
+                href="/privacy"
+                className="font-medium text-slate-900 underline-offset-4 hover:underline"
+              >
+                Privacy Policy
+              </a>
+              , which describes the data we collect, the cookies set on
+              taskpanels.app, the analytics tools we use (Google Tag Manager,
+              Google Analytics 4, and CookieYes for consent management), and
+              the choices you have under GDPR, CCPA, and similar laws.
             </p>
           </div>
 
