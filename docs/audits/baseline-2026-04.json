@@ -8,8 +8,8 @@
     "note": "Production host is taskpanels.app (marketing) with the product at app.taskpanels.app. Both return HTTP 200. lib/constants.ts MARKETING_URL matches the rendered canonical, og:url, JSON-LD url, and sitemap base \u2014 no canonical-host mismatch. A March 2026 GEO remediation pass shipped robots.txt, sitemap.xml, llms.txt, four JSON-LD schemas, canonicals across all 5 pages, and metadataBase. On 2026-04-26 the analytics + consent stack went live: GTM container GTM-MMVK7FPJ V2 published, CookieYes consent banner active, Google Consent Mode v2 defaults registered inline in &lt;head&gt; ahead of the GTM IIFE, GA4 (G-G00NB917QJ) wired exclusively through GTM with Built-in Consent Checks. Verified in Tag Assistant: pre-consent /collect emits gcs=G100 (cookieless ping, no _ga cookie), post-Accept emits gcs=G111 (full payload, _ga set), cid preserved across the consent transition. C-2 (cookie consent) and M-2 (GTM single-controller) both closed in this iteration."
   },
   "composite_score": {
-    "score": 60,
-    "grade": "D+",
+    "score": 64,
+    "grade": "C-",
     "summary": "Site is publicly reachable at taskpanels.app (HTTP 200, HSTS set, SSR confirmed, robots meta = index/follow). Technical groundwork is meaningfully complete: 4 JSON-LD blocks (Organization, WebSite, SoftwareApplication with 3 Offers, FAQPage), explicit AI-crawler allow-list in robots.txt, sitemap.xml and llms.txt both serving 200, canonical URLs on all 5 pages, /privacy and /terms shipped, GTM + CookieYes + Consent Mode v2 wired and publishing properly-signaled GA4 hits, dynamic Open Graph + Twitter cards via app/opengraph-image.tsx (statically optimized at build time), Organization.logo JSON-LD repointed at the live OG endpoint. Remaining gaps cluster on two fronts: the entire content engine is one homepage with 869 visible words and 0 spokes, and authority signals are near-zero \u2014 testimonials lack named attribution + Review schema, Organization.sameAs is empty, no /about page, no LinkedIn company page, no brand-mention coverage. Zero remaining Critical findings. Headroom is large; the next compounding move is the Phase 1 spoke buildout starting with /about."
   },
   "scores": {
@@ -124,17 +124,9 @@
       "id": "H-3",
       "severity": "High",
       "phase": 3,
-      "title": "Organization schema has empty sameAs, no contactPoint, no absolute logo URL",
-      "detail": "app/layout.tsx Organization JSON-LD currently has sameAs: [] (empty). AI engines use sameAs to verify entity identity across LinkedIn, X/Twitter, Crunchbase, Wikidata. With an empty sameAs and no public LinkedIn / X presence to even point at, AI engines cannot confidently establish that 'TaskPanels' the entity in JSON-LD is the same 'TaskPanels' anyone might mention elsewhere. No contactPoint = no support email surfaced in rich results. Logo URL is relative ('/og/taskpanels-og.png' \u2014 also broken).",
-      "fix": "Two parts: (1) create the missing brand presence \u2014 LinkedIn company page first (free, highest-ROI), then X/Twitter handle, optional Crunchbase. (2) Extend Organization JSON-LD with sameAs (the URLs from step 1), logo (absolute URL \u2014 depends on C-1 OG fix), contactPoint (email or contact form URL + contactType: 'customer support')."
-    },
-    {
-      "id": "H-4",
-      "severity": "High",
-      "phase": 1,
-      "title": "No /about page, no founder bio, no Person schema anywhere",
-      "detail": "GEO-AUDIT-REPORT.md flagged this in March as high-priority and it's still open. /about is the canonical home for E-E-A-T signals: founder identity, credentials, prior work, sameAs to LinkedIn / X / GitHub. Without it, every authority-seeking query about TaskPanels (\"who built TaskPanels,\" \"is TaskPanels legit,\" \"TaskPanels founders\") returns nothing and AI engines cannot cite a person.",
-      "fix": "Build /about with: founder bio (real name + headshot + 2\u20133 paragraphs of relevant prior work), Person JSON-LD (jobTitle, worksFor, sameAs to LinkedIn/X/GitHub), and a one-sentence company origin story. This is the single highest-leverage E-E-A-T move."
+      "title": "Organization schema sameAs still empty; no company-level LinkedIn / X / contactPoint",
+      "detail": "Partial closure: the Organization JSON-LD now has a `founder` field pointing at the Person at /about (Brian Winckel, with sameAs to LinkedIn, X, brianwinckel.com), so the founder-identity branch of entity recognition is solved. What's still missing is the company-level branch: Organization.sameAs is still []. There is no TaskPanels company LinkedIn page, no @TaskPanels X handle, no Crunchbase entry. Logo URL was fixed (now points at /opengraph-image, returns 200) but a proper square brand mark is still queued. No contactPoint on Organization either \u2014 no support email surfaced in rich results.",
+      "fix": "Two parts: (1) create the company-level brand presence \u2014 LinkedIn company page first (free, ~10 minutes, highest-ROI), then a TaskPanels X handle, optional Crunchbase. (2) Extend Organization JSON-LD with sameAs (the URLs from step 1), contactPoint (email or contact form URL + contactType: 'customer support'), and a square brand mark via Next.js's app/icon.tsx convention to replace the wide OG-image as the logo."
     },
     {
       "id": "H-5",
@@ -191,12 +183,6 @@
       "phase": 4,
       "title": "robots.txt missing 4\u20135 emerging AI crawlers",
       "detail": "Current allow-list covers the major LLM crawlers but not Perplexity-User (separate from PerplexityBot), Applebot-Extended (Apple Intelligence), Amazonbot, CCBot (Common Crawl, used as training corpus by many open models), or Meta-ExternalAgent / Meta-ExternalFetcher."
-    },
-    {
-      "id": "M-7",
-      "phase": 6,
-      "title": "Privacy policy does not enumerate GA4",
-      "detail": "GA4 went live today; /privacy text predates it. GA4 Terms of Service require disclosure of analytics + cookies set. Likely not actionable until C-2 cookie banner work anyway, so bundle the copy update with that change."
     }
   ],
   "what_is_already_strong": [
@@ -224,7 +210,13 @@
     "OG locale = en_US already sitewide",
     "Strong differentiation copy (\"built for the worker, not the watcher\") \u2014 clear anti-positioning vs surveillance software",
     "Open Graph + Twitter cards generated dynamically via app/opengraph-image.tsx (Next.js file convention, statically optimized at build time) \u2014 branded 1200\u00d7630 PNG with TaskPanels wordmark, H1 lockup, subtitle, and four colored task-panel chips. Returns HTTP 200 image/png. Each Phase 1 spoke can drop its own opengraph-image.tsx for a per-page card with no metadata wiring.",
-    "Organization.logo JSON-LD repointed from the dead /og/taskpanels-og.png to the live /opengraph-image route \u2014 AI engines extracting logo URL get a real PNG instead of a 404"
+    "Organization.logo JSON-LD repointed from the dead /og/taskpanels-og.png to the live /opengraph-image route \u2014 AI engines extracting logo URL get a real PNG instead of a 404",
+    "/about page live with named founder (Brian Winckel), professional headshot, career arc (Avatier, Fresh Wedding Cinematography, Buddy Brewing Co., Ifrit's Hookah Lounge), authentic pull quote, and Why-TaskPanels origin narrative",
+    "Person JSON-LD on /about with jobTitle, worksFor, image, sameAs to LinkedIn / X / brianwinckel.com \u2014 AI engines now have a citable founder entity for 'who built TaskPanels' queries",
+    "Organization JSON-LD gains a `founder` field pointing at the Person entity \u2014 establishes the entity link for company\u2194founder cross-reference even while company-level sameAs remains empty",
+    "Per-page OG/Twitter cards on /about (distinct design from homepage card \u2014 founder name, role, the Brianwinckel.com quote in a styled blockquote)",
+    "/about wired into footer (Product column), sitemap.xml (priority 0.7), and llms.txt (new 'Founder' section so AI crawlers get a one-line founder summary)",
+    "/privacy fully enumerates the analytics + consent stack: GTM (GTM-MMVK7FPJ), GA4 (G-G00NB917QJ), CookieYes, the three cookies set (cookieyes-consent, _ga, _ga_G00NB917QJ), Consent Mode v2 mechanics, Manage Preferences icon, GDPR/CCPA rights, data retention windows, international transfer basis. /terms updated with privacy/cookies cross-reference. M-7 closed."
   ],
   "next_actions": [
     {
@@ -246,14 +238,8 @@
       "blocking": false
     },
     {
-      "phase": 1,
-      "action": "Build /about page with founder bio (real name, headshot, prior work, 2\u20133 paragraphs) + Person JSON-LD with sameAs.",
-      "owner": "Brian + Claude",
-      "blocking": false
-    },
-    {
       "phase": 4,
-      "action": "Create LinkedIn company page (free, immediate) + X/Twitter handle. Then extend Organization JSON-LD with sameAs, contactPoint, absolute logo URL.",
+      "action": "Create TaskPanels company-level LinkedIn page + X handle (founder-level pages already linked from /about). Then extend Organization JSON-LD with sameAs (the company URLs), contactPoint, and a proper square logo via app/icon.tsx.",
       "owner": "Brian",
       "blocking": false
     },

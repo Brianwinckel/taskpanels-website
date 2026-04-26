@@ -55,8 +55,8 @@ audit = {
         ),
     },
     "composite_score": {
-        "score": 60,
-        "grade": "D+",
+        "score": 64,
+        "grade": "C-",
         "summary": (
             "Site is publicly reachable at taskpanels.app (HTTP 200, HSTS set, SSR confirmed, robots meta = "
             "index/follow). Technical groundwork is meaningfully complete: 4 JSON-LD blocks (Organization, "
@@ -261,38 +261,23 @@ audit = {
             "id": "H-3",
             "severity": "High",
             "phase": 3,
-            "title": "Organization schema has empty sameAs, no contactPoint, no absolute logo URL",
+            "title": "Organization schema sameAs still empty; no company-level LinkedIn / X / contactPoint",
             "detail": (
-                "app/layout.tsx Organization JSON-LD currently has sameAs: [] (empty). AI engines use "
-                "sameAs to verify entity identity across LinkedIn, X/Twitter, Crunchbase, Wikidata. With "
-                "an empty sameAs and no public LinkedIn / X presence to even point at, AI engines cannot "
-                "confidently establish that 'TaskPanels' the entity in JSON-LD is the same 'TaskPanels' "
-                "anyone might mention elsewhere. No contactPoint = no support email surfaced in rich "
-                "results. Logo URL is relative ('/og/taskpanels-og.png' — also broken)."
+                "Partial closure: the Organization JSON-LD now has a `founder` field pointing at the "
+                "Person at /about (Brian Winckel, with sameAs to LinkedIn, X, brianwinckel.com), so the "
+                "founder-identity branch of entity recognition is solved. What's still missing is the "
+                "company-level branch: Organization.sameAs is still []. There is no TaskPanels company "
+                "LinkedIn page, no @TaskPanels X handle, no Crunchbase entry. Logo URL was fixed (now "
+                "points at /opengraph-image, returns 200) but a proper square brand mark is still "
+                "queued. No contactPoint on Organization either — no support email surfaced in rich "
+                "results."
             ),
             "fix": (
-                "Two parts: (1) create the missing brand presence — LinkedIn company page first (free, "
-                "highest-ROI), then X/Twitter handle, optional Crunchbase. (2) Extend Organization JSON-LD "
-                "with sameAs (the URLs from step 1), logo (absolute URL — depends on C-1 OG fix), "
-                "contactPoint (email or contact form URL + contactType: 'customer support')."
-            ),
-        },
-        {
-            "id": "H-4",
-            "severity": "High",
-            "phase": 1,
-            "title": "No /about page, no founder bio, no Person schema anywhere",
-            "detail": (
-                "GEO-AUDIT-REPORT.md flagged this in March as high-priority and it's still open. /about is "
-                "the canonical home for E-E-A-T signals: founder identity, credentials, prior work, "
-                "sameAs to LinkedIn / X / GitHub. Without it, every authority-seeking query about "
-                "TaskPanels (\"who built TaskPanels,\" \"is TaskPanels legit,\" \"TaskPanels founders\") "
-                "returns nothing and AI engines cannot cite a person."
-            ),
-            "fix": (
-                "Build /about with: founder bio (real name + headshot + 2–3 paragraphs of relevant prior "
-                "work), Person JSON-LD (jobTitle, worksFor, sameAs to LinkedIn/X/GitHub), and a one-sentence "
-                "company origin story. This is the single highest-leverage E-E-A-T move."
+                "Two parts: (1) create the company-level brand presence — LinkedIn company page first "
+                "(free, ~10 minutes, highest-ROI), then a TaskPanels X handle, optional Crunchbase. "
+                "(2) Extend Organization JSON-LD with sameAs (the URLs from step 1), contactPoint "
+                "(email or contact form URL + contactType: 'customer support'), and a square brand "
+                "mark via Next.js's app/icon.tsx convention to replace the wide OG-image as the logo."
             ),
         },
         {
@@ -401,16 +386,6 @@ audit = {
                 "used as training corpus by many open models), or Meta-ExternalAgent / Meta-ExternalFetcher."
             ),
         },
-        {
-            "id": "M-7",
-            "phase": 6,
-            "title": "Privacy policy does not enumerate GA4",
-            "detail": (
-                "GA4 went live today; /privacy text predates it. GA4 Terms of Service require disclosure "
-                "of analytics + cookies set. Likely not actionable until C-2 cookie banner work anyway, "
-                "so bundle the copy update with that change."
-            ),
-        },
     ],
     "what_is_already_strong": [
         "Title tag is keyword-leading and within length budget (39 chars — actually has room to absorb a secondary keyword)",
@@ -438,6 +413,12 @@ audit = {
         "Strong differentiation copy (\"built for the worker, not the watcher\") — clear anti-positioning vs surveillance software",
         "Open Graph + Twitter cards generated dynamically via app/opengraph-image.tsx (Next.js file convention, statically optimized at build time) — branded 1200×630 PNG with TaskPanels wordmark, H1 lockup, subtitle, and four colored task-panel chips. Returns HTTP 200 image/png. Each Phase 1 spoke can drop its own opengraph-image.tsx for a per-page card with no metadata wiring.",
         "Organization.logo JSON-LD repointed from the dead /og/taskpanels-og.png to the live /opengraph-image route — AI engines extracting logo URL get a real PNG instead of a 404",
+        "/about page live with named founder (Brian Winckel), professional headshot, career arc (Avatier, Fresh Wedding Cinematography, Buddy Brewing Co., Ifrit's Hookah Lounge), authentic pull quote, and Why-TaskPanels origin narrative",
+        "Person JSON-LD on /about with jobTitle, worksFor, image, sameAs to LinkedIn / X / brianwinckel.com — AI engines now have a citable founder entity for 'who built TaskPanels' queries",
+        "Organization JSON-LD gains a `founder` field pointing at the Person entity — establishes the entity link for company↔founder cross-reference even while company-level sameAs remains empty",
+        "Per-page OG/Twitter cards on /about (distinct design from homepage card — founder name, role, the Brianwinckel.com quote in a styled blockquote)",
+        "/about wired into footer (Product column), sitemap.xml (priority 0.7), and llms.txt (new 'Founder' section so AI crawlers get a one-line founder summary)",
+        "/privacy fully enumerates the analytics + consent stack: GTM (GTM-MMVK7FPJ), GA4 (G-G00NB917QJ), CookieYes, the three cookies set (cookieyes-consent, _ga, _ga_G00NB917QJ), Consent Mode v2 mechanics, Manage Preferences icon, GDPR/CCPA rights, data retention windows, international transfer basis. /terms updated with privacy/cookies cross-reference. M-7 closed.",
     ],
     "next_actions": [
         {
@@ -459,14 +440,8 @@ audit = {
             "blocking": False,
         },
         {
-            "phase": 1,
-            "action": "Build /about page with founder bio (real name, headshot, prior work, 2–3 paragraphs) + Person JSON-LD with sameAs.",
-            "owner": "Brian + Claude",
-            "blocking": False,
-        },
-        {
             "phase": 4,
-            "action": "Create LinkedIn company page (free, immediate) + X/Twitter handle. Then extend Organization JSON-LD with sameAs, contactPoint, absolute logo URL.",
+            "action": "Create TaskPanels company-level LinkedIn page + X handle (founder-level pages already linked from /about). Then extend Organization JSON-LD with sameAs (the company URLs), contactPoint, and a proper square logo via app/icon.tsx.",
             "owner": "Brian",
             "blocking": False,
         },
@@ -889,7 +864,7 @@ def build_pdf():
         "Re-run this baseline at the end of each completed phase and quarterly thereafter. "
         "Save outputs as <font face=\"Courier\">docs/audits/post-phase-N-YYYY-MM.{json,pdf}</font>. "
         "Compare composite score deltas — that's the single best leading indicator that the playbook is working. "
-        "Closures so far: C-2 (cookie consent) 50 → 55, C-1 (OG image) 55 → 60. Expected lift after the remaining 7 High fixes (single-page hub, named testimonials + Review schema, Organization.sameAs + LinkedIn, /about + Person schema, meta description tighten, brand-mention coverage, citable stat) is roughly another +12 points (60 → 72).",
+        "Closures so far: C-2 (cookie consent) 50 → 55, C-1 (OG image) 55 → 60, M-7 (privacy doesn't enumerate GA4) + H-4 (no /about / no founder bio / no Person schema) 60 → 64. Expected lift after the remaining 5 High fixes (single-page hub spokes, named testimonials + Review schema, Organization sameAs + company LinkedIn, meta description tighten, brand-mention coverage, citable stat) is roughly another +10 points (64 → 74).",
         BODY,
     ))
 
