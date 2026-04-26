@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { SEO, SITE_NAME, MARKETING_URL } from "@/lib/constants";
+
+const GTM_ID = "GTM-MMVK7FPJ";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -143,15 +144,20 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <head>
         {/*
-          Google Consent Mode v2 — defaults MUST be registered before gtm.js
-          loads, otherwise GA4 tags evaluate against an empty consent state and
-          fire pre-consent. This inline script runs ahead of <GoogleTagManager>
-          (which renders below) so dataLayer + gtag are wired and all storage
-          types default to 'denied' before any tag has a chance to evaluate.
-          CookieYes issues gtag('consent','update',...) when the user accepts.
+          Consent Mode v2 defaults + Google Tag Manager bootstrap, colocated in
+          a single synchronous inline <script> so they share an execution
+          context. This is the canonical pattern from
+          developers.google.com/tag-platform/security/guides/consent and is the
+          ONLY ordering that reliably registers explicit defaults — splitting
+          the consent default into a separate <script> from the GTM IIFE
+          (e.g. via @next/third-parties) leaves a timing gap during which gtm.js
+          can initialize its ICS table in implicit-default mode, after which
+          gtag('consent','default',...) updates are treated as updates rather
+          than defaults. CookieYes issues gtag('consent','update',...) on
+          accept.
         */}
         <script
-          id="consent-mode-defaults"
+          id="gtm-and-consent-defaults"
           dangerouslySetInnerHTML={{
             __html: `
 window.dataLayer = window.dataLayer || [];
@@ -168,6 +174,11 @@ gtag('consent', 'default', {
 });
 gtag('set', 'ads_data_redaction', true);
 gtag('set', 'url_passthrough', true);
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_ID}');
 `,
           }}
         />
@@ -191,11 +202,21 @@ gtag('set', 'url_passthrough', true);
         />
       </head>
       <body className="min-h-full flex flex-col">
+        {/* GTM noscript iframe — lets Google Tag Manager fire pageview-style
+            tags for users with JavaScript disabled. Standard pattern from
+            tagmanager.google.com install snippet. */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>
-      <GoogleTagManager gtmId="GTM-MMVK7FPJ" />
     </html>
   );
 }
