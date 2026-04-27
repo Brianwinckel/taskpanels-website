@@ -70,6 +70,22 @@ export function Footer() {
             <ul className="mt-3 space-y-2.5">
               <li>
                 <Link
+                  href="/vs/toggl"
+                  className="text-sm text-slate-500 transition-colors hover:text-slate-900"
+                >
+                  vs. Toggl
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/vs/clockify"
+                  className="text-sm text-slate-500 transition-colors hover:text-slate-900"
+                >
+                  vs. Clockify
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/vs/time-doctor"
                   className="text-sm text-slate-500 transition-colors hover:text-slate-900"
                 >

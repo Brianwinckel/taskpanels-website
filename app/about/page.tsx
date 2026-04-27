@@ -33,12 +33,56 @@ const personSchema = {
     "Founder of TaskPanels. Multi-time founder and operator across creative and technical work — Avatier, Fresh Wedding Cinematography, Buddy Brewing Co., Ifrit's Hookah Lounge.",
 };
 
+const faqs = [
+  {
+    q: "Who is Brian Winckel?",
+    a: "Brian Winckel is the founder of TaskPanels. He's a multi-time founder and operator based in Northern California. Most recently he led AI video production and social content at Avatier; previously founded Fresh Wedding Cinematography (200+ client projects), Buddy Brewing Co., and Ifrit's Hookah Lounge.",
+  },
+  {
+    q: "What is TaskPanels and why was it built?",
+    a: "TaskPanels is a daily work tracker that turns your workday into a clean, manager-ready summary — completed work, blockers, approvals, next steps, and the unrealized effort that doesn't ship but still happened. It was built out of Brian's frustration running cross-functional projects where the most important work was the hardest to communicate.",
+  },
+  {
+    q: "What's TaskPanels' philosophy on employee monitoring?",
+    a: "TaskPanels will never include screenshots, keystroke tracking, idle detection, or productivity scoring. Those features are designed to monitor workers, not to help them. TaskPanels is built for the worker, not the watcher — workers control what they document and what they share.",
+  },
+  {
+    q: "How is TaskPanels different from Toggl, Clockify, or Time Doctor?",
+    a: "Toggl and Clockify are pure time trackers — clean, worker-friendly, but limited to hours. Time Doctor is a surveillance tool with screenshots and activity monitoring. TaskPanels is the third option: time tracking plus structured context (blockers, approvals, unrealized effort) that produces a daily summary, with no surveillance features. See the side-by-side comparison pages for each.",
+  },
+  {
+    q: "What's on the TaskPanels roadmap?",
+    a: "Near-term: an AI composition layer that turns structured TaskPanels data into prose-ready daily updates, and a Chrome extension that captures work in browser-based tools and AI assistants like Claude and ChatGPT. Longer-term: a work intelligence layer that reads from the tools you already use and composes a single daily summary across all of them.",
+  },
+  {
+    q: "How can I contact TaskPanels?",
+    a: "Reach Brian directly through brianwinckel.com, LinkedIn, or X. For product support and partnership inquiries, the fastest path is through the contact options inside the app.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+
 export default function AboutPage() {
   return (
     <section className="py-16 md:py-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="mx-auto max-w-3xl px-6 lg:px-8">
@@ -195,6 +239,25 @@ export default function AboutPage() {
               </a>
             </li>
           </ul>
+        </div>
+
+        {/* FAQ — adds FAQPage schema for citability and reinforces brand entity */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+            Frequently asked
+          </h2>
+          <dl className="mt-6 space-y-6">
+            {faqs.map((faq) => (
+              <div key={faq.q}>
+                <dt className="text-base font-semibold text-slate-900">
+                  {faq.q}
+                </dt>
+                <dd className="mt-2 text-base leading-relaxed text-slate-600">
+                  {faq.a}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
         {/* About TaskPanels callout — Phase 1 internal-linking back to hub + siblings */}
