@@ -115,13 +115,15 @@ export default function VsTimeDoctorPage() {
               TaskPanels vs. Time Doctor
             </p>
             <h1 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl">
-              The Time Doctor alternative without the surveillance.
+              Time Doctor watches you work.
+              <br />
+              TaskPanels helps you tell the story of your work.
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-slate-600">
-              Time Doctor monitors your team. TaskPanels documents your
-              team&apos;s work. Both track time — but the philosophy, the data
-              collected, and the relationship to the worker are completely
-              different.
+              Both track time — but the philosophy, the data collected, and the
+              relationship to the worker are completely different. Time Doctor
+              is built for the manager looking over your shoulder. TaskPanels
+              is built for you, the person doing the work.
             </p>
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <a

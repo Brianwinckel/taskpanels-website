@@ -57,7 +57,7 @@ const faqs = [
   },
   {
     q: "What about team features — does TaskPanels have a manager dashboard?",
-    a: "Yes, on the Team plan ($9/user/month). The Team plan includes a manager dashboard with team-level visibility, shared rollups, and admin controls. Clockify's free plan supports unlimited team members for time tracking; TaskPanels Team starts at 5 seats and adds the structured summary layer on top.",
+    a: "Yes, on the Team plan ($9/user/month). The Team plan includes a manager dashboard with team-level visibility, shared rollups, and admin controls. Clockify's free plan supports unlimited team members for time tracking; TaskPanels Team starts at 3 seats and adds the structured summary layer on top.",
   },
 ];
 
@@ -94,7 +94,7 @@ const comparison: ComparisonRow[] = [
   { feature: "Project budgets & rates", taskpanels: false, clockify: true },
   { feature: "Calendar & project tool integrations", taskpanels: "Roadmap", clockify: true },
   { feature: "Browser extension", taskpanels: "Roadmap", clockify: true },
-  { feature: "Mobile app", taskpanels: "Roadmap", clockify: true },
+  { feature: "Mobile app (iOS + Android)", taskpanels: "PWA", clockify: true },
   { feature: "Screenshots / GPS / activity monitoring", taskpanels: false, clockify: "Paid plans" },
   { feature: "AI work summary composition", taskpanels: "Roadmap", clockify: false },
 ];

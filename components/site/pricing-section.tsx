@@ -38,7 +38,7 @@ const tiers: Tier[] = [
     name: "Team",
     monthlyPrice: 9,
     period: "/user/mo",
-    description: "For teams that want better updates without more meetings. Starts at 5 seats.",
+    description: "For teams that want better updates without more meetings. Starts at 3 seats.",
     features: [
       "Everything in Individual",
       "Manager dashboard",
@@ -77,6 +77,9 @@ export function PricingSection() {
         <h2 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:text-4xl">
           Simple pricing for clearer workdays
         </h2>
+        <p className="mt-4 text-base font-medium text-slate-600">
+          $12/mo. No free tier. No screenshots. No bait.
+        </p>
 
         {/* Toggle */}
         <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white px-1.5 py-1.5 shadow-sm">

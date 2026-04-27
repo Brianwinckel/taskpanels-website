@@ -94,7 +94,7 @@ const comparison: ComparisonRow[] = [
   { feature: "Project budgets & billable rates", taskpanels: false, toggl: true },
   { feature: "Calendar / Jira / Asana integrations", taskpanels: "Roadmap", toggl: true },
   { feature: "Browser extension", taskpanels: "Roadmap", toggl: true },
-  { feature: "Mobile app", taskpanels: "Roadmap", toggl: true },
+  { feature: "Mobile app (iOS + Android)", taskpanels: "PWA", toggl: true },
   { feature: "Pomodoro timer", taskpanels: false, toggl: true },
   { feature: "AI work summary composition", taskpanels: "Roadmap", toggl: false },
 ];

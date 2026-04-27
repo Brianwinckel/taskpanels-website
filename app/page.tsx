@@ -4,6 +4,7 @@ import { ComparisonSection } from "@/components/site/comparison-section";
 import { HowItWorksSection } from "@/components/site/how-it-works-section";
 import { OutcomesSection } from "@/components/site/outcomes-section";
 import { SummaryPreviewSection } from "@/components/site/summary-preview-section";
+import { AiCapturePromiseSection } from "@/components/site/ai-capture-promise-section";
 import { UnrealizedEffortSection } from "@/components/site/unrealized-effort-section";
 import { AudienceSection } from "@/components/site/audience-section";
 import { TestimonialsSection } from "@/components/site/testimonials-section";
@@ -20,6 +21,7 @@ export default function HomePage() {
       <HowItWorksSection />
       <OutcomesSection />
       <SummaryPreviewSection />
+      <AiCapturePromiseSection />
       <UnrealizedEffortSection />
       <AudienceSection />
       <TestimonialsSection />

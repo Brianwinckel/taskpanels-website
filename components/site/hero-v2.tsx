@@ -291,14 +291,14 @@ export function HeroV2() {
       <p className="hero-v2-eyebrow">Work Tracking → Work Proof</p>
 
       <h1 className="hero-v2-headline">
-        Track your day.{" "}
-        <span className="hero-v2-accent">Prove your impact.</span>
+        End the day with{" "}
+        <span className="hero-v2-accent">a summary, not a timesheet.</span>
       </h1>
 
       <p className="hero-v2-sub">
-        TaskPanels helps you track what you worked on and automatically turns it
-        into a clean daily summary with completed work, blockers, approvals, and
-        next steps.
+        TaskPanels captures what happened — the work, the blockers, the
+        approvals you waited on, the effort that didn&apos;t ship — and turns
+        it into the daily summary you&apos;d write if you had time.
       </p>
 
       {/* CTAs */}
