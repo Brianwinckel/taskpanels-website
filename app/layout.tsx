@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
+import { CookieBanner } from "@/components/site/cookie-banner";
+import { ConsentScripts } from "@/components/site/consent-scripts";
 import { SEO, SITE_NAME, MARKETING_URL } from "@/lib/constants";
 
 const GTM_ID = "GTM-MMVK7FPJ";
@@ -234,6 +236,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <CookieBanner />
+        <ConsentScripts />
       </body>
     </html>
   );

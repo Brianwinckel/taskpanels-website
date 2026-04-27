@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { SITE_NAME, NAV_LINKS, CTA_LINKS } from "@/lib/constants";
+import { openCookieSettings } from "@/lib/consent";
 
 export function Footer() {
   return (
@@ -115,6 +118,13 @@ export function Footer() {
             >
               Terms
             </Link>
+            <button
+              type="button"
+              onClick={openCookieSettings}
+              className="text-sm text-slate-400 transition-colors hover:text-slate-600"
+            >
+              Cookie settings
+            </button>
           </div>
         </div>
       </div>
