@@ -1,10 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SITE_NAME, NAV_LINKS, CTA_LINKS } from "@/lib/constants";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+
+const forLinks = [
+  { label: "Individual Contributors", href: "/for/individual-contributors" },
+  { label: "Consultants", href: "/for/consultants" },
+  { label: "Managers", href: "/for/managers" },
+  { label: "Remote Teams", href: "/for/remote-teams" },
+];
 
 const navItems = [
   { label: "Features", href: NAV_LINKS.features },
@@ -13,6 +20,9 @@ const navItems = [
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileForOpen, setMobileForOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/60 bg-white/80 backdrop-blur-xl">
@@ -30,6 +40,40 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
+          {/* Who it's for dropdown */}
+          <div ref={dropdownRef} className="relative">
+            <button
+              onClick={() => setDropdownOpen((o) => !o)}
+              className="flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+            >
+              Who it&apos;s for
+              <ChevronDown className={`size-3.5 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {dropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.15 }}
+                  onMouseLeave={() => setDropdownOpen(false)}
+                  className="absolute left-0 top-full mt-1 w-52 rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg"
+                >
+                  {forLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setDropdownOpen(false)}
+                      className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -85,6 +129,38 @@ export function Header() {
                   {item.label}
                 </Link>
               ))}
+
+              {/* Who it's for group */}
+              <button
+                onClick={() => setMobileForOpen((o) => !o)}
+                className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100"
+              >
+                Who it&apos;s for
+                <ChevronDown className={`size-3.5 transition-transform ${mobileForOpen ? "rotate-180" : ""}`} />
+              </button>
+              <AnimatePresence>
+                {mobileForOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className="overflow-hidden pl-3"
+                  >
+                    {forLinks.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => { setMobileOpen(false); setMobileForOpen(false); }}
+                        className="block rounded-lg px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               <hr className="my-2 border-slate-200" />
               <a
                 href={CTA_LINKS.app}

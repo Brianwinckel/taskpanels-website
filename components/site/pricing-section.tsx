@@ -38,7 +38,7 @@ const tiers: Tier[] = [
     name: "Team",
     monthlyPrice: 9,
     period: "/user/mo",
-    description: "For teams that want better updates without more meetings",
+    description: "For teams that want better updates without more meetings. Starts at 5 seats.",
     features: [
       "Everything in Individual",
       "Manager dashboard",
@@ -46,9 +46,8 @@ const tiers: Tier[] = [
       "Shared rollups",
       "Admin controls",
     ],
-    cta: "Coming Soon",
+    cta: "Get Started",
     highlighted: false,
-    comingSoon: true,
   },
 ];
 
