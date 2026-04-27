@@ -66,7 +66,18 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-slate-900">Legal</h4>
+            <h4 className="text-sm font-semibold text-slate-900">Compare</h4>
+            <ul className="mt-3 space-y-2.5">
+              <li>
+                <Link
+                  href="/vs/time-doctor"
+                  className="text-sm text-slate-500 transition-colors hover:text-slate-900"
+                >
+                  vs. Time Doctor
+                </Link>
+              </li>
+            </ul>
+            <h4 className="mt-6 text-sm font-semibold text-slate-900">Legal</h4>
             <ul className="mt-3 space-y-2.5">
               <li>
                 <Link
