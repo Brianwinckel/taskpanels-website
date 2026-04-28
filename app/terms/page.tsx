@@ -128,9 +128,13 @@ export default function TermsPage() {
             <h2 className="text-lg font-semibold text-slate-900">Contact</h2>
             <p className="mt-2">
               Questions about these terms? Contact us at{" "}
-              <span className="font-medium text-slate-900">
+              <a
+                href="mailto:legal@taskpanels.app"
+                className="font-medium text-slate-900 underline underline-offset-2 hover:text-slate-700"
+              >
                 legal@taskpanels.app
-              </span>
+              </a>
+              .
             </p>
           </div>
         </div>

@@ -60,13 +60,11 @@ const organizationSchema = {
   "@type": "Organization",
   name: "TaskPanels",
   url: MARKETING_URL,
-  // Points at the dynamic OG image (1200x630 PNG with TaskPanels wordmark
-  // prominently shown). Wider than Google's preferred Organization.logo
-  // dimensions (≤600x60), but a valid image AI engines can use for entity
-  // recognition. A proper square brand mark is queued under audit H-3
-  // ("Organization schema has empty sameAs, no contactPoint, no absolute
-  // logo URL") — when shipped, swap this to the square asset URL.
-  logo: `${MARKETING_URL}/opengraph-image`,
+  // Square brand mark from app/icon.tsx — four-circle TaskPanels logo on a
+  // rounded white tile, rendered procedurally via ImageResponse. Closes the
+  // logo half of audit H-3 ("Organization schema has empty sameAs, no
+  // contactPoint, no absolute logo URL").
+  logo: `${MARKETING_URL}/icon`,
   description: SEO.description,
   foundingDate: "2026",
   // Organization-level sameAs is intentionally empty until a TaskPanels
@@ -75,6 +73,36 @@ const organizationSchema = {
   // brianwinckel.com). The founder field below establishes the entity link
   // AI engines use for "who built TaskPanels" queries.
   sameAs: [],
+  // contactPoint array — gives AI engines structured answers for "how do I
+  // contact TaskPanels for X" queries. Each ContactPoint maps to a real
+  // mailbox surfaced contextually on the site (sales on /pricing, press on
+  // /about, support in the footer, privacy on /privacy).
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: "support@taskpanels.app",
+      availableLanguage: ["English"],
+    },
+    {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      email: "sales@taskpanels.app",
+      availableLanguage: ["English"],
+    },
+    {
+      "@type": "ContactPoint",
+      contactType: "press inquiries",
+      email: "press@taskpanels.app",
+      availableLanguage: ["English"],
+    },
+    {
+      "@type": "ContactPoint",
+      contactType: "privacy",
+      email: "privacy@taskpanels.app",
+      availableLanguage: ["English"],
+    },
+  ],
   founder: {
     "@type": "Person",
     name: "Brian Winckel",

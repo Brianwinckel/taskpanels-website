@@ -125,6 +125,15 @@ export function Footer() {
             >
               Try TaskPanels
             </a>
+            <p className="mt-6 text-sm text-slate-500">
+              Need help?{" "}
+              <a
+                href="mailto:support@taskpanels.app"
+                className="font-medium text-slate-700 underline underline-offset-2 transition-colors hover:text-slate-900"
+              >
+                support@taskpanels.app
+              </a>
+            </p>
           </div>
         </div>
 

@@ -195,6 +195,17 @@ export function PricingSection() {
           </div>
         ))}
       </div>
+
+      <p className="mx-auto mt-10 max-w-2xl text-center text-sm text-slate-500">
+        Questions about pricing, larger teams, or custom plans? Email{" "}
+        <a
+          href="mailto:sales@taskpanels.app"
+          className="font-medium text-slate-700 underline underline-offset-2 hover:text-slate-900"
+        >
+          sales@taskpanels.app
+        </a>
+        .
+      </p>
     </SectionWrapper>
   );
 }

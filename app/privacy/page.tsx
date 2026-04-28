@@ -285,9 +285,12 @@ export default function PrivacyPage() {
             </ul>
             <p className="mt-3">
               To exercise any of these rights, email us at{" "}
-              <span className="font-medium text-slate-900">
+              <a
+                href="mailto:privacy@taskpanels.app"
+                className="font-medium text-slate-900 underline underline-offset-2 hover:text-slate-700"
+              >
                 privacy@taskpanels.app
-              </span>
+              </a>
               .
             </p>
           </div>
@@ -322,9 +325,12 @@ export default function PrivacyPage() {
             <p className="mt-2">
               Questions about this policy, our use of cookies, or your data?
               Contact us at{" "}
-              <span className="font-medium text-slate-900">
+              <a
+                href="mailto:privacy@taskpanels.app"
+                className="font-medium text-slate-900 underline underline-offset-2 hover:text-slate-700"
+              >
                 privacy@taskpanels.app
-              </span>
+              </a>
               .
             </p>
           </div>
