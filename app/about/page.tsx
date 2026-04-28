@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { MARKETING_URL, SITE_NAME } from "@/lib/constants";
+import { FaqAccordion } from "@/components/site/faq-accordion";
 
 export const metadata: Metadata = {
   title: "About Brian Winckel — Founder of TaskPanels",
@@ -52,26 +53,13 @@ const faqs = [
   },
   {
     q: "What's on the TaskPanels roadmap?",
-    a: "Near-term: an AI composition layer that turns structured TaskPanels data into prose-ready daily updates, and a Chrome extension that captures work in browser-based tools and AI assistants like Claude and ChatGPT. Longer-term: a work intelligence layer that reads from the tools you already use and composes a single daily summary across all of them.",
+    a: "Near-term: an AI composition layer that turns structured TaskPanels data into prose-ready daily updates, a Chrome extension that captures work in web-based AI tools like ChatGPT and Claude.ai, and a TaskPanels skills.md file that plugs into desktop and CLI tools like Claude Desktop and Codex. Longer-term: a work intelligence layer that reads from the tools you already use and composes a single daily summary across all of them.",
   },
   {
     q: "How can I contact TaskPanels?",
-    a: "Reach Brian directly through brianwinckel.com, LinkedIn, or X. For product support and partnership inquiries, the fastest path is through the contact options inside the app.",
+    a: "For press and media inquiries, email press@taskpanels.app. For product support, see the contact email in the footer or the contact options inside the app. To reach Brian directly: brianwinckel.com, LinkedIn, or X.",
   },
 ];
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.q,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.a,
-    },
-  })),
-};
 
 export default function AboutPage() {
   return (
@@ -79,10 +67,6 @@ export default function AboutPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="mx-auto max-w-3xl px-6 lg:px-8">
@@ -241,23 +225,31 @@ export default function AboutPage() {
           </ul>
         </div>
 
+        {/* Press — contextual contact for media inquiries */}
+        <div className="mt-16 rounded-2xl border border-slate-200 bg-white px-8 py-8">
+          <h2 className="text-xl font-bold tracking-tight text-slate-900">
+            Press &amp; media
+          </h2>
+          <p className="mt-2 text-base leading-relaxed text-slate-600">
+            For press inquiries, interview requests, or product imagery, email{" "}
+            <a
+              href="mailto:press@taskpanels.app"
+              className="font-medium text-slate-900 underline underline-offset-2 hover:text-slate-700"
+            >
+              press@taskpanels.app
+            </a>
+            .
+          </p>
+        </div>
+
         {/* FAQ — adds FAQPage schema for citability and reinforces brand entity */}
         <div className="mt-16">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900">
             Frequently asked
           </h2>
-          <dl className="mt-6 space-y-6">
-            {faqs.map((faq) => (
-              <div key={faq.q}>
-                <dt className="text-base font-semibold text-slate-900">
-                  {faq.q}
-                </dt>
-                <dd className="mt-2 text-base leading-relaxed text-slate-600">
-                  {faq.a}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <div className="mt-6">
+            <FaqAccordion items={faqs} className="w-full" />
+          </div>
         </div>
 
         {/* About TaskPanels callout — Phase 1 internal-linking back to hub + siblings */}

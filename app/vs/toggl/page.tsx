@@ -9,6 +9,7 @@ import {
   Layers,
 } from "lucide-react";
 import { SITE_NAME, CTA_LINKS, MARKETING_URL } from "@/lib/constants";
+import { FaqAccordion } from "@/components/site/faq-accordion";
 
 export const metadata: Metadata = {
   title: "TaskPanels vs. Toggl — A Toggl Alternative That Captures Context",
@@ -57,22 +58,9 @@ const faqs = [
   },
   {
     q: "Does TaskPanels integrate with calendars or project tools like Toggl does?",
-    a: "Toggl has mature integrations with calendars, Jira, Asana, and dozens of other tools. TaskPanels integrations are on the roadmap — currently the workflow is manual panel tracking with structured tags. The Chrome extension on the roadmap will add browser-based auto-capture for AI assistants and web tools.",
+    a: "Toggl has mature integrations with calendars, Jira, Asana, and dozens of other tools. TaskPanels integrations are on the roadmap — currently the workflow is manual panel tracking with structured tags. A Chrome extension on the roadmap will auto-capture web-based AI tools like ChatGPT and Claude.ai, and a TaskPanels skills.md file will plug into desktop and CLI tools like Claude Desktop and Codex.",
   },
 ];
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.q,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.a,
-    },
-  })),
-};
 
 type ComparisonRow = {
   feature: string;
@@ -102,11 +90,6 @@ const comparison: ComparisonRow[] = [
 export default function VsTogglPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-
       {/* ── Hero ── */}
       <section className="pt-16 pb-12 md:pt-24 md:pb-16">
         <div className="mx-auto max-w-6xl px-6 lg:px-8">
@@ -359,18 +342,9 @@ export default function VsTogglPage() {
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
               Questions, answered
             </h2>
-            <dl className="mt-10 space-y-8">
-              {faqs.map((faq) => (
-                <div key={faq.q}>
-                  <dt className="text-base font-semibold text-slate-900">
-                    {faq.q}
-                  </dt>
-                  <dd className="mt-2 text-base leading-relaxed text-slate-600">
-                    {faq.a}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <div className="mt-10">
+              <FaqAccordion items={faqs} className="w-full" />
+            </div>
           </div>
         </div>
       </section>

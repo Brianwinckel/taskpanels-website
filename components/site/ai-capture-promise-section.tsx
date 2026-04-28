@@ -16,11 +16,12 @@ export function AiCapturePromiseSection() {
             TaskPanels is the only tracker that knows it.
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-slate-600">
-            A Chrome extension is in active development that captures the work
-            you do in Claude Desktop, ChatGPT, and other browser-based AI
-            tools — so AI-assisted work flows into your daily summary
-            automatically. No more manually tagging the hours you spent
-            pair-programming with an assistant or drafting through a chat.
+            A Chrome extension is in active development for web-based AI tools
+            like ChatGPT and Claude.ai, and a TaskPanels skills.md file plugs
+            into desktop and CLI tools like Claude Desktop and Codex. Either
+            way, AI-assisted work flows into your daily summary automatically —
+            no more manually tagging the hours you spent pair-programming with
+            an assistant or drafting through a chat.
           </p>
           <div className="mt-8">
             <Link

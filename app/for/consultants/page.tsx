@@ -11,6 +11,7 @@ import {
   Users,
 } from "lucide-react";
 import { SITE_NAME, CTA_LINKS, MARKETING_URL } from "@/lib/constants";
+import { FaqAccordion } from "@/components/site/faq-accordion";
 
 export const metadata: Metadata = {
   title: "Billable Hours Tracker for Consultants",
@@ -58,19 +59,6 @@ const faqs = [
     a: "No. You generate the summary and share it however you want — paste it into an email, attach the export, or copy it into your project management tool. Clients never need to log in to anything.",
   },
 ];
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.q,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.a,
-    },
-  })),
-};
 
 const painPoints = [
   {
@@ -132,10 +120,6 @@ const summaryItems = [
 export default function ConsultantsPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
 
       {/* ── Hero ── */}
       <section className="pt-16 pb-12 md:pt-24 md:pb-16">
@@ -308,18 +292,9 @@ export default function ConsultantsPage() {
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
               Questions, answered
             </h2>
-            <dl className="mt-10 space-y-8">
-              {faqs.map((faq) => (
-                <div key={faq.q}>
-                  <dt className="text-base font-semibold text-slate-900">
-                    {faq.q}
-                  </dt>
-                  <dd className="mt-2 text-base leading-relaxed text-slate-600">
-                    {faq.a}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <div className="mt-10">
+              <FaqAccordion items={faqs} className="w-full" />
+            </div>
           </div>
         </div>
       </section>
